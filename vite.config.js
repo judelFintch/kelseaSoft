@@ -1,13 +1,20 @@
 import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
+import laravel from 'laravel-vite-plugin';
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  plugins: [vue()],
-  css: {
-    preprocessorOptions: {
-      css: {
-        additionalData: `@import "jsvectormap/dist/css/jsvectormap.min.css";`
-      }
-    }
-  }
+    plugins: [
+        laravel({
+            input: [
+                'resources/css/app.css',
+                'resources/js/app.js',
+                'resources/css/style.css',
+            ],
+            refresh: ['resources/views/**/*'],
+        }),
+        tailwindcss(),
+    ],
+    server: {
+        cors: true,
+    },
 });
