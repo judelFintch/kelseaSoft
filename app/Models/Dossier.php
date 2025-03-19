@@ -49,4 +49,9 @@ class Dossier extends Model
     {
         return $this->hasMany(Document::class);
     }
+
+    public function files()
+{
+    return $this->hasMany(File::class);
+}
 }
