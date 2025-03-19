@@ -7,7 +7,6 @@ use App\Livewire\Files\{ListFiles, CreateFile, EditFile, ShowFile, DeleteFile};
 use App\Livewire\Invoices\{ListInvoices, CreateInvoice, EditInvoice, ShowInvoice, DeleteInvoice};
 use App\Livewire\Payments\{ListPayments, CreatePayment, EditPayment, ShowPayment, DeletePayment};
 use App\Livewire\Clients\{ListClients, CreateClient, EditClient, ShowClient, DeleteClient};
-use App\Livewire\Settings\{ProfileSettings, SystemSettings, NotificationSettings};
 use App\Livewire\Dossiers\{ListDossiers,ShowDossier,CreateDossier,EditDossier};
 
 Route::get('/', function () {return view('welcome');})->name('home');
