@@ -31,8 +31,8 @@
             </flux:navlist>
 
             <flux:navlist variant="outline">
-                <flux:navlist.item icon="truck" href="{{route('trucks.index')}}" wire:navigate>
-                    {{ __('Trucks') }}
+                <flux:navlist.item icon="folder" href="{{ route('dossiers.index') }}">
+                    {{ __('Dossiers') }}
                 </flux:navlist.item>
             </flux:navlist>
 

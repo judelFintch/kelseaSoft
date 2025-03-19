@@ -11,3 +11,4 @@ class CreateTruck extends Component
         return view('livewire.trucks.create-truck');
     }
 }
+

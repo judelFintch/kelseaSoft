@@ -8,6 +8,7 @@ use App\Livewire\Invoices\{ListInvoices, CreateInvoice, EditInvoice, ShowInvoice
 use App\Livewire\Payments\{ListPayments, CreatePayment, EditPayment, ShowPayment, DeletePayment};
 use App\Livewire\Clients\{ListClients, CreateClient, EditClient, ShowClient, DeleteClient};
 use App\Livewire\Settings\{ProfileSettings, SystemSettings, NotificationSettings};
+use App\Livewire\Dossiers\{ListDossiers,ShowDossier,CreateDossier,EditDossier};
 
 Route::get('/', function () {return view('welcome');})->name('home');
 
@@ -59,6 +60,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{client}/edit', EditClient::class)->name('edit');
         Route::get('/{client}', ShowClient::class)->name('show');
         Route::get('/{client}/delete', DeleteClient::class)->name('delete');
+    });
+
+    Route::prefix('dossiers')->group(function () {
+        Route::get('/', ListDossiers::class)->name('dossiers.index'); // Liste des dossiers
+        Route::get('/create', CreateDossier::class)->name('dossiers.create'); // Création d'un dossier
+        Route::get('/{dossier}', ShowDossier::class)->name('dossiers.show'); // Détail d'un dossier
+        Route::get('/{dossier}/edit', EditDossier::class)->name('dossiers.edit'); // Modification d'un dossier
     });
 
    
