@@ -8,10 +8,14 @@ use App\Livewire\Invoices\{ListInvoices, CreateInvoice, EditInvoice, ShowInvoice
 use App\Livewire\Payments\{ListPayments, CreatePayment, EditPayment, ShowPayment, DeletePayment};
 use App\Livewire\Clients\{ListClients, CreateClient, EditClient, ShowClient, DeleteClient};
 use App\Livewire\Dossiers\{ListDossiers,ShowDossier,CreateDossier,EditDossier};
+use App\Livewire\Declarations\{Declaration,DeclarationList,DeclarationCreate,DeclarationUpdate,DeclarationDelete}; 
+use App\Livewire\Dashboard\Dashboard;
+
+
 
 Route::get('/', function () {return view('welcome');})->name('home');
 
-Route::view('dashboard', 'dashboard') ->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('dashboard', Dashboard::class) ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
     
@@ -23,6 +27,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{truck}/edit', EditTruck::class)->name('edit');
         Route::get('/{truck}', ShowTruck::class)->name('show');
         Route::get('/{truck}/delete', DeleteTruck::class)->name('delete');
+    });
+
+    Route::prefix('declarations')->name('declarations.')->group(function () {
+       Route::get('/Declaration', Declaration::class)->name('index');
+       Route::get('/Declaration/list', DeclarationList::class)->name('show');
+       Route::get('/Declaration/create', DeclarationCreate::class)->name('create');
     });
 
     // Gestion des dossiers
