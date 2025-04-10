@@ -15,56 +15,39 @@
     <!-- Styles -->
     @livewireStyles
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-  
 
     <!-- Scripts -->
-   
-   
 </head>
 
-<body
-    x-data="{
-        page: '{{ $pageName ?? 'default' }}',
-        loaded: true,
-        darkMode: false,
-        stickyMenu: false,
-        sidebarToggle: false,
-        scrollTop: false
-    }"
-    x-init="
-        darkMode = JSON.parse(localStorage.getItem('darkMode'));
-        $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))
-    "
-    :class="{ 'dark bg-gray-900': darkMode === true }"
->
-<x-ui.flash-message />
-<x-ui.error-message />
+<body x-data="{
+    page: '{{ $pageName ?? 'default' }}',
+    loaded: true,
+    darkMode: false,
+    stickyMenu: false,
+    sidebarToggle: false,
+    scrollTop: false
+}" x-init="darkMode = JSON.parse(localStorage.getItem('darkMode'));
+$watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))" :class="{ 'dark bg-gray-900': darkMode === true }">
+
     <div>
         <!-- ===== Preloader Start ===== -->
         <x-partials.preloader />
         <!-- ===== Preloader End ===== -->
-
         <!-- ===== Page Wrapper Start ===== -->
         <div class="flex h-screen overflow-hidden">
             <!-- ===== Sidebar Start ===== -->
             <x-partials.sidebar />
             <!-- ===== Sidebar End ===== -->
-
             <!-- ===== Content Area Start ===== -->
             <div class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
                 <!-- ===== Small Device Overlay Start ===== -->
-                <div
-                    @click="sidebarToggle = false"
-                    :class="sidebarToggle ? 'block lg:hidden' : 'hidden'"
+                <div @click="sidebarToggle = false" :class="sidebarToggle ? 'block lg:hidden' : 'hidden'"
                     class="fixed w-full h-screen z-9 bg-gray-900/50">
                 </div>
                 <!-- ===== Small Device Overlay End ===== -->
-
                 <!-- ===== Header Start ===== -->
                 <x-partials.header />
                 <!-- ===== Header End ===== -->
-               
-
                 <!-- ===== Main Content Start ===== -->
                 {{ $slot }}
                 <!-- ===== Main Content End ===== -->
@@ -74,8 +57,5 @@
         <!-- ===== Page Wrapper End ===== -->
     </div>
     @livewireScripts
-    
-   
 </body>
-
 </html>

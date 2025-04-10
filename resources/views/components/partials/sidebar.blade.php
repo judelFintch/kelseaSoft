@@ -177,7 +177,7 @@
                                 <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                     class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                                     <li>
-                                        <a href="/clients" class="menu-dropdown-item group"
+                                        <a href="{{route('company.list')}}" class="menu-dropdown-item group"
                                             :class="page === 'clientListe' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Liste des Clients

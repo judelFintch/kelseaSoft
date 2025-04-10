@@ -1,6 +1,7 @@
 <div>
+    <x-ui.flash-message />
+    <x-ui.error-message />
     <div class="max-w-5xl mx-auto p-6">
-
         <!-- Ouvrir le form ici pour englober tout le contenu -->
         <form wire:submit.prevent="submitForm()">
             <div class="rounded-2xl top-6 border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
