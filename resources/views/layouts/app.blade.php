@@ -13,10 +13,13 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Styles -->
+    @livewireStyles
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+  
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+   
+   
 </head>
 
 <body
@@ -34,6 +37,8 @@
     "
     :class="{ 'dark bg-gray-900': darkMode === true }"
 >
+<x-ui.flash-message />
+<x-ui.error-message />
     <div>
         <!-- ===== Preloader Start ===== -->
         <x-partials.preloader />
@@ -58,6 +63,7 @@
                 <!-- ===== Header Start ===== -->
                 <x-partials.header />
                 <!-- ===== Header End ===== -->
+               
 
                 <!-- ===== Main Content Start ===== -->
                 {{ $slot }}
@@ -67,6 +73,9 @@
         </div>
         <!-- ===== Page Wrapper End ===== -->
     </div>
+    @livewireScripts
+    
+   
 </body>
 
 </html>
