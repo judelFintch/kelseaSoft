@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('logo')->nullable(); // Assuming you want to store the logo of the company
             $table->string('website')->nullable(); // Assuming you want to store the website of the company
             $table->string('country')->nullable(); // Assuming you want to store the country of the company
+            $table->boolean('is_deleted')->default(false); // Indicateur de suppression logique
 
             $table->timestamps();
         });

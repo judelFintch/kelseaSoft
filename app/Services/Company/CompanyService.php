@@ -4,14 +4,13 @@ namespace App\Services\Company;
 
 use App\Models\Company;
 use Illuminate\Support\Facades\DB;
-use Exception;
 
 class CompanyService
 {
     /**
-     * Create a new company using the validated data.
+     * Crée une nouvelle entreprise avec les données validées.
      *
-     * @param array $data
+     * @param  array  $data
      * @return \App\Models\Company
      *
      * @throws \Exception
@@ -19,76 +18,159 @@ class CompanyService
     public static function createCompany(array $data)
     {
         return DB::transaction(function () use ($data) {
-            // Add any additional business logic here if needed.
             return Company::create($data);
         });
     }
 
-
-    public static function updateCompany($id, $data){
+    /**
+     * Met à jour une entreprise existante.
+     *
+     * @param  int    $id
+     * @param  array  $data
+     * @return \App\Models\Company
+     *
+     * @throws \Exception
+     */
+    public static function updateCompany($id, array $data)
+    {
         return DB::transaction(function () use ($id, $data) {
-            $company = Company::findOrFail($id);
+            $company = Company::notDeleted()->findOrFail($id);
             $company->update($data);
             return $company;
         });
     }
 
-    public static function deleteCompany($id){
+    /**
+     * Marque une entreprise comme supprimée (suppression douce).
+     *
+     * @param  int  $id
+     * @return \App\Models\Company
+     *
+     * @throws \Exception
+     */
+    public static function deleteCompany($id)
+    {
+        return DB::transaction(function () use ($id) {
+            $company = Company::notDeleted()->findOrFail($id);
+            $company->update(['deleted' => true]);
+            return $company;
+        });
+    }
+
+    /**
+     * Restaure une entreprise précédemment supprimée.
+     *
+     * @param  int  $id
+     * @return \App\Models\Company
+     *
+     * @throws \Exception
+     */
+    public static function restoreCompany($id)
+    {
+        return DB::transaction(function () use ($id) {
+            $company = Company::where('deleted', true)->findOrFail($id);
+            $company->update(['deleted' => false]);
+            return $company;
+        });
+    }
+
+    /**
+     * Supprime définitivement une entreprise.
+     *
+     * @param  int  $id
+     * @return \App\Models\Company
+     *
+     * @throws \Exception
+     */
+    public static function forceDeleteCompany($id)
+    {
         return DB::transaction(function () use ($id) {
             $company = Company::findOrFail($id);
             $company->delete();
             return $company;
         });
     }
-    public static function restoreCompany($id){
+
+    /**
+     * Récupère une entreprise non supprimée par son identifiant.
+     *
+     * @param  int  $id
+     * @return \App\Models\Company
+     *
+     * @throws \Exception
+     */
+    public static function getCompany($id)
+    {
         return DB::transaction(function () use ($id) {
-            $company = Company::withTrashed()->findOrFail($id);
-            $company->restore();
-            return $company;
+            return Company::notDeleted()->findOrFail($id);
         });
     }
-    public static function forceDeleteCompany($id){
-        return DB::transaction(function () use ($id) {
-            $company = Company::withTrashed()->findOrFail($id);
-            $company->forceDelete();
-            return $company;
-        });
-    }
-    public static function getCompany($id){
-        return DB::transaction(function () use ($id) {
-            $company = Company::findOrFail($id);
-            return $company;
-        });
-    }
-    public static function getAllCompanies(){
+
+    /**
+     * Récupère toutes les entreprises non supprimées.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public static function getAllCompanies()
+    {
         return DB::transaction(function () {
-            $companies = Company::all();
-            return $companies;
+            return Company::notDeleted()->get();
         });
     }
-    public static function getAllCompaniesWithTrashed(){
+
+    /**
+     * Récupère toutes les entreprises, y compris celles supprimées.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public static function getAllCompaniesWithTrashed()
+    {
         return DB::transaction(function () {
-            $companies = Company::withTrashed()->get();
-            return $companies;
+            return Company::all(); // Inclut toutes les entreprises, quelle que soit la valeur de 'deleted'
         });
     }
-    public static function getAllCompaniesPaginated($perPage = 10){
+
+    /**
+     * Récupère les entreprises non supprimées avec pagination.
+     *
+     * @param  int  $perPage
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public static function getAllCompaniesPaginated($perPage = 10)
+    {
         return DB::transaction(function () use ($perPage) {
-            $companies = Company::paginate($perPage);
-            return $companies;
+            return Company::notDeleted()->paginate($perPage);
         });
     }
-    public static function getAllCompaniesPaginatedBySearch($search, $perPage = 10){
+
+    /**
+     * Recherche les entreprises non supprimées par nom avec pagination.
+     *
+     * @param  string  $search
+     * @param  int     $perPage
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public static function getAllCompaniesPaginatedBySearch($search, $perPage = 10)
+    {
         return DB::transaction(function () use ($search, $perPage) {
-            $companies = Company::where('name', 'like', '%'.$search.'%')->paginate($perPage);
-            return $companies;
+            return Company::notDeleted()
+                ->where('name', 'like', '%' . $search . '%')
+                ->paginate($perPage);
         });
     }
-  
-    public static function getAllCompaniesBySearch($search){
+
+    /**
+     * Recherche les entreprises non supprimées par nom.
+     *
+     * @param  string  $search
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public static function getAllCompaniesBySearch($search)
+    {
         return DB::transaction(function () use ($search) {
-            $companies = Company::where('name', 'like', '%'.$search.'%')->get();
-            return $companies;
+            return Company::notDeleted()
+                ->where('name', 'like', '%' . $search . '%')
+                ->get();
         });
     }
 }
