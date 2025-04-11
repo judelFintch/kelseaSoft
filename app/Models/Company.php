@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-USE Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder;
 
 class Company extends Model
@@ -11,10 +11,7 @@ class Company extends Model
     //
     use HasFactory;
 
-    protected $casts = [
-        'is_deleted' => 'boolean',
-    ];
-
+   
 
     protected $fillable = [
         'name',
@@ -27,7 +24,8 @@ class Company extends Model
         'nbc_number',
         'phone_number',
         'email',
-        'physical_address'
+        'physical_address',
+        'is_deleted',
     ];
 
 

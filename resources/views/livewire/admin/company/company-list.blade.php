@@ -7,12 +7,12 @@
                         Liste des entreprises
                     </h3>
                 </div>
+               
                 <div class="p-5 border-t border-gray-100 dark:border-gray-800 sm:p-6">
                     <!-- ====== Table Start -->
-                    <div
-                        class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-                        <div class="max-w-full overflow-x-auto">
-                            <table class="min-w-full">
+                    <div class="overflow-visible rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                        <div class="w-full overflow-x-auto overflow-y-visible">
+                            <table class="w-full table-auto">
                                 <thead>
                                     <tr class="border-b border-gray-100 dark:border-gray-800">
                                         <th class="px-5 py-3 sm:px-6 text-left">
@@ -40,7 +40,6 @@
                                                 Code
                                             </p>
                                         </th>
-
                                         <th class="px-5 py-3 sm:px-6 text-left">
                                             <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
                                                 Actions
@@ -59,23 +58,19 @@
                                                             alt="{{ $company->name }}" />
                                                     </div>
                                                     <div>
-                                                        <span
-                                                            class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                                                        <span class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
                                                             {{ $company->name }}
                                                         </span>
-                                                        <span
-                                                            class="block text-gray-500 text-theme-xs dark:text-gray-400">
+                                                        <span class="block text-gray-500 text-theme-xs dark:text-gray-400">
                                                             {{ $company->email ?? 'N/A' }}
                                                         </span>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td
-                                                class="px-5 py-4 sm:px-6 text-gray-500 text-theme-sm dark:text-gray-400">
+                                            <td class="px-5 py-4 sm:px-6 text-gray-500 text-theme-sm dark:text-gray-400">
                                                 {{ $company->business_category ?? '—' }}
                                             </td>
-                                            <td
-                                                class="px-5 py-4 sm:px-6 text-gray-500 text-theme-sm dark:text-gray-400">
+                                            <td class="px-5 py-4 sm:px-6 text-gray-500 text-theme-sm dark:text-gray-400">
                                                 {{ $company->phone_number ?? '—' }}
                                             </td>
                                             <td class="px-5 py-4 sm:px-6">
@@ -87,11 +82,9 @@
                                                     {{ ucfirst($company->status) }}
                                                 </span>
                                             </td>
-                                            <td
-                                                class="px-5 py-4 sm:px-6 text-gray-500 text-theme-sm dark:text-gray-400">
+                                            <td class="px-5 py-4 sm:px-6 text-gray-500 text-theme-sm dark:text-gray-400">
                                                 {{ $company->code ?? '—' }}
                                             </td>
-                                            <td class="px-5 py-4 sm:px-6 text-right">
                                             <td class="px-5 py-4 sm:px-6">
                                                 <div x-data="{ open: false }" class="relative">
                                                     <button @click="open = !open"
@@ -113,12 +106,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5"
-                                                class="px-5 py-4 text-center text-sm text-gray-400 dark:text-white/50">
+                                            <td colspan="6" class="px-5 py-4 text-center text-sm text-gray-400 dark:text-white/50">
                                                 Aucune entreprise trouvée.
                                             </td>
                                         </tr>
@@ -127,6 +118,7 @@
                             </table>
                         </div>
                     </div>
+
                     <!-- Pagination -->
                     <div class="mt-6">
                         {{ $companies->links('vendor.pagination.tailwind') }}
@@ -136,5 +128,4 @@
             </div>
         </div>
     </div>
-
 </div>

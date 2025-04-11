@@ -23,7 +23,7 @@ class CompanyList extends Component
     public function confirmDelete($id)
     {
         try {
-            CompanyService::deleteCompany($id);
+            $debug =CompanyService::deleteCompany($id);
             session()->flash('message', 'Entreprise supprimée avec succès.');
         } catch (\Exception $e) {
             session()->flash('error', 'Erreur lors de la suppression.');
@@ -32,7 +32,8 @@ class CompanyList extends Component
 
     public function render()
     {
-        $companies = CompanyService::getAllCompaniesPaginated($this->perPage);
+       // $companies = CompanyService::getAllCompaniesPaginated($this->perPage);
+        $companies = CompanyService::getAllCompaniesPaginatedBySearch($this->search, 10);
 
         return view('livewire.admin.company.company-list', [
             'companies' => $companies,

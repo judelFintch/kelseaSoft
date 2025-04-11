@@ -52,7 +52,8 @@ class CompanyService
     {
         return DB::transaction(function () use ($id) {
             $company = Company::notDeleted()->findOrFail($id);
-            $company->update(['deleted' => true]);
+            $company->update(['is_deleted' => true]);
+
             return $company;
         });
     }
@@ -99,7 +100,7 @@ class CompanyService
      *
      * @throws \Exception
      */
-    public static function getCompany($id)
+    public static function getCompanyById($id)
     {
         return DB::transaction(function () use ($id) {
             return Company::notDeleted()->findOrFail($id);
