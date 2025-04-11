@@ -5,10 +5,10 @@
         <!-- SIDEBAR HEADER -->
         <div :class="sidebarToggle ? 'justify-center' : 'justify-between'"
             class="flex items-center gap-2 pt-8 sidebar-header pb-7">
-            <a href="index.html">
+            <a href="{{route('dashboard')}}">
                 <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
-                    <img class="dark:hidden" src="{{ asset('images/logo/logo.png') }}" alt="Logo" />
-                    <img class="hidden dark:block" src="{{ asset('src/images/logo/logo-dark.svg') }}" alt="Logo" />
+                    <img class="dark:hidden" src="{{ asset('src/images/logo/logo.png') }}" alt="Logo" />
+                    <img class="hidden dark:block" src="{{ asset('src/images/logo/logo.png') }}" alt="Logo" />
                 </span>
                 <img class="logo-icon" :class="sidebarToggle ? 'lg:block' : 'hidden'"
                     src="{{ asset('src/images/logo/logo-icon.svg') }}" alt="Logo" />
@@ -130,7 +130,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/douane/dossiers/create" class="menu-dropdown-item group"
+                                        <a href="{{route('folder.create')}}" class="menu-dropdown-item group"
                                             :class="page === 'dossierCreate' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Nouveau Dossier
