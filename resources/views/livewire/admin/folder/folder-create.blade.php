@@ -1,86 +1,91 @@
-<div>
+<div x-data="{ step: 1 }">
     <x-ui.flash-message />
     <x-ui.error-message />
     <div class="max-w-5xl mx-auto p-6">
         <form wire:submit.prevent="submitForm()">
-            <div class="rounded-2xl top-6 border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+            <!-- Barre de progression dynamique -->
+            <div class="mb-6">
+                <div class="flex items-center justify-between text-sm font-medium text-gray-700 dark:text-white/70 mb-2">
+                    <span x-text="`Step ${step} of 3`"></span>
+                    <span x-show="step === 1">Folder Information</span>
+                    <span x-show="step === 2">Driver & Logistics</span>
+                    <span x-show="step === 3">Financial & Description</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+                    <div class="bg-brand-500 h-2 rounded-full transition-all duration-300"
+                        :style="`width: ${(step / 3) * 100}%`"></div>
+                </div>
+            </div>
+
+            <!-- Card -->
+            <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                <!-- Header -->
                 <div class="px-5 py-4 sm:px-6 sm:py-5">
                     <h3 class="text-lg font-medium text-gray-800 dark:text-white/90">Create Folder</h3>
                 </div>
 
+                <!-- Body -->
                 <div class="divide-y divide-gray-100 p-5 sm:p-6 dark:divide-gray-800">
-                    <div class="pb-5">
-                        <h4 class="mb-4 text-base font-medium text-gray-800 dark:text-white/90">Folder Information</h4>
+                    <!-- Étape 1 -->
+                    <div x-show="step === 1" class="pb-5">
+                        <h4 class="mb-4 text-base font-medium text-gray-800 dark:text-white/90">Folder Details</h4>
                         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                            <!-- Each field below corresponds to the validated attributes -->
+                            <x-forms.input label="Folder Number" model="folder.folder_number" />
+                            <x-forms.input label="Truck Number" model="folder.truck_number" />
+                            <x-forms.input label="Trailer Number" model="folder.trailer_number" />
+                            <x-forms.input label="Transporter" model="folder.transporter" />
+                        </div>
+                    </div>
 
-                            @foreach ([
-                                'folder_number' => 'Folder Number',
-                                'truck_number' => 'Truck Number',
-                                'trailer_number' => 'Trailer Number',
-                                'transporter' => 'Transporter',
-                                'driver_name' => 'Driver Name',
-                                'driver_phone' => 'Driver Phone',
-                                'driver_nationality' => 'Driver Nationality',
-                                'origin' => 'Origin',
-                                'destination' => 'Destination',
-                                'supplier' => 'Supplier',
-                                'client' => 'Client',
-                                'customs_office' => 'Customs Office',
-                                'declaration_number' => 'Declaration Number',
-                                'declaration_type' => 'Declaration Type',
-                                'declarant' => 'Declarant',
-                                'customs_agent' => 'Customs Agent',
-                                'container_number' => 'Container Number',
-                                'weight' => 'Weight (KG)',
-                                'fob_amount' => 'FOB Amount',
-                                'insurance_amount' => 'Insurance Amount',
-                                'cif_amount' => 'CIF Amount',
-                                'arrival_border_date' => 'Arrival Border Date',
-                            ] as $field => $label)
-                                <div>
-                                    <label for="{{ $field }}"
-                                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                        {{ $label }}
-                                    </label>
-                                    <input 
-                                        @if (str_contains($field, 'date')) type="date" 
-                                        @elseif (in_array($field, ['weight', 'fob_amount', 'insurance_amount', 'cif_amount'])) type="number" step="0.01"
-                                        @else type="text" 
-                                        @endif
-                                        id="{{ $field }}"
-                                        wire:model.defer="folder.{{ $field }}"
-                                        placeholder="Enter {{ strtolower($label) }}"
-                                        class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                    @error("folder.$field")
-                                        <span class="text-sm text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            @endforeach
+                    <!-- Étape 2 -->
+                    <div x-show="step === 2" class="py-5">
+                        <h4 class="mb-4 text-base font-medium text-gray-800 dark:text-white/90">Driver & Logistics</h4>
+                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <x-forms.input label="Driver Name" model="folder.driver_name" />
+                            <x-forms.input label="Driver Phone" model="folder.driver_phone" />
+                            <x-forms.input label="Driver Nationality" model="folder.driver_nationality" />
+                            <x-forms.input label="Origin" model="folder.origin" />
+                            <x-forms.input label="Destination" model="folder.destination" />
+                            <x-forms.input label="Supplier" model="folder.supplier" />
+                            <x-forms.input label="Client" model="folder.client" />
+                            <x-forms.input label="Customs Office" model="folder.customs_office" />
+                            <x-forms.input label="Declaration Number" model="folder.declaration_number" />
+                            <x-forms.input label="Declaration Type" model="folder.declaration_type" />
+                            <x-forms.input label="Declarant" model="folder.declarant" />
+                            <x-forms.input label="Customs Agent" model="folder.customs_agent" />
+                            <x-forms.input label="Container Number" model="folder.container_number" />
+                        </div>
+                    </div>
 
-                            <!-- Description -->
-                            <div class="sm:col-span-2">
-                                <label for="description"
-                                    class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Description
-                                </label>
-                                <textarea id="description" rows="4" wire:model.defer="folder.description"
-                                    placeholder="Enter folder description"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"></textarea>
-                                @error('folder.description')
-                                    <span class="text-sm text-red-600">{{ $message }}</span>
-                                @enderror
-                            </div>
-
+                    <!-- Étape 3 -->
+                    <div x-show="step === 3" class="pt-5">
+                        <h4 class="mb-4 text-base font-medium text-gray-800 dark:text-white/90">Financial & Description</h4>
+                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <x-forms.input label="Weight" model="folder.weight" type="number" />
+                            <x-forms.input label="FOB Amount" model="folder.fob_amount" type="number" />
+                            <x-forms.input label="Insurance Amount" model="folder.insurance_amount" type="number" />
+                            <x-forms.input label="CIF Amount" model="folder.cif_amount" type="number" />
+                            <x-forms.input label="Arrival at Border" model="folder.arrival_border_date" type="date" />
+                            <x-forms.textarea label="Description" model="folder.description" rows="4" />
                         </div>
                     </div>
                 </div>
 
-                <div class="px-5 py-4 sm:px-6 sm:py-5">
-                    <button type="submit"
-                        class="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
-                        Save Folder
-                    </button>
+                <!-- Buttons -->
+                <div class="flex justify-between items-center px-5 py-4 sm:px-6 sm:py-5">
+                    <button type="button" @click="step = Math.max(1, step - 1)"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-white/80 dark:hover:bg-gray-600"
+                        x-show="step > 1">Previous</button>
+
+                    <div class="flex items-center gap-3 ml-auto">
+                        <button type="button" @click="step = Math.min(3, step + 1)"
+                            class="px-4 py-2 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600"
+                            x-show="step < 3">Next</button>
+
+                        <button type="submit"
+                            class="px-4 py-2 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600"
+                            x-show="step === 3">Save Folder</button>
+                    </div>
                 </div>
             </div>
         </form>
