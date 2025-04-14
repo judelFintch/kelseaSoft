@@ -8,7 +8,6 @@ use App\Models\DocumentType;
 class UploadFiles extends Component
 {
 
-
     public $folder;
     public $file;
     public $documentTypes;
@@ -17,8 +16,6 @@ class UploadFiles extends Component
         'file' => 'required|file|max:10240',
         'documentType' => 'required|string',
     ];
-
-
 
     public function mount($folder)
     {
@@ -46,9 +43,6 @@ class UploadFiles extends Component
 
         $this->reset('file', 'documentType');
     }
-
-
-
     public function render()
     {
         return view('livewire.admin.folder.operations.upload-files');
