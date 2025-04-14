@@ -37,8 +37,8 @@
                 <!-- Hamburger Toggle BTN -->
 
                 <a href="index.html" class="lg:hidden">
-                    <img class="dark:hidden" src="src/images/logo/logo.svg" alt="Logo" />
-                    <img class="hidden dark:block" src="src/images/logo/logo-dark.svg" alt="Logo" />
+                    <img class="dark:hidden" src="{{asset('src/images/logo/logo.png')}}" alt="Logo" />
+                    <img class="hidden dark:block" src="src/images/logo/logo.png" alt="Logo" />
                 </a>
 
                 <!-- Application nav menu button -->
@@ -322,21 +322,7 @@
                                                 class="bg-success-500 absolute right-0 bottom-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
                                         </span>
 
-                                        <span class="block">
-                                            <span class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400">
-                                                <span class="font-medium text-gray-800 dark:text-white/90">Jocelyn
-                                                    Kenter</span>
-                                                requests permission to change
-                                                <span class="font-medium text-gray-800 dark:text-white/90">Project
-                                                    - Nganter App</span>
-                                            </span>
-
-                                            <span
-                                                class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                                                <span>Project</span>
-                                                <span class="h-1 w-1 rounded-full bg-gray-400"></span>
-                                                <span>15 min ago</span>
-                                            </span>
+        
                                         </span>
                                     </a>
                                 </li>
