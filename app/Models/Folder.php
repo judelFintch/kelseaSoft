@@ -43,4 +43,9 @@ class Folder extends Model
         'cif_amount' => 'float',
         'arrival_border_date' => 'date',
     ];
+
+    public function files()
+    {
+        return $this->hasMany(FolderFile::class);
+    }
 }

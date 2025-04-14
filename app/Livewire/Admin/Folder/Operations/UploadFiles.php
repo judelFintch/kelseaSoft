@@ -3,23 +3,29 @@
 namespace App\Livewire\Admin\Folder\Operations;
 
 use Livewire\Component;
+use Livewire\WithFileUploads;
+use App\Models\Folder;
+use App\Models\FolderFile;
 use App\Models\DocumentType;
+use Illuminate\Support\Facades\Storage;
 
 class UploadFiles extends Component
 {
+    use WithFileUploads;
 
     public $folder;
     public $file;
-    public $documentTypes;
+    public $documentType;
+    public $documentTypes = [];
 
     protected $rules = [
         'file' => 'required|file|max:10240',
-        'documentType' => 'required|string',
+        'documentType' => 'required|exists:document_types,id',
     ];
 
-    public function mount($folder)
+    public function mount(Folder $folder)
     {
-        $this->folder = $folder;
+        $this->folder = $folder->load('files.documentType');
         $this->documentTypes = DocumentType::all();
     }
 
@@ -30,19 +36,44 @@ class UploadFiles extends Component
 
     public function uploadFile()
     {
-        $this->validate();
+        //$this->validate();
 
-        // logiques d’enregistrement
-        $path = $this->file->store('folder_files', 'public');
+        $storedPath = $this->file->store('folder_files', 'public');
 
         $this->folder->files()->create([
             'name' => $this->file->getClientOriginalName(),
-            'path' => $path,
-            'type' => $this->documentType,
+            'path' => $storedPath,
+            'document_type_id' => $this->documentType,
         ]);
 
+        session()->flash('success', '📁 Fichier ajouté avec succès !');
+
         $this->reset('file', 'documentType');
+        $this->folder->refresh(); // recharge les fichiers
     }
+
+    public function getGroupedFilesProperty()
+    {
+        return $this->folder->files
+            ->groupBy(function ($file) {
+                return $file->documentType->name ?? 'Non défini';
+            });
+    }
+
+    public function deleteFile($id)
+    {
+        $file = FolderFile::findOrFail($id);
+
+        if ($file->folder_id !== $this->folder->id) {
+            abort(403);
+        }
+
+        Storage::disk('public')->delete($file->path);
+        $file->delete();
+
+        $this->folder->refresh();
+    }
+
     public function render()
     {
         return view('livewire.admin.folder.operations.upload-files');
