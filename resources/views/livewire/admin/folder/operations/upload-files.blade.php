@@ -29,14 +29,8 @@
                 <label for="document_type" class="block text-sm text-gray-700 dark:text-gray-200 font-medium">
                     🗂️ Type de document
                 </label>
-                <x-forms.select
-                    id="document_type"
-                    wire:model.defer="documentType"
-                    :options="$documentTypes"
-                    option-label="name"
-                    option-value="id"
-                    placeholder="Sélectionnez un type de document"
-                />
+                <x-forms.select id="document_type" wire:model.live="documentType" :options="$documentTypes" option-label="name"
+                    option-value="id" placeholder="Sélectionnez un type de document" />
                 @error('documentType')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
@@ -47,13 +41,12 @@
                 <label for="fileInput" class="block text-sm text-gray-700 dark:text-gray-200 font-medium">
                     📂 Fichier à joindre
                 </label>
-                <div
-                    class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:border-indigo-500 transition relative"
-                    @drop.prevent
-                    @dragover.prevent
-                >
-                    <input type="file" wire:model="file" id="fileInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                    <label for="fileInput" class="text-gray-600 dark:text-gray-300 text-sm cursor-pointer relative z-10">
+                <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:border-indigo-500 transition relative"
+                    @drop.prevent @dragover.prevent>
+                    <input type="file" wire:model="file" id="fileInput"
+                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                    <label for="fileInput"
+                        class="text-gray-600 dark:text-gray-300 text-sm cursor-pointer relative z-10">
                         Glisser-déposer ou <span class="text-indigo-500 underline">choisir un fichier</span>
                     </label>
                 </div>
@@ -95,7 +88,8 @@
                             <table class="w-full table-auto text-sm border border-gray-200 dark:border-gray-700">
                                 <thead class="bg-gray-100 dark:bg-gray-700">
                                     <tr>
-                                        <th class="px-4 py-2 text-left text-gray-700 dark:text-gray-200">Nom du fichier</th>
+                                        <th class="px-4 py-2 text-left text-gray-700 dark:text-gray-200">Nom du fichier
+                                        </th>
                                         <th class="px-4 py-2 text-left text-gray-700 dark:text-gray-200">Aperçu</th>
                                         <th class="px-4 py-2 text-left text-gray-700 dark:text-gray-200">Actions</th>
                                     </tr>
@@ -104,20 +98,24 @@
                                     @foreach ($files as $file)
                                         <tr>
                                             <td class="px-4 py-2">
-                                                <a href="{{ asset('storage/' . $file->path) }}" target="_blank" class="text-indigo-600 dark:text-indigo-400 hover:underline">
+                                                <a href="{{ asset('storage/' . $file->path) }}" target="_blank"
+                                                    class="text-indigo-600 dark:text-indigo-400 hover:underline">
                                                     {{ $file->name }}
                                                 </a>
                                             </td>
                                             <td class="px-4 py-2">
                                                 @if (Str::startsWith(pathinfo($file->path, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png']))
-                                                    <img src="{{ asset('storage/' . $file->path) }}" class="w-16 h-16 object-cover rounded">
+                                                    <img src="{{ asset('storage/' . $file->path) }}"
+                                                        class="w-16 h-16 object-cover rounded">
                                                 @else
                                                     <span class="text-xs text-gray-400">(non affichable)</span>
                                                 @endif
                                             </td>
                                             <td class="px-4 py-2 flex gap-3">
-                                                <a href="{{ asset('storage/' . $file->path) }}" target="_blank" class="text-blue-500 text-xs hover:underline">Télécharger</a>
-                                                <button wire:click="deleteFile({{ $file->id }})" class="text-red-500 text-xs hover:underline">Supprimer</button>
+                                                <a href="{{ asset('storage/' . $file->path) }}" target="_blank"
+                                                    class="text-blue-500 text-xs hover:underline">Télécharger</a>
+                                                <button wire:click="deleteFile({{ $file->id }})"
+                                                    class="text-red-500 text-xs hover:underline">Supprimer</button>
                                             </td>
                                         </tr>
                                     @endforeach

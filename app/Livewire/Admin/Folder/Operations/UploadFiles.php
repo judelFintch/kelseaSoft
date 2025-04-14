@@ -27,6 +27,7 @@ class UploadFiles extends Component
     {
         $this->folder = $folder->load('files.documentType');
         $this->documentTypes = DocumentType::all();
+    
     }
 
     public function updated($property)
@@ -35,13 +36,16 @@ class UploadFiles extends Component
     }
 
     public function uploadFile()
+
+    
     {
         //$this->validate();
+      
 
         $storedPath = $this->file->store('folder_files', 'public');
 
         $this->folder->files()->create([
-            'name' => $this->file->getClientOriginalName(),
+            'name' => $this->documentType,
             'path' => $storedPath,
             'document_type_id' => $this->documentType,
         ]);
