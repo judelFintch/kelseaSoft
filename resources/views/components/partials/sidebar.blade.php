@@ -412,14 +412,14 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/roles" class="menu-dropdown-item group"
+                                        <a href="{{route('merchandiseType.create')}}" class="menu-dropdown-item group"
                                             :class="page === 'Roles' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
-                                            Rôles
+                                            Types Marchandise 
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/regimes-douaniers" class="menu-dropdown-item group"
+                                        <a href="{{route('customsRegimes.create')}}" class="menu-dropdown-item group"
                                             :class="page === 'RegimesDouaniers' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Régimes douaniers

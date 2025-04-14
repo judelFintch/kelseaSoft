@@ -28,6 +28,7 @@
                     @if($editingId)
                         <button wire:click="$set('editingId', null)" type="button" class="text-sm text-gray-500 hover:underline">Annuler</button>
                     @endif
+                    <button wire:click="resetForm" type="button" class="text-sm text-gray-500 hover:underline">Réinitialiser tout</button>
                 </div>
             </form>
         </div>

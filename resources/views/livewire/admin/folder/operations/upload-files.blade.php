@@ -95,12 +95,13 @@
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                                    @php $i = 1; @endphp
                                     @foreach ($files as $file)
                                         <tr>
                                             <td class="px-4 py-2">
                                                 <a href="{{ asset('storage/' . $file->path) }}" target="_blank"
                                                     class="text-indigo-600 dark:text-indigo-400 hover:underline">
-                                                    {{ $file->name }}
+                                                    {{ $i++ }}
                                                 </a>
                                             </td>
                                             <td class="px-4 py-2">

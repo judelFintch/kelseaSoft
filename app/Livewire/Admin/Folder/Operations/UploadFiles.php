@@ -17,6 +17,8 @@ class UploadFiles extends Component
     public $file;
     public $documentType;
     public $documentTypes = [];
+    public $confirmingReset = false;
+    public $confirmingDelete = null;
 
     protected $rules = [
         'file' => 'required|file|max:10240',
@@ -27,7 +29,6 @@ class UploadFiles extends Component
     {
         $this->folder = $folder->load('files.documentType');
         $this->documentTypes = DocumentType::all();
-    
     }
 
     public function updated($property)
@@ -37,13 +38,10 @@ class UploadFiles extends Component
 
     public function uploadFile()
 
-    
+
     {
         $this->validate();
-      
-
         $storedPath = $this->file->store('folder_files', 'public');
-
         $this->folder->files()->create([
             'name' => $this->documentType,
             'path' => $storedPath,
