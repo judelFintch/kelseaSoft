@@ -32,4 +32,22 @@ class FolderService
         $folder = $this->getFolder($id);
         return $folder->delete();
     }
+
+
+    public static function generateFolderNumber()
+    {
+        $lastFolder = Folder::orderBy('created_at', 'desc')->first();
+        if ($lastFolder) {
+            $lastNumber = (int) substr($lastFolder->folder_number, 1);
+            $newNumber = $lastNumber + 1;
+            return 'F' . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
+        }
+        return 'F00001';
+    }
+
+    public static function storeFolder($data)
+    {
+        return Folder::create($data);
+    }
+      
 }

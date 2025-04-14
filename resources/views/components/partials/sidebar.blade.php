@@ -5,7 +5,7 @@
         <!-- SIDEBAR HEADER -->
         <div :class="sidebarToggle ? 'justify-center' : 'justify-between'"
             class="flex items-center gap-2 pt-8 sidebar-header pb-7">
-            <a href="{{route('dashboard')}}">
+            <a href="{{ route('dashboard') }}">
                 <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
                     <img class="dark:hidden" src="{{ asset('src/images/logo/logo.png') }}" alt="Logo" />
                     <img class="hidden dark:block" src="{{ asset('src/images/logo/logo.png') }}" alt="Logo" />
@@ -123,14 +123,14 @@
                                 <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                     class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                                     <li>
-                                        <a href="/douane/dossiers" class="menu-dropdown-item group"
+                                        <a href="{{route('folder.list')}}" class="menu-dropdown-item group"
                                             :class="page === 'dossierListe' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Liste
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{route('folder.create')}}" class="menu-dropdown-item group"
+                                        <a href="{{ route('folder.create') }}" class="menu-dropdown-item group"
                                             :class="page === 'dossierCreate' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Nouveau Dossier
@@ -176,16 +176,16 @@
                                 :class="(selected === 'Client') ? 'block' : 'hidden'">
                                 <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                     class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
-                                    
+
                                     <li>
-                                        <a href="{{route('company.list')}}" class="menu-dropdown-item group"
+                                        <a href="{{ route('company.list') }}" class="menu-dropdown-item group"
                                             :class="page === 'clientListe' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Liste des Clients
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{route('company.create')}}" class="menu-dropdown-item group"
+                                        <a href="{{ route('company.create') }}" class="menu-dropdown-item group"
                                             :class="page === 'clientCreate' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Nouveau Client
@@ -354,9 +354,6 @@
                             </div>
                             <!-- Dropdown Menu End -->
                         </li>
-
-
-
                         <li>
                             <a href="#"
                                 @click.prevent="selected = (selected === 'Parametres' ? '' : 'Parametres')"

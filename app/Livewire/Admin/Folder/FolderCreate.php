@@ -1,22 +1,23 @@
 <?php
 
 namespace App\Livewire\Admin\Folder;
-use App\Services\Company\CompanyService;
 
+
+use App\Services\Company\CompanyService;
+use App\Services\Folder\FolderService;
 use Livewire\Component;
 
 class FolderCreate extends Component
 {
-
-
-
     public $clients;
-
+    public $folder;
 
     public function mount()
     {
-        
-        $this->clients =  CompanyService::getAllCompanies();
+        $this->clients = CompanyService::getAllCompanies();
+        $this->folder = [
+            'folder_number' => FolderService::generateFolderNumber(),
+        ];
     }
 
     public function save()
@@ -47,12 +48,14 @@ class FolderCreate extends Component
             'folder.description'          => 'nullable|string|max:1000',
         ]);
 
-        $this->folder->save();
+        FolderService::storeFolder($validated['folder']);
 
-        session()->flash('success', 'Folder created successfully.');
+        $this->reset('folder');
+        $this->folder['folder_number'] = FolderService::generateFolderNumber();
 
-        return redirect()->route('folder.index');
+        session()->flash('message', 'Folder created successfully.');
     }
+
     public function render()
     {
         return view('livewire.admin.folder.folder-create');
