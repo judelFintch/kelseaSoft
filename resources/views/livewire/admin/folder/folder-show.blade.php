@@ -88,45 +88,9 @@
             </div>
         </div>
 
+        @livewire('admin.folder.operations.upload-files', ['folder' => $folder], key('upload-files-' . $folder->id))
         <!-- FICHIERS -->
-        <div x-show="tab === 'files'" x-cloak class="space-y-6">
-            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                    📤 Téléverser un fichier
-                </label>
-                <div
-                    class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center cursor-pointer hover:border-indigo-500"
-                    @drop.prevent
-                    @dragover.prevent
-                >
-                    <input type="file" wire:model="file" class="hidden" id="fileInput" />
-                    <label for="fileInput" class="text-gray-600 dark:text-gray-300 text-sm cursor-pointer">
-                        Glisser-déposer ou <span class="underline text-indigo-500">choisir un fichier</span>
-                    </label>
-                </div>
-                @error('file') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-            </div>
 
-            <div>
-                <h4 class="text-sm font-medium text-gray-800 dark:text-white mb-2">📁 Fichiers joints</h4>
-                @if ($folder->files && count($folder->files))
-                    <ul class="divide-y divide-gray-200 dark:divide-gray-700 text-sm">
-                        @foreach($folder->files as $file)
-                            <li class="py-2 flex justify-between items-center">
-                                <a href="{{ asset('storage/'.$file->path) }}" class="text-blue-600 hover:underline flex-1" target="_blank">
-                                    {{ $file->name }}
-                                </a>
-                                <button wire:click="deleteFile('{{ $file->id }}')" class="text-red-500 text-xs hover:underline">
-                                    Supprimer
-                                </button>
-                            </li>
-                        @endforeach
-                    </ul>
-                @else
-                    <p class="text-sm text-gray-500">Aucun fichier disponible.</p>
-                @endif
-            </div>
-        </div>
 
         <!-- PROGRESSION -->
         <div x-show="tab === 'progress'" x-cloak>

@@ -18,6 +18,21 @@ class FolderShow extends Component
         $this->folder = Folder::findOrFail($id);
     }
 
+    public function deleteFile($id)
+    {
+        // logiques de suppression ici
+    }
+
+    public function printPdf()
+    {
+        // génération PDF ou redirection
+    }
+
+    public function confirmDelete()
+    {
+        // logique de confirmation ou suppression immédiate
+    }
+
     public function render()
     {
         return view('livewire.admin.folder.folder-show');
