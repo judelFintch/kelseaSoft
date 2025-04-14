@@ -433,10 +433,10 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/entreprises" class="menu-dropdown-item group"
+                                        <a href="{{ route('fileTypeName.create') }}" class="menu-dropdown-item group"
                                             :class="page === 'Entreprises' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
-                                            Entreprises
+                                            Types de fichiers
                                         </a>
                                     </li>
                                     <li>

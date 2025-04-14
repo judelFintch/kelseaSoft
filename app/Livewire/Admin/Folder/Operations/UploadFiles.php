@@ -39,7 +39,7 @@ class UploadFiles extends Component
 
     
     {
-        //$this->validate();
+        $this->validate();
       
 
         $storedPath = $this->file->store('folder_files', 'public');

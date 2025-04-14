@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\Dashboard\Dashboard;
 use App\Livewire\Admin\Company\{CompanyCreate,CompanyIndex,CompanyList,CompanyShow};
 use App\Livewire\Admin\Folder\{FolderDashboard,FolderCreate,FolderList,FolderShow};
+use App\Livewire\Admin\FilesTpesName\FileTypeNameCreate;
 
 Route::get('/', function () {return view('auth.login');});
 
@@ -35,6 +36,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/show/{id}', FolderShow::class)->name('show');
         Route::get('/delete/{id}', FolderCreate::class)->name('delete');
         Route::get('/restore/{id}', FolderCreate::class)->name('restore');
+    });
+
+    Route::prefix('fileTypeName')->name('fileTypeName.')->group(function () {
+        Route::get('/create', FileTypeNameCreate::class)->name('create');
+        Route::get('/edit/{id}', FileTypeNameCreate::class)->name('edit');
+        Route::get('/list', FileTypeNameCreate::class)->name('list');
+        Route::get('/show/{id}', FileTypeNameCreate::class)->name('show');
+        Route::get('/delete/{id}', FileTypeNameCreate::class)->name('delete');
+        Route::get('/restore/{id}', FileTypeNameCreate::class)->name('restore');
     });
 
 });
