@@ -2,16 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
     //
     use HasFactory;
-
-   
 
     protected $fillable = [
         'name',
@@ -27,7 +25,6 @@ class Company extends Model
         'physical_address',
         'is_deleted',
     ];
-
 
     public function scopeNotDeleted(Builder $query)
     {

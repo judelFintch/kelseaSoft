@@ -2,26 +2,24 @@
 
 namespace App\Livewire\Admin\FilesTpesName;
 
-use Livewire\Component;
 use App\Models\DocumentType;
+use Livewire\Component;
 use Livewire\WithPagination;
 
 class FileTypeNameCreate extends Component
 {
-
-
     use WithPagination;
 
     public $name;
+
     public $editingId = null;
+
     public $search = '';
 
     protected $rules = [
         'name' => 'required|string|min:2|max:255',
     ];
 
-
-   
     public function save()
     {
         $this->validate();
@@ -31,7 +29,7 @@ class FileTypeNameCreate extends Component
             ['name' => $this->name]
         );
 
-        session()->flash('success', 'Type de document ' . ($this->editingId ? 'modifié' : 'ajouté') . ' avec succès.');
+        session()->flash('success', 'Type de document '.($this->editingId ? 'modifié' : 'ajouté').' avec succès.');
 
         $this->reset(['name', 'editingId']);
     }
@@ -48,12 +46,14 @@ class FileTypeNameCreate extends Component
         DocumentType::findOrFail($id)->delete();
         session()->flash('success', 'Type supprimé avec succès.');
     }
+
     public function render()
     {
 
-        $types = DocumentType::where('name', 'like', '%' . $this->search . '%')
+        $types = DocumentType::where('name', 'like', '%'.$this->search.'%')
             ->orderBy('name')
             ->paginate(10);
+
         return view(
             'livewire.admin.files-tpes-name.file-type-name-create',
             [

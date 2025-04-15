@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Faker\Factory as Faker;
 
 class CompanySeeder extends Seeder
 {
@@ -23,11 +22,11 @@ class CompanySeeder extends Seeder
                 'name' => $faker->company,
                 'business_category' => $faker->randomElement(['Import', 'Export', 'Tech', 'Finance', 'Logistics']),
                 'tax_id' => strtoupper(Str::random(10)),
-                'code' => 'CMP-' . strtoupper(Str::random(5)),
+                'code' => 'CMP-'.strtoupper(Str::random(5)),
                 'national_identification' => strtoupper(Str::random(12)),
-                'commercial_register' => 'RC' . $faker->randomNumber(5, true),
-                'import_export_number' => 'IE' . $faker->randomNumber(6, true),
-                'nbc_number' => 'NBC' . $faker->randomNumber(6, true),
+                'commercial_register' => 'RC'.$faker->randomNumber(5, true),
+                'import_export_number' => 'IE'.$faker->randomNumber(6, true),
+                'nbc_number' => 'NBC'.$faker->randomNumber(6, true),
                 'phone_number' => $faker->phoneNumber,
                 'email' => $faker->companyEmail,
                 'physical_address' => $faker->address,

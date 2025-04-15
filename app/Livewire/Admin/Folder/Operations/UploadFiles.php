@@ -2,22 +2,27 @@
 
 namespace App\Livewire\Admin\Folder\Operations;
 
-use Livewire\Component;
-use Livewire\WithFileUploads;
+use App\Models\DocumentType;
 use App\Models\Folder;
 use App\Models\FolderFile;
-use App\Models\DocumentType;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class UploadFiles extends Component
 {
     use WithFileUploads;
 
     public $folder;
+
     public $file;
+
     public $documentType;
+
     public $documentTypes = [];
+
     public $confirmingReset = false;
+
     public $confirmingDelete = null;
 
     protected $rules = [
@@ -37,8 +42,6 @@ class UploadFiles extends Component
     }
 
     public function uploadFile()
-
-
     {
         $this->validate();
         $storedPath = $this->file->store('folder_files', 'public');

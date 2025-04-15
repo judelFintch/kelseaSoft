@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Admin\Folder;
 
-use Livewire\Component;
 use App\Services\Folder\FolderService;
+use Livewire\Component;
 
 class FolderShow extends Component
 {

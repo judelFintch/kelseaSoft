@@ -2,21 +2,28 @@
 
 namespace App\Livewire\Admin\ManageSupplier;
 
+use App\Models\Supplier;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Supplier;
 
 class SupplierCreate extends Component
 {
     use WithPagination;
 
     public $name;
+
     public $phone;
+
     public $email;
+
     public $country;
+
     public $editingId = null;
+
     public $search = '';
+
     public $confirmingReset = false;
+
     public $confirmingDelete = null;
 
     protected $rules = [
@@ -40,7 +47,7 @@ class SupplierCreate extends Component
             ]
         );
 
-        session()->flash('success', 'Supplier ' . ($this->editingId ? 'updated' : 'added') . ' successfully.');
+        session()->flash('success', 'Supplier '.($this->editingId ? 'updated' : 'added').' successfully.');
 
         $this->reset(['name', 'phone', 'email', 'country', 'editingId']);
     }
@@ -80,13 +87,14 @@ class SupplierCreate extends Component
     public function render()
     {
         $suppliers = Supplier::where(function ($query) {
-            $query->where('name', 'like', '%' . $this->search . '%')
-                ->orWhere('phone', 'like', '%' . $this->search . '%')
-                ->orWhere('email', 'like', '%' . $this->search . '%')
-                ->orWhere('country', 'like', '%' . $this->search . '%');
+            $query->where('name', 'like', '%'.$this->search.'%')
+                ->orWhere('phone', 'like', '%'.$this->search.'%')
+                ->orWhere('email', 'like', '%'.$this->search.'%')
+                ->orWhere('country', 'like', '%'.$this->search.'%');
         })
             ->orderBy('name')
             ->paginate(10);
+
         return view('livewire.admin.manage-supplier.supplier-create', [
             'suppliers' => $suppliers,
         ]);

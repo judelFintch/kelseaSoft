@@ -76,11 +76,30 @@
                                 {{ $folder->origin?->name ?? '?' }} → {{ $folder->destination?->name ?? '?' }}
                             </td>
                             <td class="px-4 py-3">{{ $folder->arrival_border_date?->format('Y-m-d') ?? '-' }}</td>
-                            <td class="px-4 py-3 text-right space-x-2">
-                                <a href="{{ route('folder.show', $folder->id) }}"
-                                    class="text-blue-600 hover:text-blue-800 font-medium transition">View</a>
-                                <a href="{{ route('folder.edit', $folder->id) }}"
-                                    class="text-yellow-600 hover:text-yellow-700 font-medium transition">Edit</a>
+                            <td class="px-4 py-3 text-right">
+                                <div class="relative inline-block text-left" x-data="{ open: false }">
+                                    <button @click="open = !open"
+                                        class="inline-flex justify-center w-full rounded-md bg-gray-100 dark:bg-gray-700 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600">
+                                        Options
+                                    </button>
+                                    <div x-show="open" @click.away="open = false"
+                                        class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                        <div class="py-1">
+                                            <a href="{{ route('folder.show', $folder->id) }}"
+                                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                👁 View
+                                            </a>
+                                            <a href="{{ route('folder.edit', $folder->id) }}"
+                                                class="block px-4 py-2 text-sm text-yellow-600 hover:bg-gray-100 dark:text-yellow-400 dark:hover:bg-gray-700">
+                                                ✏️ Edit
+                                            </a>
+                                            <button wire:click="$emit('confirmFolderDelete', {{ $folder->id }})"
+                                                class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-700">
+                                                🗑 Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     @empty

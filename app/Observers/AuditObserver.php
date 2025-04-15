@@ -13,13 +13,13 @@ class AuditObserver
     public function created($model)
     {
         AuditLog::create([
-            'user_id'       => Auth::id(),
-            'auditable_id'  => $model->id,
-            'auditable_type'=> get_class($model),
-            'operation'     => 'CREATE',
+            'user_id' => Auth::id(),
+            'auditable_id' => $model->id,
+            'auditable_type' => get_class($model),
+            'operation' => 'CREATE',
             'previous_data' => null,
-            'new_data'      => $model->toArray(),
-            'message'       => 'Création de ' . class_basename($model)
+            'new_data' => $model->toArray(),
+            'message' => 'Création de '.class_basename($model),
         ]);
     }
 
@@ -29,13 +29,13 @@ class AuditObserver
     public function updated($model)
     {
         AuditLog::create([
-            'user_id'       => Auth::id(),
-            'auditable_id'  => $model->id,
-            'auditable_type'=> get_class($model),
-            'operation'     => 'UPDATE',
+            'user_id' => Auth::id(),
+            'auditable_id' => $model->id,
+            'auditable_type' => get_class($model),
+            'operation' => 'UPDATE',
             'previous_data' => $model->getOriginal(),
-            'new_data'      => $model->toArray(),
-            'message'       => 'Mise à jour de ' . class_basename($model)
+            'new_data' => $model->toArray(),
+            'message' => 'Mise à jour de '.class_basename($model),
         ]);
     }
 
@@ -45,13 +45,13 @@ class AuditObserver
     public function deleted($model)
     {
         AuditLog::create([
-            'user_id'       => Auth::id(),
-            'auditable_id'  => $model->id,
-            'auditable_type'=> get_class($model),
-            'operation'     => 'DELETE',
+            'user_id' => Auth::id(),
+            'auditable_id' => $model->id,
+            'auditable_type' => get_class($model),
+            'operation' => 'DELETE',
             'previous_data' => $model->toArray(),
-            'new_data'      => null,
-            'message'       => 'Suppression de ' . class_basename($model)
+            'new_data' => null,
+            'message' => 'Suppression de '.class_basename($model),
         ]);
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Supplier extends Model
 {
     protected $fillable = ['name', 'phone', 'email', 'country'];
-    
+
     /**
      * Relationship: A Supplier may have many folders (optional).
      */
@@ -16,4 +16,3 @@ class Supplier extends Model
         return $this->hasMany(\App\Models\Folder::class);
     }
 }
-

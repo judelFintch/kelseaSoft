@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class ui.flashMessage extends Component
+class UiFlashMessage extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class ui.flashMessage extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.ui.flash-message');
+        return view('components.ui.flash_message');
     }
 }

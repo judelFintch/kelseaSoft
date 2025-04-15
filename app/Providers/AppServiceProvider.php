@@ -2,13 +2,13 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Pagination\Paginator;
-use App\Models\Folder;
-use App\Models\DocumentType;
-use App\Models\FolderFile;
 use App\Models\Company;
+use App\Models\DocumentType;
+use App\Models\Folder;
+use App\Models\FolderFile;
 use App\Observers\AuditObserver;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {

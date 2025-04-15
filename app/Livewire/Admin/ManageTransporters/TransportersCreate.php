@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Admin\ManageTransporters;
 
-use Livewire\Component;
 use App\Models\Transporter;
+use Livewire\Component;
 use Livewire\WithPagination;
 
 class TransportersCreate extends Component
@@ -11,12 +11,19 @@ class TransportersCreate extends Component
     use WithPagination;
 
     public $name;
+
     public $phone;
+
     public $email;
+
     public $country;
+
     public $editingId = null;
+
     public $search = '';
+
     public $confirmingReset = false;
+
     public $confirmingDelete = null;
 
     protected $rules = [
@@ -40,7 +47,7 @@ class TransportersCreate extends Component
             ]
         );
 
-        session()->flash('success', 'Transporter ' . ($this->editingId ? 'updated' : 'added') . ' successfully.');
+        session()->flash('success', 'Transporter '.($this->editingId ? 'updated' : 'added').' successfully.');
 
         $this->reset(['name', 'phone', 'email', 'country', 'editingId']);
     }
@@ -80,11 +87,11 @@ class TransportersCreate extends Component
     public function render()
     {
         $transporters = Transporter::where(function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%')
-                      ->orWhere('phone', 'like', '%' . $this->search . '%')
-                      ->orWhere('email', 'like', '%' . $this->search . '%')
-                      ->orWhere('country', 'like', '%' . $this->search . '%');
-            })
+            $query->where('name', 'like', '%'.$this->search.'%')
+                ->orWhere('phone', 'like', '%'.$this->search.'%')
+                ->orWhere('email', 'like', '%'.$this->search.'%')
+                ->orWhere('country', 'like', '%'.$this->search.'%');
+        })
             ->orderBy('name')
             ->paginate(10);
 

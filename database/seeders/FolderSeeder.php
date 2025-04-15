@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Carbon\Carbon;
+use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Faker\Factory as Faker;
-use Carbon\Carbon;
 
 class FolderSeeder extends Seeder
 {
@@ -21,9 +20,9 @@ class FolderSeeder extends Seeder
 
         foreach (range(1, 10) as $i) {
             DB::table('folders')->insert([
-                'folder_number' => 'FD-' . strtoupper(Str::random(6)),
-                'truck_number' => 'TRK-' . $faker->randomNumber(4, true),
-                'trailer_number' => 'TRL-' . $faker->randomNumber(4, true),
+                'folder_number' => 'FD-'.strtoupper(Str::random(6)),
+                'truck_number' => 'TRK-'.$faker->randomNumber(4, true),
+                'trailer_number' => 'TRL-'.$faker->randomNumber(4, true),
                 'transporter_id' => DB::table('transporters')->inRandomOrder()->value('id'),
                 'driver_name' => $faker->name,
                 'driver_phone' => $faker->phoneNumber,
@@ -37,7 +36,7 @@ class FolderSeeder extends Seeder
                 'declaration_type_id' => DB::table('declaration_types')->inRandomOrder()->value('id'),
                 'declarant' => $faker->name,
                 'customs_agent' => $faker->name,
-                'container_number' => 'CONT-' . strtoupper(Str::random(6)),
+                'container_number' => 'CONT-'.strtoupper(Str::random(6)),
                 'weight' => $faker->randomFloat(2, 500, 30000),
                 'fob_amount' => $faker->randomFloat(2, 1000, 50000),
                 'insurance_amount' => $faker->randomFloat(2, 100, 5000),

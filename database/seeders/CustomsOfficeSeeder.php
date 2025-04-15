@@ -1,9 +1,8 @@
 <?php
 
 namespace Database\Seeders;
-use App\Models\CustomsOffice;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\CustomsOffice;
 use Illuminate\Database\Seeder;
 
 class CustomsOfficeSeeder extends Seeder

@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class partials.header extends Component
+class PartialsHeader extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class partials.header extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.partials.header');
+        return view('components.partials_header');
     }
 }
