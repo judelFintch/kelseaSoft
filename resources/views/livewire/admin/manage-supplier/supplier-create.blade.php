@@ -1,79 +1,41 @@
 <div>
-    <div class="max-w-3xl mx-auto py-10 px-6 space-y-8">
-        <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Suppliers Management</h2>
-
-        @if (session()->has('success'))
-            <div class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-4 py-3 rounded">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <form wire:submit.prevent="save" class="space-y-4">
-                <div>
-                    <x-forms.input 
-                        label="Supplier Name" 
-                        wire:model.live="name" 
-                        placeholder="e.g., Global Transit SARL" 
-                    />
-                    @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                </div>
-
-                <div>
-                    <x-forms.input 
-                        label="Phone" 
-                        wire:model.live="phone" 
-                        placeholder="e.g., +243812345678" 
-                    />
-                    @error('phone') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                </div>
-
-                <div>
-                    <x-forms.input 
-                        label="Email" 
-                        wire:model.live="email" 
-                        type="email" 
-                        placeholder="e.g., contact@supplier.com" 
-                    />
-                    @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                </div>
-
-                <div>
-                    <x-forms.input 
-                        label="Country" 
-                        wire:model.live="country" 
-                        placeholder="e.g., DR Congo" 
-                    />
-                    @error('country') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                </div>
-
-                <div class="flex items-center gap-3">
-                    <x-forms.button type="submit">
-                        {{ $editingId ? 'Update' : 'Add' }}
-                    </x-forms.button>
-                    @if ($editingId)
-                        <button wire:click="$set('editingId', null)" type="button" class="text-sm text-gray-500 hover:underline">Cancel</button>
-                    @endif
-                    @if ($confirmingReset)
-                        <div class="text-sm text-gray-600 dark:text-gray-300">
-                            Confirm reset?
-                            <button wire:click="resetForm" class="ml-2 text-blue-500 hover:underline">Yes</button>
-                            <button wire:click="$set('confirmingReset', false)" class="ml-2 text-gray-500 hover:underline">No</button>
+    <div x-data="{ step: 1 }">
+        <x-ui.flash-message />
+        <x-ui.error-message />
+    
+        <div class="max-w-5xl mx-auto p-6">
+            <form wire:submit.prevent="save()">
+                <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                    <div class="px-5 py-4 sm:px-6 sm:py-5">
+                        <h3 class="text-lg font-medium text-gray-800 dark:text-white/90">Manage Supplier</h3>
+                    </div>
+    
+                    <div class="divide-y divide-gray-100 p-5 sm:p-6 dark:divide-gray-800">
+                        <div class="pb-5">
+                            <h4 class="mb-4 text-base font-medium text-gray-800 dark:text-white/90">Supplier Details</h4>
+                            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                                <x-forms.input label="Supplier Name" wire:model.live="name" placeholder="e.g., Global Transit SARL" />
+                                <x-forms.input label="Phone" wire:model.live="phone" placeholder="e.g., +243812345678" />
+                                <x-forms.input label="Email" wire:model.live="email" type="email" placeholder="e.g., contact@supplier.com" />
+                                <x-forms.input label="Country" wire:model.live="country" placeholder="e.g., DR Congo" />
+                            </div>
                         </div>
-                    @else
-                        <button wire:click="confirmReset" type="button" class="text-sm text-gray-500 hover:underline">Reset All</button>
-                    @endif
+                    </div>
+    
+                    <div class="flex justify-end items-center px-5 py-4 sm:px-6 sm:py-5">
+                        <x-forms.button type="submit">
+                            {{ $editingId ? 'Update Supplier' : 'Add Supplier' }}
+                        </x-forms.button>
+                    </div>
                 </div>
             </form>
-        </div>
-
-        <div>
+        
             <x-forms.input 
                 wire:model.debounce.300ms="search" 
                 placeholder="🔍 Search supplier..." 
                 class="w-full"
             />
-        </div>
+        
 
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
