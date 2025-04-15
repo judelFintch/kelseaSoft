@@ -3,14 +3,17 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\Dashboard\Dashboard;
-use App\Livewire\Admin\Company\{CompanyCreate,CompanyIndex,CompanyList,CompanyShow};
-use App\Livewire\Admin\Folder\{FolderDashboard,FolderCreate,FolderList,FolderShow};
+use App\Livewire\Admin\Company\{CompanyCreate, CompanyIndex, CompanyList, CompanyShow};
+use App\Livewire\Admin\Folder\{FolderDashboard, FolderCreate, FolderList, FolderShow};
 use App\Livewire\Admin\FilesTpesName\FileTypeNameCreate;
 use App\Livewire\Admin\ManageMerchandiseType\MerchandiseTypeCreate;
 use App\Livewire\Admin\ManageCustomsRegimes\CustomsRegimesCreate;
 use App\Livewire\Admin\ManageSupplier\SupplierCreate;
+use App\Livewire\Admin\ManageTransporters\TransportersCreate;
 
-Route::get('/', function () {return view('auth.login');});
+Route::get('/', function () {
+    return view('auth.login');
+});
 
 Route::get('/dashboard', Dashboard::class)->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -61,7 +64,7 @@ Route::middleware('auth')->group(function () {
     });
 
 
-  
+
     Route::prefix('customsRegimes')->name('customsRegimes.')->group(function () {
         Route::get('/create', CustomsRegimesCreate::class)->name('create');
         Route::get('/edit/{id}', CustomsRegimesCreate::class)->name('edit');
@@ -69,7 +72,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/show/{id}', CustomsRegimesCreate::class)->name('show');
         Route::get('/delete/{id}', CustomsRegimesCreate::class)->name('delete');
         Route::get('/restore/{id}', CustomsRegimesCreate::class)->name('restore');
-
     });
 
 
@@ -80,9 +82,20 @@ Route::middleware('auth')->group(function () {
         Route::get('/show/{id}', SupplierCreate::class)->name('show');
         Route::get('/delete/{id}', SupplierCreate::class)->name('delete');
         Route::get('/restore/{id}', SupplierCreate::class)->name('restore');
-
     });
+
+
+    Route::prefix('manageTransporter')->name('transporter.')->group(function () {
+        Route::get('/create', TransportersCreate::class)->name('create');
+        Route::get('/edit/{id}', TransportersCreate::class)->name('edit');
+        Route::get('/list', TransportersCreate::class)->name('list');
+        Route::get('/show/{id}', TransportersCreate::class)->name('show');
+        Route::get('/delete/{id}', TransportersCreate::class)->name('delete');
+        Route::get('/restore/{id}', TransportersCreate::class)->name('restore');
+    });
+
+
 
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

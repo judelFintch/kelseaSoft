@@ -447,10 +447,10 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/tares" class="menu-dropdown-item group"
+                                        <a href="{{route('transporter.create')}}" class="menu-dropdown-item group"
                                             :class="page === 'Tares' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
-                                            Tares
+                                            Transporteurs
                                         </a>
                                     </li>
                                     <li>
