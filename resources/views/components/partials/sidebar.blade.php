@@ -468,10 +468,10 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/pays" class="menu-dropdown-item group"
+                                        <a href="{{route('supplier.create')}}" class="menu-dropdown-item group"
                                             :class="page === 'Pays' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
-                                            Pays
+                                            Fournisseurs
                                         </a>
                                     </li>
                                     <li>

@@ -8,6 +8,7 @@ use App\Livewire\Admin\Folder\{FolderDashboard,FolderCreate,FolderList,FolderSho
 use App\Livewire\Admin\FilesTpesName\FileTypeNameCreate;
 use App\Livewire\Admin\ManageMerchandiseType\MerchandiseTypeCreate;
 use App\Livewire\Admin\ManageCustomsRegimes\CustomsRegimesCreate;
+use App\Livewire\Admin\ManageSupplier\SupplierCreate;
 
 Route::get('/', function () {return view('auth.login');});
 
@@ -68,6 +69,18 @@ Route::middleware('auth')->group(function () {
         Route::get('/show/{id}', CustomsRegimesCreate::class)->name('show');
         Route::get('/delete/{id}', CustomsRegimesCreate::class)->name('delete');
         Route::get('/restore/{id}', CustomsRegimesCreate::class)->name('restore');
+
+    });
+
+
+    Route::prefix('supplier')->name('supplier.')->group(function () {
+        Route::get('/create', SupplierCreate::class)->name('create');
+        Route::get('/edit/{id}', SupplierCreate::class)->name('edit');
+        Route::get('/list', SupplierCreate::class)->name('list');
+        Route::get('/show/{id}', SupplierCreate::class)->name('show');
+        Route::get('/delete/{id}', SupplierCreate::class)->name('delete');
+        Route::get('/restore/{id}', SupplierCreate::class)->name('restore');
+
     });
 
 });
