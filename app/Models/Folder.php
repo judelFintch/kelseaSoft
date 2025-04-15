@@ -88,10 +88,12 @@ class Folder extends Model
     }
 
     public function company()
+    {
+        return $this->belongsTo(\App\Models\Company::class);
+    }
+
+    public function files()
 {
-    return $this->belongsTo(\App\Models\Company::class);
+    return $this->hasMany(\App\Models\FolderFile::class);
 }
-
-
-
 }
