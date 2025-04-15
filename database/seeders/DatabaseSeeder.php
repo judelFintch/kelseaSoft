@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
             CustomsOfficeSeeder::class,
             LocationSeeder::class,
             TransporterSeeder::class,
+            CompanySeeder::class,
+            FolderSeeder::class,
 
         ]);
     }
