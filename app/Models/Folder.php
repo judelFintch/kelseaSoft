@@ -7,24 +7,23 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Folder extends Model
 {
-    //
     use SoftDeletes;
 
     protected $fillable = [
         'folder_number',
         'truck_number',
         'trailer_number',
-        'transporter',
+        'transporter_id',
         'driver_name',
         'driver_phone',
         'driver_nationality',
-        'origin',
-        'destination',
-        'supplier',
+        'origin_id',
+        'destination_id',
+        'supplier_id',
         'client',
-        'customs_office',
+        'customs_office_id',
         'declaration_number',
-        'declaration_type',
+        'declaration_type_id',
         'declarant',
         'customs_agent',
         'container_number',
@@ -47,5 +46,40 @@ class Folder extends Model
     public function files()
     {
         return $this->hasMany(FolderFile::class);
+    }
+
+    public function transporter()
+    {
+        return $this->belongsTo(Transporter::class);
+    }
+
+    public function origin()
+    {
+        return $this->belongsTo(Location::class, 'origin_id');
+    }
+
+    public function destination()
+    {
+        return $this->belongsTo(Location::class, 'destination_id');
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
+
+    public function customsOffice()
+    {
+        return $this->belongsTo(CustomsOffice::class);
+    }
+
+    public function declarationType()
+    {
+        return $this->belongsTo(DeclarationType::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'client');
     }
 }

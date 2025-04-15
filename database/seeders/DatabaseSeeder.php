@@ -18,6 +18,14 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             DocumentTypeSeeder::class,
+            SupplierSeeder::class,
+            DeclarationTypeSeeder::class,
+            CustomsOfficeSeeder::class,
+            LocationSeeder::class,
+            TransporterSeeder::class,
+            CompanySeeder::class,
+            FolderSeeder::class,
+
         ]);
     }
 }

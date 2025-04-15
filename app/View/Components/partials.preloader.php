@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class partials.preloader extends Component
+class PartialsPreloader extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class partials.preloader extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.partials.preloader');
+        return view('components.partials_preloader');
     }
 }

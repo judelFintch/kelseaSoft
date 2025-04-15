@@ -4,7 +4,6 @@ namespace App\Services\Folder;
 
 use App\Models\Folder;
 
-
 class FolderService
 {
     public function createFolder($name, $parentId = null)
@@ -15,39 +14,89 @@ class FolderService
         ]);
     }
 
-    public function getFolder($id)
+    public static function getFolder($id)
     {
-        return Folder::findOrFail($id);
-    }
-
-    public function updateFolder($id, $data)
-    {
-        $folder = $this->getFolder($id);
-        $folder->update($data);
-        return $folder;
+        return Folder::with([
+            'transporter',
+            'supplier',
+            'origin',
+            'destination',
+            'customsOffice',
+            'declarationType',
+            'company',
+            'files.documentType',
+        ])->findOrFail($id);
     }
 
     public function deleteFolder($id)
     {
         $folder = $this->getFolder($id);
+
         return $folder->delete();
     }
 
-
-    public static function generateFolderNumber()
+    public static function storeFolder(array $data): Folder
     {
-        $lastFolder = Folder::orderBy('created_at', 'desc')->first();
-        if ($lastFolder) {
-            $lastNumber = (int) substr($lastFolder->folder_number, 1);
-            $newNumber = $lastNumber + 1;
-            return 'F' . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
-        }
-        return 'F00001';
+        return Folder::create([
+            'folder_number' => $data['folder_number'],
+            'truck_number' => $data['truck_number'],
+            'trailer_number' => $data['trailer_number'] ?? null,
+            'transporter_id' => $data['transporter_id'] ?? null,
+            'driver_name' => $data['driver_name'] ?? null,
+            'driver_phone' => $data['driver_phone'] ?? null,
+            'driver_nationality' => $data['driver_nationality'] ?? null,
+            'origin_id' => $data['origin_id'] ?? null,
+            'destination_id' => $data['destination_id'] ?? null,
+            'supplier_id' => $data['supplier_id'] ?? null,
+            'client' => $data['client'] ?? null,
+            'customs_office_id' => $data['customs_office_id'] ?? null,
+            'declaration_number' => $data['declaration_number'] ?? null,
+            'declaration_type_id' => $data['declaration_type_id'] ?? null,
+            'declarant' => $data['declarant'] ?? null,
+            'customs_agent' => $data['customs_agent'] ?? null,
+            'container_number' => $data['container_number'] ?? null,
+            'weight' => $data['weight'] ?? 0,
+            'fob_amount' => $data['fob_amount'] ?? 0,
+            'insurance_amount' => $data['insurance_amount'] ?? 0,
+            'cif_amount' => $data['cif_amount'] ?? 0,
+            'arrival_border_date' => $data['arrival_border_date'] ?? null,
+            'description' => $data['description'] ?? null,
+        ]);
     }
 
-    public static function storeFolder($data)
+    public static function generateFolderNumber(): string
     {
-        return Folder::create($data);
+        return 'FD-'.strtoupper(uniqid());
     }
-      
+
+    public static function updateFolder(Folder $folder, array $data): Folder
+    {
+        $folder->update([
+            'folder_number' => $data['folder_number'],
+            'truck_number' => $data['truck_number'],
+            'trailer_number' => $data['trailer_number'] ?? null,
+            'transporter_id' => $data['transporter_id'] ?? null,
+            'driver_name' => $data['driver_name'] ?? null,
+            'driver_phone' => $data['driver_phone'] ?? null,
+            'driver_nationality' => $data['driver_nationality'] ?? null,
+            'origin_id' => $data['origin_id'] ?? null,
+            'destination_id' => $data['destination_id'] ?? null,
+            'supplier_id' => $data['supplier_id'] ?? null,
+            'client' => $data['client'] ?? null,
+            'customs_office_id' => $data['customs_office_id'] ?? null,
+            'declaration_number' => $data['declaration_number'] ?? null,
+            'declaration_type_id' => $data['declaration_type_id'] ?? null,
+            'declarant' => $data['declarant'] ?? null,
+            'customs_agent' => $data['customs_agent'] ?? null,
+            'container_number' => $data['container_number'] ?? null,
+            'weight' => $data['weight'] ?? 0,
+            'fob_amount' => $data['fob_amount'] ?? 0,
+            'insurance_amount' => $data['insurance_amount'] ?? 0,
+            'cif_amount' => $data['cif_amount'] ?? 0,
+            'arrival_border_date' => $data['arrival_border_date'] ?? null,
+            'description' => $data['description'] ?? null,
+        ]);
+
+        return $folder;
+    }
 }

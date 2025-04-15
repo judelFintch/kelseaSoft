@@ -10,7 +10,6 @@ class CompanyService
     /**
      * Crée une nouvelle entreprise avec les données validées.
      *
-     * @param  array  $data
      * @return \App\Models\Company
      *
      * @throws \Exception
@@ -25,8 +24,7 @@ class CompanyService
     /**
      * Met à jour une entreprise existante.
      *
-     * @param  int    $id
-     * @param  array  $data
+     * @param  int  $id
      * @return \App\Models\Company
      *
      * @throws \Exception
@@ -36,6 +34,7 @@ class CompanyService
         return DB::transaction(function () use ($id, $data) {
             $company = Company::notDeleted()->findOrFail($id);
             $company->update($data);
+
             return $company;
         });
     }
@@ -71,6 +70,7 @@ class CompanyService
         return DB::transaction(function () use ($id) {
             $company = Company::where('deleted', true)->findOrFail($id);
             $company->update(['deleted' => false]);
+
             return $company;
         });
     }
@@ -88,6 +88,7 @@ class CompanyService
         return DB::transaction(function () use ($id) {
             $company = Company::findOrFail($id);
             $company->delete();
+
             return $company;
         });
     }
@@ -148,14 +149,14 @@ class CompanyService
      * Recherche les entreprises non supprimées par nom avec pagination.
      *
      * @param  string  $search
-     * @param  int     $perPage
+     * @param  int  $perPage
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public static function getAllCompaniesPaginatedBySearch($search, $perPage = 10)
     {
         return DB::transaction(function () use ($search, $perPage) {
             return Company::notDeleted()
-                ->where('name', 'like', '%' . $search . '%')
+                ->where('name', 'like', '%'.$search.'%')
                 ->paginate($perPage);
         });
     }
@@ -170,7 +171,7 @@ class CompanyService
     {
         return DB::transaction(function () use ($search) {
             return Company::notDeleted()
-                ->where('name', 'like', '%' . $search . '%')
+                ->where('name', 'like', '%'.$search.'%')
                 ->get();
         });
     }

@@ -2,20 +2,16 @@
 
 namespace App\Livewire\Admin\Folder;
 
-
+use App\Services\Folder\FolderService;
 use Livewire\Component;
-use App\Models\Folder;
 
 class FolderShow extends Component
 {
-
-
     public $folder;
-
 
     public function mount($id)
     {
-        $this->folder = Folder::findOrFail($id);
+        $this->folder = FolderService::getFolder($id);
     }
 
     public function deleteFile($id)

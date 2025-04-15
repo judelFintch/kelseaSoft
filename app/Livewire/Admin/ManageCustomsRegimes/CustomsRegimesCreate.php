@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Admin\ManageCustomsRegimes;
 
-use Livewire\Component;
 use App\Models\CustomsRegime;
+use Livewire\Component;
 use Livewire\WithPagination;
 
 class CustomsRegimesCreate extends Component
@@ -11,9 +11,13 @@ class CustomsRegimesCreate extends Component
     use WithPagination;
 
     public $name;
+
     public $editingId = null;
+
     public $search = '';
+
     public $confirmingReset = false;
+
     public $confirmingDelete = null;
 
     protected $rules = [
@@ -29,7 +33,7 @@ class CustomsRegimesCreate extends Component
             ['name' => $this->name]
         );
 
-        session()->flash('success', 'Customs regime ' . ($this->editingId ? 'updated' : 'added') . ' successfully.');
+        session()->flash('success', 'Customs regime '.($this->editingId ? 'updated' : 'added').' successfully.');
 
         $this->reset(['name', 'editingId']);
     }
@@ -65,9 +69,10 @@ class CustomsRegimesCreate extends Component
 
     public function render()
     {
-        $regimes = CustomsRegime::where('name', 'like', '%' . $this->search . '%')
+        $regimes = CustomsRegime::where('name', 'like', '%'.$this->search.'%')
             ->orderBy('name')
             ->paginate(10);
+
         return view('livewire.admin.manage-customs-regimes.customs-regimes-create', [
             'regimes' => $regimes,
         ]);

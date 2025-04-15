@@ -1,9 +1,8 @@
 <?php
 
 namespace Database\Seeders;
-use App\Models\DocumentType;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\DocumentType;
 use Illuminate\Database\Seeder;
 
 class DocumentTypeSeeder extends Seeder
@@ -20,7 +19,7 @@ class DocumentTypeSeeder extends Seeder
             'Fiche d\'identification',
             'Autre',
         ];
-    
+
         foreach ($types as $type) {
             DocumentType::firstOrCreate(['name' => $type]);
         }

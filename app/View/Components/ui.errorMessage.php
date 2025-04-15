@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class ui.errorMessage extends Component
+class UiErrorMessage extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class ui.errorMessage extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.ui.error-message');
+        return view('components.ui-error-message');
     }
 }

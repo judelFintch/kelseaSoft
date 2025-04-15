@@ -2,10 +2,8 @@
 
 namespace App\Livewire\Admin\ManageMerchandiseType;
 
-
-
-use Livewire\Component;
 use App\Models\MerchandiseType;
+use Livewire\Component;
 use Livewire\WithPagination;
 
 class MerchandiseTypeCreate extends Component
@@ -13,9 +11,13 @@ class MerchandiseTypeCreate extends Component
     use WithPagination;
 
     public $name;
+
     public $editingId = null;
+
     public $search = '';
+
     public $confirmingReset = false;
+
     public $confirmingDelete = null;
 
     protected $rules = [
@@ -31,7 +33,7 @@ class MerchandiseTypeCreate extends Component
             ['name' => $this->name]
         );
 
-        session()->flash('success', 'Merchandise type ' . ($this->editingId ? 'updated' : 'added') . ' successfully.');
+        session()->flash('success', 'Merchandise type '.($this->editingId ? 'updated' : 'added').' successfully.');
 
         $this->reset(['name', 'editingId']);
     }
@@ -67,9 +69,10 @@ class MerchandiseTypeCreate extends Component
 
     public function render()
     {
-        $types = MerchandiseType::where('name', 'like', '%' . $this->search . '%')
+        $types = MerchandiseType::where('name', 'like', '%'.$this->search.'%')
             ->orderBy('name')
             ->paginate(10);
-        return view('livewire.admin.manage-merchandise-type.merchandise-type-create',['types' => $types]);
+
+        return view('livewire.admin.manage-merchandise-type.merchandise-type-create', ['types' => $types]);
     }
 }

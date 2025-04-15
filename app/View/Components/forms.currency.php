@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class forms.currency extends Component
+class FormsCurrency extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class forms.currency extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.forms.currency');
+        return view('components.forms_currency');
     }
 }
