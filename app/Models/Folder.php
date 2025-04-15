@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
+use App\Enums\DossierType;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Folder extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'folder_number',
         'truck_number',
         'trailer_number',
+        'invoice_number',
         'transporter_id',
         'driver_name',
         'driver_phone',
@@ -33,20 +37,25 @@ class Folder extends Model
         'cif_amount',
         'arrival_border_date',
         'description',
+        'dossier_type',
+        'license_code',
+        'bivac_code',
     ];
 
     protected $casts = [
+        'arrival_border_date' => 'date',
         'weight' => 'float',
         'fob_amount' => 'float',
         'insurance_amount' => 'float',
         'cif_amount' => 'float',
-        'arrival_border_date' => 'date',
+        'dossier_type' => DossierType::class,
     ];
 
-    public function files()
-    {
-        return $this->hasMany(FolderFile::class);
-    }
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function transporter()
     {
@@ -79,7 +88,10 @@ class Folder extends Model
     }
 
     public function company()
-    {
-        return $this->belongsTo(Company::class, 'client');
-    }
+{
+    return $this->belongsTo(\App\Models\Company::class);
+}
+
+
+
 }

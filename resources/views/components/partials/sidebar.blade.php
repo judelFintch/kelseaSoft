@@ -11,7 +11,7 @@
                     <img class="hidden dark:block" src="{{ asset('src/images/logo/logo.png') }}" alt="Logo" />
                 </span>
                 <img class="logo-icon" :class="sidebarToggle ? 'lg:block' : 'hidden'"
-                    src="{{ asset('src/images/logo/logo-icon.svg') }}" alt="Logo" />
+                    src="{{ asset('src/images/logo/logo.png') }}" alt="Logo" />
             </a>
         </div>
         <!-- SIDEBAR HEADER -->
