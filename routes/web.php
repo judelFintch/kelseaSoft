@@ -15,6 +15,12 @@ use App\Livewire\Admin\ManageCustomsRegimes\CustomsRegimesCreate;
 use App\Livewire\Admin\ManageMerchandiseType\MerchandiseTypeCreate;
 use App\Livewire\Admin\ManageSupplier\SupplierCreate;
 use App\Livewire\Admin\ManageTransporters\TransportersCreate;
+use App\Livewire\Admin\Licence\{LicenceIndex,
+    LicenceCreate,
+    LicenceShow,
+    LicenceEdit,
+    LicenceDelete,
+    LicenceRestore};
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -77,21 +83,22 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('supplier')->name('supplier.')->group(function () {
         Route::get('/create', SupplierCreate::class)->name('create');
-        Route::get('/edit/{id}', SupplierCreate::class)->name('edit');
-        Route::get('/list', SupplierCreate::class)->name('list');
-        Route::get('/show/{id}', SupplierCreate::class)->name('show');
-        Route::get('/delete/{id}', SupplierCreate::class)->name('delete');
-        Route::get('/restore/{id}', SupplierCreate::class)->name('restore');
+      
     });
 
     Route::prefix('manageTransporter')->name('transporter.')->group(function () {
         Route::get('/create', TransportersCreate::class)->name('create');
-        Route::get('/edit/{id}', TransportersCreate::class)->name('edit');
-        Route::get('/list', TransportersCreate::class)->name('list');
-        Route::get('/show/{id}', TransportersCreate::class)->name('show');
-        Route::get('/delete/{id}', TransportersCreate::class)->name('delete');
-        Route::get('/restore/{id}', TransportersCreate::class)->name('restore');
+       
     });
+
+    Route::prefix('licence')->name('licence.')->group(function () {
+        Route::get('/list', LicenceIndex::class)->name('list');
+        
+    });
+
+
+
+    
 
 });
 
