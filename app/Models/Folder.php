@@ -77,4 +77,10 @@ class Folder extends Model
     {
         return $this->belongsTo(DeclarationType::class);
     }
+
+    public function company()
+{
+    return $this->belongsTo(Company::class, 'client');
+}
+
 }

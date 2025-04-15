@@ -52,17 +52,17 @@
                 $fields = [
                     ['label' => 'Truck Number', 'value' => $folder->truck_number],
                     ['label' => 'Trailer Number', 'value' => $folder->trailer_number],
-                    ['label' => 'Transporter', 'value' => $folder->transporter],
+                    ['label' => 'Transporter', 'value' => $folder->transporter?->name],
                     ['label' => 'Driver Name', 'value' => $folder->driver_name],
                     ['label' => 'Driver Phone', 'value' => $folder->driver_phone],
                     ['label' => 'Nationality', 'value' => $folder->driver_nationality],
-                    ['label' => 'Origin', 'value' => $folder->origin],
-                    ['label' => 'Destination', 'value' => $folder->destination],
-                    ['label' => 'Client', 'value' => $folder->client],
-                    ['label' => 'Supplier', 'value' => $folder->supplier],
-                    ['label' => 'Customs Office', 'value' => $folder->customs_office],
+                    ['label' => 'Origin', 'value' => $folder->origin?->name],
+                    ['label' => 'Destination', 'value' => $folder->destination?->name],
+                    ['label' => 'Client', 'value' => $folder->company?->name],
+                    ['label' => 'Supplier', 'value' => $folder->supplier?->name],
+                    ['label' => 'Customs Office', 'value' => $folder->customsOffice?->name],
                     ['label' => 'Declaration Number', 'value' => $folder->declaration_number],
-                    ['label' => 'Declaration Type', 'value' => $folder->declaration_type],
+                    ['label' => 'Declaration Type', 'value' => $folder->declarationType?->name],
                     ['label' => 'Declarant', 'value' => $folder->declarant],
                     ['label' => 'Customs Agent', 'value' => $folder->customs_agent],
                     ['label' => 'Container', 'value' => $folder->container_number],
@@ -88,9 +88,10 @@
             </div>
         </div>
 
-        @livewire('admin.folder.operations.upload-files', ['folder' => $folder], key('upload-files-' . $folder->id))
         <!-- FICHIERS -->
-
+        <div x-show="tab === 'files'" x-cloak>
+            @livewire('admin.folder.operations.upload-files', ['folder' => $folder], key('upload-files-' . $folder->id))
+        </div>
 
         <!-- PROGRESSION -->
         <div x-show="tab === 'progress'" x-cloak>

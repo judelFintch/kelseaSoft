@@ -15,9 +15,18 @@ class FolderService
         ]);
     }
 
-    public function getFolder($id)
+    public static function getFolder($id)
     {
-        return Folder::findOrFail($id);
+        return Folder::with([
+            'transporter',
+            'supplier',
+            'origin',
+            'destination',
+            'customsOffice',
+            'declarationType',
+            'company',
+            'files.documentType'
+        ])->findOrFail($id);
     }
 
 
