@@ -45,7 +45,9 @@ class LicenceCreate extends Component
 
     public function save()
     {
-        $this->validate();
+
+        dd('test');
+       //$this->validate();
 
         License::create([
             'license_number' => $this->license_number,
