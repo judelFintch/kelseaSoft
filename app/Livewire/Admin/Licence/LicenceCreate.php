@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Admin\Licence;
 
-use App\Models\License;
+use App\Models\Licence;
 use Livewire\Component;
 
 class LicenceCreate extends Component
@@ -49,7 +49,7 @@ class LicenceCreate extends Component
 
         $this->validate();
 
-        License::create([
+        Licence::create([
             'license_number' => $this->license_number,
             'license_type' => $this->license_type,
             'license_category' => $this->license_category,
