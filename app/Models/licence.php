@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class License extends Model
+class Licence extends Model
 {
+    //
     use SoftDeletes;
 
     protected $fillable = [
@@ -41,9 +42,6 @@ class License extends Model
     ];
 
     protected $casts = [
-        'invoice_date' => 'date',
-        'validation_date' => 'date',
-        'expiry_date' => 'date',
         'initial_weight' => 'float',
         'remaining_weight' => 'float',
         'initial_fob_amount' => 'float',
@@ -54,6 +52,9 @@ class License extends Model
         'insurance_amount' => 'float',
         'other_fees' => 'float',
         'cif_amount' => 'float',
+        'invoice_date' => 'date',
+        'validation_date' => 'date',
+        'expiry_date' => 'date',
     ];
 
     // 🔗 Relations

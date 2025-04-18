@@ -20,12 +20,12 @@ class LicenceCreate extends Component
     public $freight_amount;
     public $insurance_amount;
     public $other_fees;
-    public $cif_amount;
+    public $cif_amount; 
 
     public $payment_mode;
 
     protected $rules = [
-        'license_number' => 'required|unique:licenses',
+        'license_number' => 'required',
         'license_type' => 'required|string',
         'license_category' => 'nullable|string',
         'currency' => 'required|string',
@@ -46,8 +46,8 @@ class LicenceCreate extends Component
     public function save()
     {
 
-        dd('test');
-       //$this->validate();
+
+        $this->validate();
 
         License::create([
             'license_number' => $this->license_number,

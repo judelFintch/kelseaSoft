@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('licences', function (Blueprint $table) {
+            $table->id();
             $table->string('license_number')->unique();
             $table->string('license_type');
             $table->string('license_category')->nullable();
@@ -27,7 +28,7 @@ return new class extends Migration
             $table->float('quantity_total')->default(0);
             $table->float('remaining_quantity')->default(0);
 
-            
+            // Financier
             $table->float('freight_amount')->nullable();
             $table->float('insurance_amount')->nullable();
             $table->float('other_fees')->nullable();
@@ -38,17 +39,14 @@ return new class extends Migration
             $table->string('transport_mode')->nullable();
             $table->string('transport_reference')->nullable();
 
-        
             $table->date('invoice_date')->nullable();
             $table->date('validation_date')->nullable();
             $table->date('expiry_date')->nullable();
             $table->string('customs_regime')->nullable();
 
-         
             $table->foreignId('customs_office_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('supplier_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('company_id')->nullable()->constrained('companies')->nullOnDelete();
-            
 
             $table->text('notes')->nullable();
 
