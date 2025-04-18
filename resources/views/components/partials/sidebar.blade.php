@@ -238,7 +238,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/licences/create" class="menu-dropdown-item group"
+                                        <a href="{{ route('licences.create')}}" class="menu-dropdown-item group"
                                             :class="page === 'licencesCreate' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Nouvelle Licence

@@ -91,14 +91,12 @@ Route::middleware('auth')->group(function () {
        
     });
 
-    Route::prefix('licence')->name('licence.')->group(function () {
+    Route::prefix('licence')->name('licences.')->group(function () {
         Route::get('/list', LicenceIndex::class)->name('list');
+        Route::get('/create', LicenceCreate::class)->name('create');
         
     });
 
-
-
-    
 
 });
 
