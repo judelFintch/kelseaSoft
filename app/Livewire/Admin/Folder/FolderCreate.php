@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Folder;
 
+use App\Enums\DossierType;
 use App\Models\CustomsOffice;
 use App\Models\DeclarationType;
 use App\Models\Location;
@@ -9,23 +10,24 @@ use App\Models\Supplier;
 use App\Models\Transporter;
 use App\Services\Company\CompanyService;
 use App\Services\Folder\FolderService;
+use App\Services\Licence\LicenceService;
 use Livewire\Component;
+use Illuminate\Validation\Rules\Enum;
 
 class FolderCreate extends Component
 {
     public $clients;
-
     public $transporters;
-
     public $suppliers;
-
     public $locations;
-
     public $customsOffices;
-
     public $declarationTypes;
 
     public $folder;
+
+    public $optionsSelect;
+    public $licenseCodes = [];
+    public $bivacCodes = [];
 
     public function mount()
     {
@@ -38,15 +40,40 @@ class FolderCreate extends Component
 
         $this->folder = [
             'folder_number' => FolderService::generateFolderNumber(),
+            'dossier_type' => DossierType::SANS->value,
         ];
+
+        $this->optionsSelect = DossierType::options();
+
+        $this->licenseCodes = \App\Models\Licence::all()
+            ->map(fn($license) => [
+                'label' => $license->license_number,
+                'value' => $license->id,
+            ])
+            ->toArray();
+
+        $this->bivacCodes = [
+            ['label' => 'BIVAC-01', 'value' => 'BIVAC-01'],
+            ['label' => 'BIVAC-02', 'value' => 'BIVAC-02'],
+        ];
+    }
+
+    public function updated($propertyName)
+    {
+        if (in_array($propertyName, ['folder.fob_amount', 'folder.insurance_amount'])) {
+            $fob = floatval($this->folder['fob_amount'] ?? 0);
+            $insurance = floatval($this->folder['insurance_amount'] ?? 0);
+            $this->folder['cif_amount'] = $fob + $insurance;
+        }
     }
 
     public function save()
     {
-        $validated = $this->validate([
+        $rules = [
             'folder.folder_number' => 'required|string|max:255|unique:folders,folder_number',
             'folder.truck_number' => 'required|string|max:255',
             'folder.trailer_number' => 'nullable|string|max:255',
+            'folder.invoice_number' => 'nullable|string|max:255',
             'folder.transporter_id' => 'nullable|exists:transporters,id',
             'folder.driver_name' => 'nullable|string|max:255',
             'folder.driver_phone' => 'nullable|string|max:255',
@@ -67,14 +94,44 @@ class FolderCreate extends Component
             'folder.cif_amount' => 'nullable|numeric',
             'folder.arrival_border_date' => 'nullable|date',
             'folder.description' => 'nullable|string|max:1000',
+            'folder.dossier_type' => ['required', new Enum(DossierType::class)],
+            'folder.quantity' => 'nullable|numeric',
+        ];
+
+        if ($this->folder['dossier_type'] === DossierType::AVEC->value) {
+            $rules['folder.license_id'] = 'required|exists:licences,id';
+            $rules['folder.bivac_code'] = 'required|string|max:255';
+        }
+
+        $validated = $this->validate($rules);
+
+        $folder = FolderService::storeFolder([
+            ...$validated['folder'],
+            'license_id' => $this->folder['license_id'] ?? null,
         ]);
 
-        FolderService::storeFolder($validated['folder']);
+        if ($this->folder['dossier_type'] === DossierType::AVEC->value) {
+            $license = LicenceService::getLicenseById($this->folder['license_id']);
+
+            if (!$license) {
+                session()->flash('error', '🚫 Licence introuvable.');
+                return;
+            }
+
+            $success = app(LicenceService::class)->attachFolderToLicense($folder, $license);
+
+            if (!$success) {
+                $folder->delete();
+                session()->flash('error', '❌ Échec : la licence ne permet pas ce rattachement (poids, FOB ou quantité insuffisants).');
+                return;
+            }
+        }
 
         $this->reset('folder');
         $this->folder['folder_number'] = FolderService::generateFolderNumber();
+        $this->folder['dossier_type'] = DossierType::SANS->value;
 
-        session()->flash('message', 'Folder created successfully.');
+        session()->flash('message', '✅ Dossier créé avec succès et licence mise à jour.');
     }
 
     public function render()

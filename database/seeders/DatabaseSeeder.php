@@ -24,7 +24,9 @@ class DatabaseSeeder extends Seeder
             LocationSeeder::class,
             TransporterSeeder::class,
             CompanySeeder::class,
+            LicenceSeeder::class,
             FolderSeeder::class,
+            
 
         ]);
     }
