@@ -38,8 +38,6 @@ class FolderCreate extends Component
         $this->customsOffices = CustomsOffice::all();
         $this->declarationTypes = DeclarationType::all();
 
-
-
         $this->folder = [
             'folder_number' => FolderService::generateFolderNumber(),
             'dossier_type' => DossierType::SANS->value,
@@ -47,10 +45,10 @@ class FolderCreate extends Component
 
         $this->optionsSelect = DossierType::options();
 
-        $this->licenseCodes = collect(LicenceService::getAllLicenses())
+        $this->licenseCodes = \App\Models\Licence::all()
             ->map(fn($license) => [
-                'label' => $license['license_number'],
-                'value' => $license['id'],
+                'label' => $license->license_number,
+                'value' => $license->id,
             ])
             ->toArray();
 
@@ -101,16 +99,19 @@ class FolderCreate extends Component
         ];
 
         if ($this->folder['dossier_type'] === DossierType::AVEC->value) {
-            $rules['folder.license_code'] = 'required|string|max:255';
+            $rules['folder.license_id'] = 'required|exists:licences,id';
             $rules['folder.bivac_code'] = 'required|string|max:255';
         }
 
         $validated = $this->validate($rules);
 
-        $folder = FolderService::storeFolder($validated['folder']);
+        $folder = FolderService::storeFolder([
+            ...$validated['folder'],
+            'license_id' => $this->folder['license_id'] ?? null,
+        ]);
 
         if ($this->folder['dossier_type'] === DossierType::AVEC->value) {
-            $license = LicenceService::getLicenseById($this->folder['license_code']);
+            $license = LicenceService::getLicenseById($this->folder['license_id']);
 
             if (!$license) {
                 session()->flash('error', '🚫 Licence introuvable.');

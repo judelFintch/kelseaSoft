@@ -3,6 +3,10 @@
 namespace App\Services\Folder;
 
 use App\Models\Folder;
+use App\Models\Licence;
+use App\Services\Licence\LicenceService;
+use Illuminate\Support\Facades\DB;
+use App\Enums\DossierType;
 
 class FolderService
 {
@@ -42,13 +46,25 @@ class FolderService
 
     public static function storeFolder(array $data): Folder
     {
-        // Calcul automatique du CIF si FOB et assurance sont présents
-        $fob = floatval($data['fob_amount'] ?? 0);
-        $insurance = floatval($data['insurance_amount'] ?? 0);
+        return DB::transaction(function () use ($data) {
+            $fob = floatval($data['fob_amount'] ?? 0);
+            $insurance = floatval($data['insurance_amount'] ?? 0);
+            $data['cif_amount'] = $fob + $insurance;
 
-        $data['cif_amount'] = $fob + $insurance;
+            $folder = Folder::create($data);
 
-        return Folder::create($data);
+            // Attachement à une licence si dossier type "avec"
+            if (($data['dossier_type'] ?? null) === DossierType::AVEC->value && isset($data['license_id'])) {
+                $license = Licence::find($data['license_id']);
+
+                if (!$license || !app(LicenceService::class)->attachFolderToLicense($folder, $license)) {
+                    $folder->delete();
+                    throw new \Exception("La licence ne peut pas supporter ce dossier (poids, FOB ou quantité insuffisants).");
+                }
+            }
+
+            return $folder;
+        });
     }
 
     public static function updateFolder(Folder $folder, array $data): Folder

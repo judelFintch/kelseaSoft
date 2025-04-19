@@ -97,8 +97,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/show/{id}', LicenceShow::class)->name('show');
         Route::get('/edit/{id}', LicenceEdit::class)->name('edit');
        
-      
-       
     });
 
 

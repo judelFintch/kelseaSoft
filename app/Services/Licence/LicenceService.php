@@ -35,7 +35,7 @@ class LicenceService
             $license->save();
 
             FoldeLicence::create([
-                'license_id' => $license->id,
+                'licence_id' => $license->id,
                 'folder_id' => $folder->id,
                 'fob_used' => $fob,
                 'weight_used' => $weight,

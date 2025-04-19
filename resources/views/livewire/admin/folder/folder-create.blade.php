@@ -13,7 +13,8 @@
                     <span x-show="step === 3">Financier & Description</span>
                 </div>
                 <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-                    <div class="bg-brand-500 h-2 rounded-full transition-all duration-300" :style="`width: ${(step / 3) * 100}%`"></div>
+                    <div class="bg-brand-500 h-2 rounded-full transition-all duration-300"
+                        :style="`width: ${(step / 3) * 100}%`"></div>
                 </div>
             </div>
 
@@ -25,50 +26,69 @@
                 <div class="divide-y divide-gray-100 p-5 sm:p-6 dark:divide-gray-800">
                     <!-- Étape 1 -->
                     <div x-show="step === 1" class="pb-5">
-                        <h4 class="mb-4 text-base font-medium text-gray-800 dark:text-white/90">Informations sur le Dossier</h4>
+                        <h4 class="mb-4 text-base font-medium text-gray-800 dark:text-white/90">Informations sur le
+                            Dossier</h4>
 
                         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                             <x-forms.input label="Numéro de Dossier" model="folder.folder_number" readonly />
                             <x-forms.input label="Plaque du Camion" model="folder.truck_number" />
                             <x-forms.input label="Numéro de la Remorque" model="folder.trailer_number" />
                             <x-forms.input label="Code Facture" model="folder.invoice_number" />
-                            <x-forms.select label="Transporteur" model="folder.transporter_id" :options="$transporters" option-label="name" option-value="id" placeholder="Sélectionnez un transporteur" />
-                            <x-forms.select label="Type de Dossier" model="folder.dossier_type" :options="$optionsSelect" option-label="label" option-value="value" placeholder="Sélectionnez un type de dossier" />
+                            <x-forms.select label="Transporteur" model="folder.transporter_id" :options="$transporters"
+                                option-label="name" option-value="id" placeholder="Sélectionnez un transporteur" />
+                            <x-forms.select label="Type de Dossier" model="folder.dossier_type" :options="$optionsSelect"
+                                option-label="label" option-value="value"
+                                placeholder="Sélectionnez un type de dossier" />
                         </div>
 
                         <!-- Champs affichés si "Avec licence" est sélectionné -->
-                        <div x-show="dossierType === 'avec'" class="grid grid-cols-1 gap-6 sm:grid-cols-2 mt-6 border-t pt-4 transition-all duration-300">
-                             <!-- Affichage conditionnel si "Avec licence" -->
-                        <div x-show="dossierType === 'avec'" class="grid grid-cols-1 gap-6 sm:grid-cols-2 mt-6 border-t pt-4 transition-all duration-300">
-                            <x-forms.select label="Code Licence" model="folder.license_code" :options="$licenseCodes" option-label="label" option-value="value" placeholder="Sélectionnez un code licence" />
-                            <x-forms.select label="Code BIVAC" model="folder.bivac_code" :options="$bivacCodes" option-label="label" option-value="value" placeholder="Sélectionnez un code BIVAC" />
-                        </div>
+                        <div x-show="dossierType === 'avec'"
+                            class="grid grid-cols-1 gap-6 sm:grid-cols-2 mt-6 border-t pt-4 transition-all duration-300">
+                            <!-- Affichage conditionnel si "Avec licence" -->
+                            <div x-show="dossierType === 'avec'"
+                                class="grid grid-cols-1 gap-6 sm:grid-cols-2 mt-6 border-t pt-4 transition-all duration-300">
+                                <x-forms.select label="Code Licence" model="folder.license_id" :options="$licenseCodes"
+                                    option-label="label" option-value="value" placeholder="Sélectionnez une licence" />
+                                <x-forms.select label="Code BIVAC" model="folder.bivac_code" :options="$bivacCodes"
+                                    option-label="label" option-value="value"
+                                    placeholder="Sélectionnez un code BIVAC" />
+                            </div>
                         </div>
                     </div>
 
                     <!-- Étape 2 -->
                     <div x-show="step === 2" class="py-5">
-                        <h4 class="mb-4 text-base font-medium text-gray-800 dark:text-white/90">Chauffeur & Logistique</h4>
+                        <h4 class="mb-4 text-base font-medium text-gray-800 dark:text-white/90">Chauffeur & Logistique
+                        </h4>
                         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                             <x-forms.input label="Nom du Chauffeur" model="folder.driver_name" />
                             <x-forms.input label="Téléphone du Chauffeur" model="folder.driver_phone" />
                             <x-forms.input label="Nationalité du Chauffeur" model="folder.driver_nationality" />
-                            <x-forms.select label="Provenance" model="folder.origin_id" :options="$locations" option-label="name" option-value="id" placeholder="Sélectionnez une provenance" />
-                            <x-forms.select label="Destination" model="folder.destination_id" :options="$locations" option-label="name" option-value="id" placeholder="Sélectionnez une destination" />
-                            <x-forms.select label="Fournisseur" model="folder.supplier_id" :options="$suppliers" option-label="name" option-value="id" placeholder="Sélectionnez un fournisseur" />
-                            <x-forms.select label="Client" model="folder.client" :options="$clients" option-label="name" option-value="id" placeholder="Sélectionnez un client" />
-                            <x-forms.select label="Bureau de Douane" model="folder.customs_office_id" :options="$customsOffices" option-label="name" option-value="id" placeholder="Sélectionnez un bureau" />
-                            <x-forms.select label="Type de Déclaration" model="folder.declaration_type_id" :options="$declarationTypes" option-label="name" option-value="id" placeholder="Sélectionnez un type de déclaration" />
+                            <x-forms.select label="Provenance" model="folder.origin_id" :options="$locations"
+                                option-label="name" option-value="id" placeholder="Sélectionnez une provenance" />
+                            <x-forms.select label="Destination" model="folder.destination_id" :options="$locations"
+                                option-label="name" option-value="id" placeholder="Sélectionnez une destination" />
+                            <x-forms.select label="Fournisseur" model="folder.supplier_id" :options="$suppliers"
+                                option-label="name" option-value="id" placeholder="Sélectionnez un fournisseur" />
+                            <x-forms.select label="Client" model="folder.client" :options="$clients" option-label="name"
+                                option-value="id" placeholder="Sélectionnez un client" />
+                            <x-forms.select label="Bureau de Douane" model="folder.customs_office_id" :options="$customsOffices"
+                                option-label="name" option-value="id" placeholder="Sélectionnez un bureau" />
+                            <x-forms.select label="Type de Déclaration" model="folder.declaration_type_id"
+                                :options="$declarationTypes" option-label="name" option-value="id"
+                                placeholder="Sélectionnez un type de déclaration" />
                             <x-forms.input label="Numéro de Déclaration" model="folder.declaration_number" />
                             <x-forms.input label="Numéro de Conteneur" model="folder.container_number" />
                             <x-forms.input label="" model="folder.declarant" hidden value="Default Declarant" />
-                            <x-forms.input label="" model="folder.customs_agent" hidden value="Default Customs Agent" />
+                            <x-forms.input label="" model="folder.customs_agent" hidden
+                                value="Default Customs Agent" />
                         </div>
                     </div>
 
                     <!-- Étape 3 -->
                     <div x-show="step === 3" class="pt-5">
-                        <h4 class="mb-4 text-base font-medium text-gray-800 dark:text-white/90">Financier & Description</h4>
+                        <h4 class="mb-4 text-base font-medium text-gray-800 dark:text-white/90">Financier & Description
+                        </h4>
                         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                             <x-forms.input label="Poids" model="folder.weight" type="number" />
                             <x-forms.currency label="Montant FOB" model="folder.fob_amount" />
