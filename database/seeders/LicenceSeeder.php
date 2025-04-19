@@ -17,45 +17,41 @@ class LicenceSeeder extends Seeder
     {
         //
         for ($i = 1; $i <= 10; $i++) {
-            Licence::create([
-                'license_number' => 'LIC-' . strtoupper(Str::random(6)),
-                'license_type' => fake()->randomElement(['Import', 'Export']),
-                'license_category' => fake()->randomElement(['A', 'B', 'C']),
-                'currency' => 'USD',
-
-                'max_folders' => $max = fake()->numberBetween(3, 10),
-                'remaining_folders' => $max,
-
-                'initial_weight' => $weight = fake()->randomFloat(2, 1000, 5000),
-                'remaining_weight' => $weight,
-
-                'initial_fob_amount' => $fob = fake()->randomFloat(2, 10000, 50000),
-                'remaining_fob_amount' => $fob,
-
-                'quantity_total' => $qty = fake()->randomFloat(2, 100, 500),
-                'remaining_quantity' => $qty,
-
-                'freight_amount' => fake()->randomFloat(2, 100, 500),
-                'insurance_amount' => fake()->randomFloat(2, 50, 300),
-                'other_fees' => fake()->randomFloat(2, 10, 100),
-                'cif_amount' => $fob + 200 + 300 + 100,
-
-                'payment_mode' => fake()->randomElement(['Bank Transfer', 'Cash']),
-                'payment_beneficiary' => fake()->company,
-                'transport_mode' => fake()->randomElement(['Maritime', 'Aérien', 'Routier']),
-                'transport_reference' => strtoupper(Str::random(8)),
-
-                'invoice_date' => now()->subDays(rand(10, 30)),
-                'validation_date' => now()->subDays(rand(5, 10)),
-                'expiry_date' => now()->addMonths(6),
-                'customs_regime' => fake()->randomElement(['Régime 42', 'Régime 48']),
-
-                'customs_office_id' => 1,
-                'supplier_id' => 1,
-                'company_id' => 1,
-
-                'notes' => fake()->sentence(),
-            ]);
+            if (!Licence::where('license_number', 'LIC-001')->exists()) {
+                Licence::create([
+                    'license_number' => 'LIC-001',
+                    'license_type' => 'Import',
+                    'license_category' => 'Générale',
+                    'currency' => 'USD',
+    
+                    'max_folders' => 5,
+                    'remaining_folders' => 5,
+                    'initial_weight' => 50000,
+                    'remaining_weight' => 50000,
+                    'initial_fob_amount' => 500000,
+                    'remaining_fob_amount' => 500000,
+                    'quantity_total' => 1000,
+                    'remaining_quantity' => 1000,
+    
+                    'freight_amount' => 0,
+                    'insurance_amount' => 0,
+                    'other_fees' => 0,
+                    'cif_amount' => 0,
+    
+                    'payment_mode' => 'Cash',
+                    'payment_beneficiary' => 'Agence X',
+                    'transport_mode' => 'Routier',
+                    'transport_reference' => 'REF1234',
+                    'invoice_date' => now(),
+                    'validation_date' => now(),
+                    'expiry_date' => now()->addMonths(6),
+                    'customs_regime' => 'Régime A',
+                    'customs_office_id' => 1,
+                    'supplier_id' => 1,
+                    'company_id' => 1,
+                    'notes' => 'Licence de test',
+                ]);
+            }
         }
     
     }

@@ -37,6 +37,7 @@ class FolderSeeder extends Seeder
             'container_number' => 'CONT-001',
 
             'weight' => 15000.75,
+            'quantity' => 100, // ✅ nouveau champ
             'fob_amount' => 120000.00,
             'insurance_amount' => 2500.00,
             'cif_amount' => 122500.00,
@@ -46,6 +47,7 @@ class FolderSeeder extends Seeder
             'dossier_type' => DossierType::AVEC->value,
             'license_code' => 'LIC-001',
             'bivac_code' => 'BIV-001',
+            'license_id' => 1, // ✅ relation vers licence
         ]);
     }
 }

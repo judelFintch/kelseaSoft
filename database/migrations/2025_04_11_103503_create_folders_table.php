@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('folders', function (Blueprint $table) {
             $table->id();
-            $table->string('folder_number');
+            $table->string('folder_number')->unique();
             $table->string('truck_number');
             $table->string('trailer_number')->nullable();
-            $table->string('invoice_number')->nullable(); // ✅ Code facture
+            $table->string('invoice_number')->nullable();
 
             $table->foreignId('transporter_id')->nullable()->constrained()->nullOnDelete();
             $table->string('driver_name')->nullable();
@@ -35,16 +35,18 @@ return new class extends Migration
             $table->string('customs_agent')->nullable();
             $table->string('container_number')->nullable();
 
-            $table->float('weight')->nullable();
-            $table->float('fob_amount')->nullable();
-            $table->float('insurance_amount')->nullable();
-            $table->float('cif_amount')->nullable();
+            $table->decimal('weight', 10, 2)->nullable();
+            $table->decimal('quantity', 10, 2)->nullable();
+            $table->decimal('fob_amount', 15, 2)->nullable();
+            $table->decimal('insurance_amount', 15, 2)->nullable();
+            $table->decimal('cif_amount', 15, 2)->nullable();
             $table->date('arrival_border_date')->nullable();
             $table->text('description')->nullable();
 
             $table->string('dossier_type')->default('sans'); 
             $table->string('license_code')->nullable(); 
-            $table->string('bivac_code')->nullable();   
+            $table->string('bivac_code')->nullable();
+            $table->foreignId('license_id')->nullable()->constrained('licences')->nullOnDelete();
 
             $table->timestamps();
             $table->softDeletes();

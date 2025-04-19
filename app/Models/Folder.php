@@ -32,6 +32,7 @@ class Folder extends Model
         'customs_agent',
         'container_number',
         'weight',
+        'quantity',
         'fob_amount',
         'insurance_amount',
         'cif_amount',
@@ -40,11 +41,13 @@ class Folder extends Model
         'dossier_type',
         'license_code',
         'bivac_code',
+        'license_id',
     ];
 
     protected $casts = [
         'arrival_border_date' => 'date',
         'weight' => 'float',
+        'quantity' => 'float',
         'fob_amount' => 'float',
         'insurance_amount' => 'float',
         'cif_amount' => 'float',
@@ -93,7 +96,17 @@ class Folder extends Model
     }
 
     public function files()
-{
-    return $this->hasMany(\App\Models\FolderFile::class);
-}
+    {
+        return $this->hasMany(\App\Models\FolderFile::class);
+    }
+
+    public function license()
+    {
+        return $this->belongsTo(Licence::class);
+    }
+
+    public function licenseLogs()
+    {
+        return $this->hasMany(FoldeLicence::class);
+    }
 }
