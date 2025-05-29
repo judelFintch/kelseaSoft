@@ -89,13 +89,33 @@ class FolderCreate extends Component
             'folder.customs_agent' => 'nullable|string|max:255',
             'folder.container_number' => 'nullable|string|max:255',
             'folder.weight' => 'nullable|numeric',
+            'folder.quantity' => 'nullable|numeric',
             'folder.fob_amount' => 'nullable|numeric',
             'folder.insurance_amount' => 'nullable|numeric',
             'folder.cif_amount' => 'nullable|numeric',
             'folder.arrival_border_date' => 'nullable|date',
             'folder.description' => 'nullable|string|max:1000',
             'folder.dossier_type' => ['required', new Enum(DossierType::class)],
-            'folder.quantity' => 'nullable|numeric',
+
+            // ✅ Ajout des nouveaux champs
+            'folder.goods_type' => 'nullable|string|max:255',
+            'folder.agency' => 'nullable|string|max:255',
+            'folder.pre_alert_place' => 'nullable|string|max:255',
+            'folder.transport_mode' => 'nullable|string|max:255',
+            'folder.internal_reference' => 'nullable|string|max:255',
+            'folder.order_number' => 'nullable|string|max:255',
+            'folder.folder_date' => 'nullable|date',
+            'folder.tr8_number' => 'nullable|string|max:255',
+            'folder.tr8_date' => 'nullable|date',
+            'folder.t1_number' => 'nullable|string|max:255',
+            'folder.t1_date' => 'nullable|date',
+            'folder.formalities_office_reference' => 'nullable|string|max:255',
+            'folder.im4_number' => 'nullable|string|max:255',
+            'folder.im4_date' => 'nullable|date',
+            'folder.liquidation_number' => 'nullable|string|max:255',
+            'folder.liquidation_date' => 'nullable|date',
+            'folder.quitance_number' => 'nullable|string|max:255',
+            'folder.quitance_date' => 'nullable|date',
         ];
 
         if ($this->folder['dossier_type'] === DossierType::AVEC->value) {
@@ -133,7 +153,7 @@ class FolderCreate extends Component
 
         session()->flash('message', '✅ Dossier créé avec succès et licence mise à jour.');
     }
-
+    
     public function render()
     {
         return view('livewire.admin.folder.folder-create');

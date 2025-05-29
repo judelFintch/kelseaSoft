@@ -21,6 +21,15 @@ use App\Livewire\Admin\Licence\{LicenceIndex,
     LicenceEdit,
     LicenceDelete,
     LicenceRestore};
+use App\Livewire\Admin\Billing\{BillingCreate,BillingIndex};
+
+use App\Livewire\Admin\Invoices\ShowInvoice;
+use App\Livewire\Admin\Invoices\GenerateInvoice;
+use App\Livewire\Admin\Invoices\InvoiceIndex;
+use App\Livewire\Admin\Invoices\UpdateInvoice;
+use App\Livewire\Admin\Currency\CurrencyStore;
+use App\Livewire\Admin\Currency\CurrencyIndex;
+use App\Livewire\Admin\Currency\CurrencyUpdate;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -97,6 +106,34 @@ Route::middleware('auth')->group(function () {
         Route::get('/show/{id}', LicenceShow::class)->name('show');
         Route::get('/edit/{id}', LicenceEdit::class)->name('edit');
        
+    });
+
+
+    Route::prefix('billing')->name('billing.')->group(function () {
+        Route::get('/create', BillingCreate::class)->name('create');
+        Route::get('/edit/{id}', BillingCreate::class)->name('edit');
+        Route::get('/list', BillingIndex::class)->name('list');
+        Route::get('/show/{id}', BillingCreate::class)->name('show');
+        Route::get('/delete/{id}', BillingCreate::class)->name('delete');
+        Route::get('/restore/{id}', BillingCreate::class)->name('restore');
+    });
+
+
+    Route::prefix('invoices')->name('invoices.')->group(function () {
+        Route::get('/invoices/{invoice}/show', ShowInvoice::class)->name('show');
+        Route::get('/generate', GenerateInvoice::class)->name('generate');
+        Route::get('/download/{invoiceId}', [GenerateInvoice::class, 'downloadPdf'])->name('download');
+        Route::get('/index', InvoiceIndex::class)->name('index');
+        Route::get('/invoices/{invoice}/edit', UpdateInvoice::class)->name('invoices.edit');
+    });
+
+    Route::prefix('currency')->name('currency.')->group(function () {
+        Route::get('/create', CurrencyStore::class)->name('create');
+        Route::get('/edit/{id}', CurrencyUpdate::class)->name('edit');
+        Route::get('/list', CurrencyIndex::class)->name('list');
+        Route::get('/show/{id}', CurrencyUpdate::class)->name('show');
+        Route::get('/delete/{id}', CurrencyUpdate::class)->name('delete');
+        Route::get('/restore/{id}', CurrencyUpdate::class)->name('restore');
     });
 
 

@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             CompanySeeder::class,
             LicenceSeeder::class,
             FolderSeeder::class,
+             CurrencySeeder::class,
             
 
         ]);

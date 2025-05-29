@@ -1,5 +1,5 @@
 <div x-data="{ tab: 'details' }" class="bg-white dark:bg-gray-900 shadow rounded-xl p-6">
-    <!-- Barre info et actions -->
+    <!-- Header + Actions -->
     <div class="flex justify-between items-center mb-4">
         <div>
             <h2 class="text-xl font-semibold text-gray-800 dark:text-white">📁 Dossier : {{ $folder->folder_number }}</h2>
@@ -7,51 +7,45 @@
         </div>
         <div class="flex gap-3">
             <a href="{{ route('folder.edit', $folder) }}"
-               class="inline-flex items-center px-3 py-1.5 text-sm bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200">
-                ✏️ Modifier
-            </a>
+               class="inline-flex items-center px-3 py-1.5 text-sm bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200">✏️ Modifier</a>
             <button wire:click="confirmDelete"
-                    class="inline-flex items-center px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200">
-                🗑 Supprimer
-            </button>
+                    class="inline-flex items-center px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200">🗑 Supprimer</button>
             <button wire:click="printPdf"
-                    class="inline-flex items-center px-3 py-1.5 text-sm bg-gray-100 text-gray-800 rounded hover:bg-gray-200">
-                🖨️ Imprimer
-            </button>
+                    class="inline-flex items-center px-3 py-1.5 text-sm bg-gray-100 text-gray-800 rounded hover:bg-gray-200">🖨️ Imprimer</button>
         </div>
     </div>
 
-    <!-- Onglets -->
+    <!-- Tabs -->
     <div class="border-b border-gray-200 dark:border-gray-700 mb-6">
         <nav class="-mb-px flex flex-wrap gap-6 text-sm font-semibold">
             <button @click="tab = 'details'"
                 :class="tab === 'details' ? 'border-b-2 border-indigo-500 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-indigo-500'"
-                class="flex items-center gap-1 px-1 pb-3 transition">
-                📄 Détails
-            </button>
-
+                class="flex items-center gap-1 px-1 pb-3 transition">📄 Détails</button>
             <button @click="tab = 'files'"
                 :class="tab === 'files' ? 'border-b-2 border-green-500 text-green-600 dark:text-green-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-green-500'"
-                class="flex items-center gap-1 px-1 pb-3 transition">
-                📁 Fichiers
-            </button>
-
+                class="flex items-center gap-1 px-1 pb-3 transition">📁 Fichiers</button>
             <button @click="tab = 'progress'"
                 :class="tab === 'progress' ? 'border-b-2 border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-blue-500'"
-                class="flex items-center gap-1 px-1 pb-3 transition">
-                ⏳ Progression
-            </button>
+                class="flex items-center gap-1 px-1 pb-3 transition">⏳ Progression</button>
         </nav>
     </div>
 
-    <!-- PANELS -->
+    <!-- Panels -->
     <div class="mt-4 space-y-6">
-        <!-- DÉTAILS -->
+        <!-- Details -->
         <div x-show="tab === 'details'" x-cloak class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             @php
                 $fields = [
                     ['label' => 'Truck Number', 'value' => $folder->truck_number],
                     ['label' => 'Trailer Number', 'value' => $folder->trailer_number],
+                    ['label' => 'Invoice Number', 'value' => $folder->invoice_number],
+                    ['label' => 'Goods Type', 'value' => $folder->goods_type],
+                    ['label' => 'Agency', 'value' => $folder->agency],
+                    ['label' => 'Pre-alert Place', 'value' => $folder->pre_alert_place],
+                    ['label' => 'Transport Mode', 'value' => $folder->transport_mode],
+                    ['label' => 'Internal Reference', 'value' => $folder->internal_reference],
+                    ['label' => 'Order Number', 'value' => $folder->order_number],
+                    ['label' => 'Folder Date', 'value' => $folder->folder_date],
                     ['label' => 'Transporter', 'value' => $folder->transporter?->name],
                     ['label' => 'Driver Name', 'value' => $folder->driver_name],
                     ['label' => 'Driver Phone', 'value' => $folder->driver_phone],
@@ -66,10 +60,25 @@
                     ['label' => 'Declarant', 'value' => $folder->declarant],
                     ['label' => 'Customs Agent', 'value' => $folder->customs_agent],
                     ['label' => 'Container', 'value' => $folder->container_number],
-                    ['label' => 'Weight', 'value' => $folder->weight . ' kg'],
-                    ['label' => 'FOB', 'value' => $folder->fob_amount . ' USD'],
-                    ['label' => 'Insurance', 'value' => $folder->insurance_amount . ' USD'],
-                    ['label' => 'CIF', 'value' => $folder->cif_amount . ' USD'],
+                    ['label' => 'Weight', 'value' => $folder->weight],
+                    ['label' => 'Quantity', 'value' => $folder->quantity],
+                    ['label' => 'FOB Amount', 'value' => $folder->fob_amount],
+                    ['label' => 'Insurance Amount', 'value' => $folder->insurance_amount],
+                    ['label' => 'CIF Amount', 'value' => $folder->cif_amount],
+                    ['label' => 'Arrival Border Date', 'value' => $folder->arrival_border_date],
+                    ['label' => 'License Code', 'value' => $folder->license_code],
+                    ['label' => 'BIVAC Code', 'value' => $folder->bivac_code],
+                    ['label' => 'TR8 Number', 'value' => $folder->tr8_number],
+                    ['label' => 'TR8 Date', 'value' => $folder->tr8_date],
+                    ['label' => 'T1 Number', 'value' => $folder->t1_number],
+                    ['label' => 'T1 Date', 'value' => $folder->t1_date],
+                    ['label' => 'Formalities Office Ref', 'value' => $folder->formalities_office_reference],
+                    ['label' => 'IM4 Number', 'value' => $folder->im4_number],
+                    ['label' => 'IM4 Date', 'value' => $folder->im4_date],
+                    ['label' => 'Liquidation Number', 'value' => $folder->liquidation_number],
+                    ['label' => 'Liquidation Date', 'value' => $folder->liquidation_date],
+                    ['label' => 'Quitance Number', 'value' => $folder->quitance_number],
+                    ['label' => 'Quitance Date', 'value' => $folder->quitance_date],
                 ];
             @endphp
 
@@ -88,12 +97,12 @@
             </div>
         </div>
 
-        <!-- FICHIERS -->
+        <!-- Files -->
         <div x-show="tab === 'files'" x-cloak>
             @livewire('admin.folder.operations.upload-files', ['folder' => $folder], key('upload-files-' . $folder->id))
         </div>
 
-        <!-- PROGRESSION -->
+        <!-- Progress -->
         <div x-show="tab === 'progress'" x-cloak>
             <h4 class="text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">📊 Suivi de progression</h4>
             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 overflow-hidden">

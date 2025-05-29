@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Kyslik\ColumnSortable\Sortable;
 
 class Folder extends Model
 {
     use HasFactory, SoftDeletes;
+    use Sortable;
 
     protected $fillable = [
         'folder_number',
@@ -109,4 +111,17 @@ class Folder extends Model
     {
         return $this->hasMany(FoldeLicence::class);
     }
+
+    public $sortable = [
+        'id', 'folder_number', 'truck_number', 'trailer_number',
+        'invoice_number', 'goods_type', 'agency', 'pre_alert_place',
+        'transport_mode', 'internal_reference', 'order_number',
+        'folder_date', 'driver_name', 'driver_phone', 'driver_nationality',
+        'declaration_number', 'declarant', 'customs_agent', 'container_number',
+        'arrival_border_date', 'tr8_number', 'tr8_date', 't1_number',
+        't1_date', 'formalities_office_reference', 'im4_number',
+        'im4_date', 'liquidation_number', 'liquidation_date',
+        'quitance_number', 'quitance_date', 'dossier_type',
+        'license_code', 'bivac_code', 'description', 'created_at'
+    ];
 }

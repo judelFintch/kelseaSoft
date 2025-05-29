@@ -43,10 +43,30 @@ return new class extends Migration
             $table->date('arrival_border_date')->nullable();
             $table->text('description')->nullable();
 
-            $table->string('dossier_type')->default('sans'); 
-            $table->string('license_code')->nullable(); 
+            $table->string('dossier_type')->default('sans');
+            $table->string('license_code')->nullable();
             $table->string('bivac_code')->nullable();
             $table->foreignId('license_id')->nullable()->constrained('licences')->nullOnDelete();
+
+            // ✅ Ajouts demandés
+            $table->string('goods_type')->nullable();
+            $table->string('agency')->nullable();
+            $table->string('pre_alert_place')->nullable();
+            $table->string('transport_mode')->nullable();
+            $table->string('internal_reference')->nullable();
+            $table->string('order_number')->nullable();
+            $table->date('folder_date')->nullable();
+            $table->string('tr8_number')->nullable();
+            $table->date('tr8_date')->nullable();
+            $table->string('t1_number')->nullable();
+            $table->date('t1_date')->nullable();
+            $table->string('formalities_office_reference')->nullable();
+            $table->string('im4_number')->nullable();
+            $table->date('im4_date')->nullable();
+            $table->string('liquidation_number')->nullable();
+            $table->date('liquidation_date')->nullable();
+            $table->string('quitance_number')->nullable();
+            $table->date('quitance_date')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

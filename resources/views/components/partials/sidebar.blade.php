@@ -317,7 +317,7 @@
                                 </svg>
 
                                 <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
-                                    Déclarations
+                                    Facturations
                                 </span>
 
                                 <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
@@ -337,17 +337,17 @@
                                 <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                     class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                                     <li>
-                                        <a href="/declarations" class="menu-dropdown-item group"
+                                        <a href="{{route('invoices.generate')}}" class="menu-dropdown-item group"
                                             :class="page === 'declarationListe' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
-                                            Liste des Déclarations
+                                            Liste facture 
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/declarations/create" class="menu-dropdown-item group"
+                                        <a href="{{route('invoices.index')}}" class="menu-dropdown-item group"
                                             :class="page === 'declarationCreate' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
-                                            Nouvelle Déclaration
+                                            Nouvelle Facture
                                         </a>
                                     </li>
                                 </ul>
@@ -398,10 +398,10 @@
                                 <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                     class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                                     <li>
-                                        <a href="/applications" class="menu-dropdown-item group"
+                                        <a href="{{route('currency.list')}}" class="menu-dropdown-item group"
                                             :class="page === 'Applications' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
-                                            Applications
+                                            Devise
                                         </a>
                                     </li>
                                     <li>
