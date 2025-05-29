@@ -15,6 +15,8 @@
     <!-- Styles -->
     @livewireStyles
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
 
     <!-- Scripts -->
 </head>

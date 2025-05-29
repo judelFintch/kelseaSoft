@@ -15,30 +15,8 @@ class CurrencySeeder extends Seeder
     {
         //
         Currency::insert([
-            [
-                'code' => 'USD',
-                'name' => 'Dollar américain',
-                'symbol' => '$',
-                'is_default' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'code' => 'CDF',
-                'name' => 'Franc congolais',
-                'symbol' => 'FC',
-                'is_default' => false,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'code' => 'EUR',
-                'name' => 'Euro',
-                'symbol' => '€',
-                'is_default' => false,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            ['code' => 'USD', 'name' => 'Dollar Américain', 'symbol' => '$', 'is_default' => true],
+            ['code' => 'CDF', 'name' => 'Franc Congolais', 'symbol' => 'FC', 'is_default' => false],
         ]);
     }
 }

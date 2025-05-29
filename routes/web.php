@@ -15,19 +15,21 @@ use App\Livewire\Admin\ManageCustomsRegimes\CustomsRegimesCreate;
 use App\Livewire\Admin\ManageMerchandiseType\MerchandiseTypeCreate;
 use App\Livewire\Admin\ManageSupplier\SupplierCreate;
 use App\Livewire\Admin\ManageTransporters\TransportersCreate;
-use App\Livewire\Admin\Licence\{LicenceIndex,
+use App\Livewire\Admin\Licence\{
+    LicenceIndex,
     LicenceCreate,
     LicenceShow,
     LicenceEdit,
     LicenceDelete,
-    LicenceRestore};
-use App\Livewire\Admin\Billing\{BillingCreate,BillingIndex};
+    LicenceRestore
+};
+use App\Livewire\Admin\Billing\{BillingCreate, BillingIndex};
 
 use App\Livewire\Admin\Invoices\ShowInvoice;
 use App\Livewire\Admin\Invoices\GenerateInvoice;
 use App\Livewire\Admin\Invoices\InvoiceIndex;
 use App\Livewire\Admin\Invoices\UpdateInvoice;
-use App\Livewire\Admin\Currency\CurrencyStore;
+
 use App\Livewire\Admin\Currency\CurrencyIndex;
 use App\Livewire\Admin\Currency\CurrencyUpdate;
 use Illuminate\Support\Facades\Route;
@@ -92,12 +94,10 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('supplier')->name('supplier.')->group(function () {
         Route::get('/create', SupplierCreate::class)->name('create');
-      
     });
 
     Route::prefix('manageTransporter')->name('transporter.')->group(function () {
         Route::get('/create', TransportersCreate::class)->name('create');
-       
     });
 
     Route::prefix('licence')->name('licence.')->group(function () {
@@ -105,7 +105,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/create', LicenceCreate::class)->name('create');
         Route::get('/show/{id}', LicenceShow::class)->name('show');
         Route::get('/edit/{id}', LicenceEdit::class)->name('edit');
-       
     });
 
 
@@ -128,15 +127,13 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('currency')->name('currency.')->group(function () {
-        Route::get('/create', CurrencyStore::class)->name('create');
+
         Route::get('/edit/{id}', CurrencyUpdate::class)->name('edit');
         Route::get('/list', CurrencyIndex::class)->name('list');
         Route::get('/show/{id}', CurrencyUpdate::class)->name('show');
         Route::get('/delete/{id}', CurrencyUpdate::class)->name('delete');
         Route::get('/restore/{id}', CurrencyUpdate::class)->name('restore');
     });
-
-
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

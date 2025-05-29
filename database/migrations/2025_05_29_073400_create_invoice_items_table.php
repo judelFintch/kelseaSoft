@@ -13,13 +13,21 @@ return new class extends Migration
     {
         Schema::create('invoice_items', function (Blueprint $table) {
             $table->id();
+
+            // Lien vers la facture
             $table->foreignId('invoice_id')->constrained()->cascadeOnDelete();
 
-            $table->string('label'); // ex: DDI, SEGUCE
+            // Informations principales
+            $table->string('label'); // Exemple : DDI, SEGUCE, CNCT
             $table->enum('category', ['import_tax', 'agency_fee', 'extra_fee']);
-            $table->decimal('amount_usd', 12, 2)->default(0);
-            $table->string('currency')->default('USD');
+            $table->decimal('amount_usd', 12, 2)->default(0); // Montant en USD (référence)
 
+            // Multidevise
+            $table->foreignId('currency_id')->constrained('currencies')->default(1); // USD par défaut
+            $table->decimal('exchange_rate', 12, 6)->default(1.0); // Taux appliqué au moment de la facture
+            $table->decimal('converted_amount', 12, 2)->default(0); // Montant converti (affichage local)
+
+            // Références associées
             $table->foreignId('tax_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('agency_fee_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('extra_fee_id')->nullable()->constrained()->nullOnDelete();
