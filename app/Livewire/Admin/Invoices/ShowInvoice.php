@@ -5,26 +5,29 @@ namespace App\Livewire\Admin\Invoices;
 use Livewire\Component;
 use App\Models\Invoice;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ShowInvoice extends Component
 {
-
     public Invoice $invoice;
 
-    public function mount($invoice)
+    /**
+     * Initialisation du composant avec chargement des relations.
+     */
+    public function mount($invoice): void
     {
-        $this->invoice = Invoice::with('company', 'items')->findOrFail($invoice);
+        //$this->invoice = Invoice::with(['company', 'items'])->findOrFail($invoice);
     }
 
-    public function downloadPdf(): StreamedResponse
-    {
-        $pdf = Pdf::loadView('pdf.invoice', ['invoice' => $this->invoice]);
-        return response()->streamDownload(
-            fn() => print($pdf->output()),
-            'facture-' . $this->invoice->invoice_number . '.pdf'
-        );
-    }
+    /**
+     * Téléchargement de la facture au format PDF.
+     */
+    
+
+    /**
+     * Rendu du composant.
+     */
     public function render()
     {
         return view('livewire.admin.invoices.show-invoice');

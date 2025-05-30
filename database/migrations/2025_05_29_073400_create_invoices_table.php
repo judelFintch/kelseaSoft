@@ -26,7 +26,7 @@ return new class extends Migration
             $table->enum('payment_mode', ['provision', 'cash', 'transfer'])->default('provision');
             $table->decimal('total_usd', 12, 2)->default(0);
             $table->decimal('default_amount', 10, 2)->nullable();
-            $table->foreignId('currency_id')->default(1)->constrained(); // USD = 1
+            $table->foreignId('currency_id')->nullable(); // USD = 1
             $table->decimal('exchange_rate', 12, 4)->default(1.0); // par rapport à USD
             $table->decimal('converted_total', 12, 2)->nullable(); // Montant dans la devise choisie
             $table->timestamps();

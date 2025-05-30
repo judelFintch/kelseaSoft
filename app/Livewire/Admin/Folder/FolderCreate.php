@@ -22,9 +22,7 @@ class FolderCreate extends Component
     public $locations;
     public $customsOffices;
     public $declarationTypes;
-
     public $folder;
-
     public $optionsSelect;
     public $licenseCodes = [];
     public $bivacCodes = [];
@@ -37,21 +35,18 @@ class FolderCreate extends Component
         $this->locations = Location::all();
         $this->customsOffices = CustomsOffice::all();
         $this->declarationTypes = DeclarationType::all();
-
         $this->folder = [
             'folder_number' => FolderService::generateFolderNumber(),
             'dossier_type' => DossierType::SANS->value,
         ];
 
         $this->optionsSelect = DossierType::options();
-
         $this->licenseCodes = \App\Models\Licence::all()
             ->map(fn($license) => [
                 'label' => $license->license_number,
                 'value' => $license->id,
             ])
             ->toArray();
-
         $this->bivacCodes = [
             ['label' => 'BIVAC-01', 'value' => 'BIVAC-01'],
             ['label' => 'BIVAC-02', 'value' => 'BIVAC-02'],
@@ -97,7 +92,7 @@ class FolderCreate extends Component
             'folder.description' => 'nullable|string|max:1000',
             'folder.dossier_type' => ['required', new Enum(DossierType::class)],
 
-            // ✅ Ajout des nouveaux champs
+
             'folder.goods_type' => 'nullable|string|max:255',
             'folder.agency' => 'nullable|string|max:255',
             'folder.pre_alert_place' => 'nullable|string|max:255',

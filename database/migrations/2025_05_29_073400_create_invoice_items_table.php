@@ -23,7 +23,7 @@ return new class extends Migration
             $table->decimal('amount_usd', 12, 2)->default(0); // Montant en USD (référence)
 
             // Multidevise
-            $table->foreignId('currency_id')->constrained('currencies')->default(1); // USD par défaut
+            $table->foreignId('currency_id')->nullable();// USD par défaut
             $table->decimal('exchange_rate', 12, 6)->default(1.0); // Taux appliqué au moment de la facture
             $table->decimal('converted_amount', 12, 2)->default(0); // Montant converti (affichage local)
 
