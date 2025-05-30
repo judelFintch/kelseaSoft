@@ -21,7 +21,7 @@ class GenerateInvoice extends Component
     public $weight = '9000';
     public $operation_code = 'MBDKCCGL';
 
-    public $fob_amount = 10000;
+    public $fob_amount = 0 ;
     public $insurance_amount = 0;
     public $freight_amount = 0;
     public $cif_amount = 0;
@@ -43,7 +43,6 @@ class GenerateInvoice extends Component
         $this->agencyFees = AgencyFee::all();
         $this->extraFees = ExtraFee::all();
         $this->currencies = Currency::all();
-
         $this->initCategorySteps();
         $this->addItem();
     }
@@ -55,16 +54,21 @@ class GenerateInvoice extends Component
 
     public function updatedItems($value, $key): void
     {
-        if (preg_match('/items\.(\d+)\.(amount_local|currency_id)/', $key, $matches)) {
+        
+  
+        
+        if (preg_match('/^(\d+)\.(amount_local|currency_id)$/', $key, $matches)) {
+
+           
+          
             $index = (int)$matches[1];
             $item = &$this->items[$index];
-
             $localAmount = (float)($item['amount_local'] ?? 0);
-            $selectedCurrencyId = (int)($item['currency_id'] ?? 1);
 
+            
+            $selectedCurrencyId = (int)($item['currency_id'] ?? 1);
             $selectedCurrency = Currency::find($selectedCurrencyId);
             $baseCurrency = Currency::find($this->currency_id);
-
             if ($selectedCurrency && $baseCurrency) {
                 $usdRate = $selectedCurrency->exchange_rate ?: 1;
                 $item['exchange_rate'] = $usdRate;
@@ -89,7 +93,7 @@ class GenerateInvoice extends Component
             'category' => $category,
             'currency_id' => $this->currency_id ?? 1,
             'exchange_rate' => 1.0,
-            'amount_local' => 0,
+            'amount_local' => $this->fob_amount,
             'amount_usd' => 0,
             'converted_amount' => 0,
             'tax_id' => null,
@@ -146,6 +150,10 @@ class GenerateInvoice extends Component
 
         $total = collect($this->items)->sum('amount_usd');
         $convertedTotal = collect($this->items)->sum('converted_amount');
+        dd($total, $convertedTotal);
+
+
+
 
         $invoice = Invoice::create([
             'invoice_number' => 'MDBKCCGL' . str_pad((Invoice::max('id') ?? 0) + 1, 6, '0', STR_PAD_LEFT),
@@ -179,9 +187,9 @@ class GenerateInvoice extends Component
             ]);
         }
 
-        session()->flash('success', 'Facture créée avec succès.');
-        $this->resetExcept(['step']);
-        $this->step = 1;
+      //  session()->flash('success', 'Facture créée avec succès.');
+       // $this->resetExcept(['step']);
+       // $this->step = 1;
     }
 
     public function render()
