@@ -14,11 +14,20 @@ class InvoiceItem extends Model
         'label',
         'category',
         'amount_usd',
-        'currency',
+        'currency_id',
+        'exchange_rate',
+        'amount_cdf',
         'tax_id',
         'agency_fee_id',
         'extra_fee_id',
     ];
+
+    // 🔁 Relations
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
 
     public function invoice()
     {

@@ -21,7 +21,7 @@ class GenerateInvoice extends Component
     public $weight = '9000';
     public $operation_code = 'MBDKCCGL';
 
-    public $fob_amount = 0 ;
+    public $fob_amount = 0;
     public $insurance_amount = 0;
     public $freight_amount = 0;
     public $cif_amount = 0;
@@ -54,26 +54,28 @@ class GenerateInvoice extends Component
 
     public function updatedItems($value, $key): void
     {
-        
-  
-        
-        if (preg_match('/^(\d+)\.(amount_local|currency_id)$/', $key, $matches)) {
 
-           
-          
+        if (preg_match('/^(\d+)\.(amount_local|currency_id)$/', $key, $matches)) {
+            
             $index = (int)$matches[1];
             $item = &$this->items[$index];
             $localAmount = (float)($item['amount_local'] ?? 0);
-
-            
             $selectedCurrencyId = (int)($item['currency_id'] ?? 1);
             $selectedCurrency = Currency::find($selectedCurrencyId);
-            $baseCurrency = Currency::find($this->currency_id);
-            if ($selectedCurrency && $baseCurrency) {
-                $usdRate = $selectedCurrency->exchange_rate ?: 1;
-                $item['exchange_rate'] = $usdRate;
-                $item['amount_usd'] = round($localAmount / $usdRate, 2);
-                $item['converted_amount'] = round($item['amount_usd'] * $this->exchange_rate, 2);
+
+            if ($selectedCurrency) {
+                $rate = $selectedCurrency->exchange_rate ?: 1;
+                $item['exchange_rate'] = $rate;
+                if (strtoupper($selectedCurrency->code) === 'USD') {
+                    $item['amount_usd'] = $localAmount;
+                    $item['amount_cdf'] = round($localAmount * $rate, 2);
+                } elseif (strtoupper($selectedCurrency->code) === 'CDF') {
+                    $item['amount_usd'] = round($localAmount / $rate, 2);
+                    $item['amount_cdf'] = $localAmount;
+                } else {
+                    $item['amount_usd'] = round($localAmount / $rate, 2);
+                    $item['amount_cdf'] = round($localAmount, 2); // fallback
+                }
             }
         }
     }
@@ -149,11 +151,7 @@ class GenerateInvoice extends Component
         }
 
         $total = collect($this->items)->sum('amount_usd');
-        $convertedTotal = collect($this->items)->sum('converted_amount');
-        dd($total, $convertedTotal);
-
-
-
+        $totalCdf = collect($this->items)->sum('amount_cdf');
 
         $invoice = Invoice::create([
             'invoice_number' => 'MDBKCCGL' . str_pad((Invoice::max('id') ?? 0) + 1, 6, '0', STR_PAD_LEFT),
@@ -170,7 +168,7 @@ class GenerateInvoice extends Component
             'currency_id' => $this->currency_id,
             'exchange_rate' => $this->exchange_rate,
             'total_usd' => $total,
-            'converted_total' => $convertedTotal,
+            'converted_total' => $totalCdf,
         ]);
 
         foreach ($this->items as $item) {
@@ -178,18 +176,18 @@ class GenerateInvoice extends Component
                 'label' => $item['label'],
                 'category' => $item['category'],
                 'amount_usd' => $item['amount_usd'],
+                'amount_cdf' => $item['amount_cdf'],
                 'currency_id' => $item['currency_id'],
                 'exchange_rate' => $item['exchange_rate'],
-                'converted_amount' => $item['converted_amount'],
                 'tax_id' => $item['tax_id'],
                 'agency_fee_id' => $item['agency_fee_id'],
                 'extra_fee_id' => $item['extra_fee_id'],
             ]);
         }
 
-      //  session()->flash('success', 'Facture créée avec succès.');
-       // $this->resetExcept(['step']);
-       // $this->step = 1;
+        session()->flash('success', 'Facture enregistrée avec succès.');
+        $this->resetExcept(['step']);
+        $this->step = 1;
     }
 
     public function render()

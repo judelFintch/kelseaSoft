@@ -15,8 +15,20 @@ class CurrencySeeder extends Seeder
     {
         //
         Currency::insert([
-            ['code' => 'USD', 'name' => 'Dollar Américain', 'symbol' => '$', 'is_default' => true],
-            ['code' => 'CDF', 'name' => 'Franc Congolais', 'symbol' => 'FC', 'is_default' => false],
+            [
+            'code' => 'USD',
+            'name' => 'Dollar Américain',
+            'symbol' => '$',
+            'is_default' => true,
+            'exchange_rate' => 2850 // taux d'échange par rapport à USD
+            ],
+            [
+            'code' => 'CDF',
+            'name' => 'Franc Congolais',
+            'symbol' => 'FC',
+            'is_default' => false,
+            'exchange_rate' => 2850 // exemple de taux d'échange par rapport à USD
+            ],
         ]);
     }
 }

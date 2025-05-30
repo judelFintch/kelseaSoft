@@ -16,6 +16,7 @@ class Currency extends Model
         'name',
         'symbol',
         'is_default',
+        'exchange_rate',
     ];
 
     public function invoices()

@@ -81,8 +81,8 @@
                             <x-forms.input label="Montant USD" :model="'items.' . $i . '.amount_usd'" type="number" step="0.01"
                                 disabled />
 
-                            <x-forms.input label="Montant converti (CDF)" :model="'items.' . $i . '.converted_amount'" type="number"
-                                step="0.01" disabled />
+                            <x-forms.input label="Montant CDF" :model="'items.' . $i . '.amount_cdf'" type="number" step="0.01"
+                                disabled />
 
                             <button wire:click.prevent="removeItem({{ $i }})"
                                 class="text-red-600 text-sm">❌</button>

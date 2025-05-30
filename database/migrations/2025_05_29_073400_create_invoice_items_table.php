@@ -18,16 +18,18 @@ return new class extends Migration
             $table->foreignId('invoice_id')->constrained()->cascadeOnDelete();
 
             // Informations principales
-            $table->string('label'); // Exemple : DDI, SEGUCE, CNCT
+            $table->string('label');
             $table->enum('category', ['import_tax', 'agency_fee', 'extra_fee']);
-            $table->decimal('amount_usd', 12, 2)->default(0); // Montant en USD (référence)
 
-            // Multidevise
-            $table->foreignId('currency_id')->nullable();// USD par défaut
-            $table->decimal('exchange_rate', 12, 6)->default(1.0); // Taux appliqué au moment de la facture
-            $table->decimal('converted_amount', 12, 2)->default(0); // Montant converti (affichage local)
+            // Montants
+            $table->decimal('amount_usd', 12, 2)->default(0); // Référence USD
+            $table->decimal('amount_cdf', 14, 2)->default(0); // Montant converti CDF
 
-            // Références associées
+            // Devise utilisée
+            $table->foreignId('currency_id')->nullable();
+            $table->decimal('exchange_rate', 12, 6)->default(1.0);
+
+            // Références
             $table->foreignId('tax_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('agency_fee_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('extra_fee_id')->nullable()->constrained()->nullOnDelete();
