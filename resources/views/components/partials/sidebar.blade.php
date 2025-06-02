@@ -123,7 +123,7 @@
                                 <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                     class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                                     <li>
-                                        <a href="{{route('folder.list')}}" class="menu-dropdown-item group"
+                                        <a href="{{ route('folder.list') }}" class="menu-dropdown-item group"
                                             :class="page === 'dossierListe' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Liste
@@ -231,14 +231,14 @@
                                 <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                     class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                                     <li>
-                                        <a href="{{route('licence.list')}}" class="menu-dropdown-item group"
+                                        <a href="{{ route('licence.list') }}" class="menu-dropdown-item group"
                                             :class="page === 'licencesListe' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Liste des Licences
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('licence.create')}}" class="menu-dropdown-item group"
+                                        <a href="{{ route('licence.create') }}" class="menu-dropdown-item group"
                                             :class="page === 'licencesCreate' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Nouvelle Licence
@@ -337,14 +337,14 @@
                                 <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                     class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                                     <li>
-                                        <a href="{{route('invoices.generate')}}" class="menu-dropdown-item group"
+                                        <a href="{{ route('invoices.generate') }}" class="menu-dropdown-item group"
                                             :class="page === 'declarationListe' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
-                                            Liste facture 
+                                            Liste facture
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{route('invoices.index')}}" class="menu-dropdown-item group"
+                                        <a href="{{ route('invoices.index') }}" class="menu-dropdown-item group"
                                             :class="page === 'declarationCreate' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Nouvelle Facture
@@ -398,7 +398,7 @@
                                 <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                     class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                                     <li>
-                                        <a href="{{route('currency.list')}}" class="menu-dropdown-item group"
+                                        <a href="{{ route('currency.list') }}" class="menu-dropdown-item group"
                                             :class="page === 'Applications' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Devise
@@ -412,14 +412,40 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{route('merchandiseType.create')}}" class="menu-dropdown-item group"
+                                        <a href="{{ route('merchandiseType.create') }}"
+                                            class="menu-dropdown-item group"
                                             :class="page === 'Roles' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
-                                            Types Marchandise 
+                                            Types Marchandise
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{route('customsRegimes.create')}}" class="menu-dropdown-item group"
+                                        <a href="{{ route('taxes.index') }}"
+                                            class="menu-dropdown-item group"
+                                            :class="page === 'Roles' ? 'menu-dropdown-item-active' :
+                                                'menu-dropdown-item-inactive'">
+                                            Taxes
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('merchandiseType.create') }}"
+                                            class="menu-dropdown-item group"
+                                            :class="page === 'Roles' ? 'menu-dropdown-item-active' :
+                                                'menu-dropdown-item-inactive'">
+                                            Autres Frais
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('merchandiseType.create') }}"
+                                            class="menu-dropdown-item group"
+                                            :class="page === 'Roles' ? 'menu-dropdown-item-active' :
+                                                'menu-dropdown-item-inactive'">
+                                            Frais Agence
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('customsRegimes.create') }}"
+                                            class="menu-dropdown-item group"
                                             :class="page === 'RegimesDouaniers' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Régimes douaniers
@@ -447,7 +473,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{route('transporter.create')}}" class="menu-dropdown-item group"
+                                        <a href="{{ route('transporter.create') }}" class="menu-dropdown-item group"
                                             :class="page === 'Tares' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Transporteurs
@@ -468,7 +494,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{route('supplier.create')}}" class="menu-dropdown-item group"
+                                        <a href="{{ route('supplier.create') }}" class="menu-dropdown-item group"
                                             :class="page === 'Pays' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Fournisseurs

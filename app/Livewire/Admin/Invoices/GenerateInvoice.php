@@ -66,6 +66,7 @@ class GenerateInvoice extends Component
             if ($selectedCurrency) {
                 $rate = $selectedCurrency->exchange_rate ?: 1;
                 $item['exchange_rate'] = $rate;
+
                 if (strtoupper($selectedCurrency->code) === 'USD') {
                     $item['amount_usd'] = $localAmount;
                     $item['amount_cdf'] = round($localAmount * $rate, 2);

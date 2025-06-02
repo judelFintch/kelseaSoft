@@ -1,4 +1,5 @@
 <div class="w-full max-w-5xl mx-auto bg-white p-6 rounded-xl shadow space-y-6">
+    
     <h2 class="text-2xl font-bold">🧾 Nouvelle Facture</h2>
 
     @if (session()->has('success'))

@@ -47,7 +47,6 @@
                     </thead>
                     <tbody>
                         @foreach($items as $item)
-                       
                             <tr>
                                 <td class="border px-2 py-1">{{ $item->label }}</td>
                                 <td class="border px-2 py-1 text-right">{{ number_format($item->amount_usd, 2) }}</td>

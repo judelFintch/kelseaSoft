@@ -32,6 +32,7 @@ use App\Livewire\Admin\Invoices\UpdateInvoice;
 
 use App\Livewire\Admin\Currency\CurrencyIndex;
 use App\Livewire\Admin\Currency\CurrencyUpdate;
+use App\Livewire\Admin\Taxes\Taxe;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -133,6 +134,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/show/{id}', CurrencyUpdate::class)->name('show');
         Route::get('/delete/{id}', CurrencyUpdate::class)->name('delete');
         Route::get('/restore/{id}', CurrencyUpdate::class)->name('restore');
+    });
+
+    Route::prefix('taxes')->name('taxes.')->group(function () {
+        Route::get('/index', Taxe::class)->name('index');
+       
     });
 });
 
