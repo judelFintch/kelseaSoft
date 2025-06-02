@@ -340,14 +340,15 @@
                                         <a href="{{ route('invoices.generate') }}" class="menu-dropdown-item group"
                                             :class="page === 'declarationListe' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
-                                            Liste facture
+                                            Nouvelle Facture
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('invoices.index') }}" class="menu-dropdown-item group"
                                             :class="page === 'declarationCreate' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
-                                            Nouvelle Facture
+
+                                            Liste facture
                                         </a>
                                     </li>
                                 </ul>
@@ -420,24 +421,21 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('taxes.index') }}"
-                                            class="menu-dropdown-item group"
+                                        <a href="{{ route('taxes.index') }}" class="menu-dropdown-item group"
                                             :class="page === 'Roles' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Taxes
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('extraFees.index') }}"
-                                            class="menu-dropdown-item group"
+                                        <a href="{{ route('extraFees.index') }}" class="menu-dropdown-item group"
                                             :class="page === 'Roles' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Autres Frais
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('merchandiseType.create') }}"
-                                            class="menu-dropdown-item group"
+                                        <a href="{{ route('agencyFees.index') }}" class="menu-dropdown-item group"
                                             :class="page === 'Roles' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Frais Agence

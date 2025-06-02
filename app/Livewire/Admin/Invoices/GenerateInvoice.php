@@ -45,6 +45,8 @@ class GenerateInvoice extends Component
         $this->currencies = Currency::all();
         $this->initCategorySteps();
         $this->addItem();
+
+        $this->cif_amount = $this->fob_amount + $this->insurance_amount + $this->freight_amount;
     }
 
     public function initCategorySteps(): void

@@ -34,6 +34,7 @@ use App\Livewire\Admin\Currency\CurrencyIndex;
 use App\Livewire\Admin\Currency\CurrencyUpdate;
 use App\Livewire\Admin\Taxes\Taxe;
 use App\Livewire\Admin\ManageExtraFees\ExtraFee;
+use App\Livewire\Admin\ManageAgencyFees\ManageAgencyFee;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -144,6 +145,10 @@ Route::middleware('auth')->group(function () {
     Route::prefix('extraFees')->name('extraFees.')->group(function () {
         Route::get('/index', ExtraFee::class)->name('index');
         
+    });
+    Route::prefix('agencyFees')->name('agencyFees.')->group(function () {
+        Route::get('/index', ManageAgencyFee::class)->name('index');
+       
     });
 });
 

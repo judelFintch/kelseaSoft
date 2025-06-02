@@ -18,6 +18,7 @@
         <tbody>
             @forelse ($invoices as $invoice)
                 <tr>
+                    
                     <td class="border px-2 py-1">{{ $loop->iteration }}</td>
                     <td class="border px-2 py-1 font-semibold">{{ $invoice->invoice_number }}</td>
                     <td class="border px-2 py-1">{{ $invoice->invoice_date->format('d/m/Y') }}</td>

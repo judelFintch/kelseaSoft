@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Currency;
 use App\Models\AgencyFee;
 
 class AgencyFeeSeeder extends Seeder
@@ -14,23 +12,21 @@ class AgencyFeeSeeder extends Seeder
      */
     public function run(): void
     {
-        $usd = 1;
-
         $fees = [
-            ['label' => 'Frais Techniques', 'default_amount' => 150],
-            ['label' => 'Couts Internes', 'default_amount' => 150],
-            ['label' => 'Honoraires', 'default_amount' => 200],
-            ['label' => 'TVA', 'default_amount' => 80],
+            ['label' => 'Frais Techniques', 'description' => 'Frais liés aux aspects techniques'],
+            ['label' => 'Couts Internes', 'description' => 'Coûts internes de gestion'],
+            ['label' => 'Honoraires', 'description' => 'Honoraires de l\'agence'],
+            ['label' => 'TVA', 'description' => 'Taxe sur la valeur ajoutée'],
         ];
 
         foreach ($fees as $fee) {
-            AgencyFee::create([
-                'label' => $fee['label'],
-                'default_amount' => $fee['default_amount'],
-                'currency_id' => $usd,
-                'exchange_rate' => 1.0,
-                'default_converted_amount' => $fee['default_amount'],
-            ]);
+            AgencyFee::updateOrCreate(
+                ['code' => str_replace(' ', '_', strtolower($fee['label']))],
+                [
+                    'label' => $fee['label'],
+                    'description' => $fee['description'],
+                ]
+            );
         }
     }
 }
