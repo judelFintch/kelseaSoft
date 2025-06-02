@@ -29,6 +29,8 @@ use App\Livewire\Admin\Invoices\ShowInvoice;
 use App\Livewire\Admin\Invoices\GenerateInvoice;
 use App\Livewire\Admin\Invoices\InvoiceIndex;
 use App\Livewire\Admin\Invoices\UpdateInvoice;
+use App\Livewire\Admin\Invoices\GlobalInvoiceIndex; // Ajout pour GlobalInvoiceIndex
+use App\Livewire\Admin\Invoices\GlobalInvoiceShow;  // Ajout pour GlobalInvoiceShow
 
 use App\Livewire\Admin\Currency\CurrencyIndex;
 use App\Livewire\Admin\Currency\CurrencyUpdate;
@@ -133,6 +135,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/show/{id}', CurrencyUpdate::class)->name('show');
         Route::get('/delete/{id}', CurrencyUpdate::class)->name('delete');
         Route::get('/restore/{id}', CurrencyUpdate::class)->name('restore');
+    });
+
+    // Routes pour la facturation globale
+    Route::prefix('admin/global-invoices')->name('admin.global-invoices.')->group(function () {
+        Route::get('/', GlobalInvoiceIndex::class)->name('index');
+        Route::get('/{globalInvoice}', GlobalInvoiceShow::class)->name('show');
+        Route::get('/{globalInvoice}/download', [GlobalInvoiceShow::class, 'downloadPdf'])->name('download');
     });
 });
 
