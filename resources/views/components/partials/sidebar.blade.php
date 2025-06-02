@@ -428,7 +428,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('merchandiseType.create') }}"
+                                        <a href="{{ route('extraFees.index') }}"
                                             class="menu-dropdown-item group"
                                             :class="page === 'Roles' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
