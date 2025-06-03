@@ -102,8 +102,8 @@
                                         Facturé ({{ $folder->invoice->invoice_number ?? 'Voir' }})
                                     </a>
                                 @else
-                                    {{-- La route 'admin.invoices.generate.from-folder' sera créée plus tard --}}
-                                    <a href="{{ route('admin.invoices.generate', ['folder_id' => $folder->id]) }}" {{-- Supposition temporaire de la route et du paramètre --}}
+                                    {{-- La route est maintenant 'invoices.generate' sans le préfixe 'admin.' --}}
+                                    <a href="{{ route('invoices.generate', ['folder_id' => $folder->id]) }}"
                                        class="px-2 py-1 text-xs bg-blue-500 text-white rounded-full hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700">
                                         Facturer
                                     </a>
