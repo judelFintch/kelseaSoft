@@ -6,12 +6,25 @@
             <p class="text-sm text-gray-500 dark:text-gray-400">📅 Arrivée : {{ $folder->arrival_border_date }}</p>
         </div>
         <div class="flex gap-3">
+            {{-- Conditional Invoicing Button --}}
+            @if($folder->invoice)
+                <a href="{{ route('invoices.show', $folder->invoice->id) }}"
+                   class="inline-flex items-center px-3 py-1.5 text-sm bg-sky-100 text-sky-700 rounded hover:bg-sky-200 dark:bg-sky-700 dark:text-sky-100 dark:hover:bg-sky-600">
+                    📄 Voir la facture
+                </a>
+            @else
+                <a href="{{ route('invoices.generate', ['folder_id' => $folder->id]) }}"
+                   class="inline-flex items-center px-3 py-1.5 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200 dark:bg-green-700 dark:text-green-100 dark:hover:bg-green-600">
+                    ➕ Facturer
+                </a>
+            @endif
+
             <a href="{{ route('folder.edit', $folder) }}"
-               class="inline-flex items-center px-3 py-1.5 text-sm bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200">✏️ Modifier</a>
+               class="inline-flex items-center px-3 py-1.5 text-sm bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 dark:bg-indigo-700 dark:text-indigo-100 dark:hover:bg-indigo-600">✏️ Modifier</a>
             <button wire:click="confirmDelete"
-                    class="inline-flex items-center px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200">🗑 Supprimer</button>
+                    class="inline-flex items-center px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 dark:bg-red-700 dark:text-red-100 dark:hover:bg-red-600">🗑 Supprimer</button>
             <button wire:click="printPdf"
-                    class="inline-flex items-center px-3 py-1.5 text-sm bg-gray-100 text-gray-800 rounded hover:bg-gray-200">🖨️ Imprimer</button>
+                    class="inline-flex items-center px-3 py-1.5 text-sm bg-gray-100 text-gray-800 rounded hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">🖨️ Imprimer</button>
         </div>
     </div>
 
