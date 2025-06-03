@@ -428,14 +428,14 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('extraFees.index') }}" class="menu-dropdown-item group"
+                                        <a href="{{ route('extra-fees.index') }}" class="menu-dropdown-item group"
                                             :class="page === 'Roles' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Autres Frais
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('agencyFees.index') }}" class="menu-dropdown-item group"
+                                        <a href="{{ route('agency-fees.index') }}" class="menu-dropdown-item group"
                                             :class="page === 'Roles' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Frais Agence

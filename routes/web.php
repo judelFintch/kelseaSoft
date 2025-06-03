@@ -29,6 +29,8 @@ use App\Livewire\Admin\Invoices\ShowInvoice;
 use App\Livewire\Admin\Invoices\GenerateInvoice;
 use App\Livewire\Admin\Invoices\InvoiceIndex;
 use App\Livewire\Admin\Invoices\UpdateInvoice;
+use App\Livewire\Admin\Invoices\GlobalInvoiceIndex; // Ajout pour GlobalInvoiceIndex
+use App\Livewire\Admin\Invoices\GlobalInvoiceShow;  // Ajout pour GlobalInvoiceShow
 
 use App\Livewire\Admin\Currency\CurrencyIndex;
 use App\Livewire\Admin\Currency\CurrencyUpdate;
@@ -138,17 +140,21 @@ Route::middleware('auth')->group(function () {
         Route::get('/restore/{id}', CurrencyUpdate::class)->name('restore');
     });
 
+    // Routes pour la facturation globale
+    Route::prefix('admin/global-invoices')->name('admin.global-invoices.')->group(function () {
+        Route::get('/', GlobalInvoiceIndex::class)->name('index');
+        Route::get('/{globalInvoice}', GlobalInvoiceShow::class)->name('show');
+        Route::get('/{globalInvoice}/download', [GlobalInvoiceShow::class, 'downloadPdf'])->name('download');
+    });
+
     Route::prefix('taxes')->name('taxes.')->group(function () {
         Route::get('/index', Taxe::class)->name('index');
-       
     });
-    Route::prefix('extraFees')->name('extraFees.')->group(function () {
+    Route::prefix('extra-fees')->name('extra-fees.')->group(function () {
         Route::get('/index', ExtraFee::class)->name('index');
-        
     });
-    Route::prefix('agencyFees')->name('agencyFees.')->group(function () {
+    Route::prefix('agency-fees')->name('agency-fees.')->group(function () {
         Route::get('/index', ManageAgencyFee::class)->name('index');
-       
     });
 });
 

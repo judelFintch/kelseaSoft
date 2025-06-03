@@ -23,6 +23,8 @@ class Invoice extends Model
         'invoice_date',
         'payment_mode',
         'total_usd',
+        'global_invoice_id',
+        'status',
     ];
 
     protected $casts = [
@@ -42,5 +44,13 @@ class Invoice extends Model
     public function currency()
     {
         return $this->belongsTo(Currency::class);
+    }
+
+    /**
+     * Get the global invoice that owns the invoice.
+     */
+    public function globalInvoice()
+    {
+        return $this->belongsTo(GlobalInvoice::class);
     }
 }
