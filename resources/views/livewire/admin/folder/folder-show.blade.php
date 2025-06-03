@@ -95,6 +95,22 @@
                     <p class="text-sm text-gray-800 dark:text-gray-100">{{ $folder->description }}</p>
                 </div>
             </div>
+
+            {{-- Section pour la Facture Associée --}}
+            @if($folder->invoice)
+                <div class="sm:col-span-1 lg:col-span-1 bg-green-50 dark:bg-green-900/20 p-4 rounded-lg shadow-sm border-l-4 border-green-500">
+                    <h4 class="text-md font-semibold mb-2 text-gray-700 dark:text-gray-200">Facture Associée</h4>
+                    <p>
+                        <a href="{{ route('invoices.show', $folder->invoice->id) }}" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+                            Voir Facture N° {{ $folder->invoice->invoice_number ?? 'N/A' }}
+                        </a>
+                    </p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                        Montant: {{ number_format($folder->invoice->total_usd ?? 0, 2) }} USD
+                        {{-- Adaptez le champ de montant et la devise si nécessaire --}}
+                    </p>
+                </div>
+            @endif
         </div>
 
         <!-- Files -->

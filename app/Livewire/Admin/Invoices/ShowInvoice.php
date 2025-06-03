@@ -15,9 +15,10 @@ class ShowInvoice extends Component
     /**
      * Initialisation du composant avec chargement des relations.
      */
-    public function mount($invoice): void
+    public function mount(Invoice $invoice): void // Utilisation du Route Model Binding de Livewire
     {
-        //$this->invoice = Invoice::with(['company', 'items'])->findOrFail($invoice);
+        // Charge les relations nécessaires, y compris 'folder'
+        $this->invoice = $invoice->load(['company', 'items', 'folder']);
     }
 
     /**

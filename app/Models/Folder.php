@@ -112,6 +112,14 @@ class Folder extends Model
         return $this->hasMany(FoldeLicence::class);
     }
 
+    /**
+     * Get the invoice associated with the folder.
+     */
+    public function invoice()
+    {
+        return $this->hasOne(\App\Models\Invoice::class);
+    }
+
     public $sortable = [
         'id', 'folder_number', 'truck_number', 'trailer_number',
         'invoice_number', 'goods_type', 'agency', 'pre_alert_place',

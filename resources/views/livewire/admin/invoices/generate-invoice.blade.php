@@ -16,8 +16,64 @@
     {{-- Étape 1 – Informations générales --}}
     @if ($step === 1)
         <div class="space-y-6">
+
+            {{-- Section de Recherche/Sélection de Dossier --}}
+            <div class="p-4 border rounded-md bg-slate-50">
+                <label for="searchTermFolder" class="block text-sm font-medium text-gray-700 mb-1">Lier à un Dossier (Optionnel)</label>
+                <input type="text" id="searchTermFolder"
+                       wire:model.live.debounce.300ms="searchTermFolder"
+                       placeholder="Rechercher par N° de dossier..."
+                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+
+                <div wire:loading wire:target="searchTermFolder" class="text-sm text-gray-500 mt-1">Recherche en cours...</div>
+
+                @if(!empty($searchableFolders))
+                    <ul class="mt-2 border border-gray-300 rounded-md bg-white max-h-60 overflow-y-auto shadow">
+                        @foreach($searchableFolders as $sFolder)
+                            {{-- Livewire attend un tableau simple pour $sFolder si get()->toArray() est utilisé --}}
+                            {{-- Si get() est utilisé, $sFolder est un objet Folder --}}
+                            <li class="p-3 hover:bg-indigo-50 cursor-pointer border-b border-gray-200 last:border-b-0"
+                                wire:click="selectFolder({{ $sFolder['id'] ?? $sFolder->id }})">
+                                {{ $sFolder['folder_number'] ?? $sFolder->folder_number }}
+                                @php
+                                    // Essayer de trouver le nom de la compagnie si c'est un tableau
+                                    // Ceci est une supposition, la structure exacte de $sFolder (array) dépend de ce qui est passé
+                                    $companyName = '';
+                                    if (is_array($sFolder) && isset($sFolder['company']) && is_array($sFolder['company'])) {
+                                        $companyName = $sFolder['company']['name'] ?? '';
+                                    } elseif (is_object($sFolder) && isset($sFolder->company)) {
+                                        $companyName = $sFolder->company->name ?? '';
+                                    } elseif(is_array($sFolder) && isset($sFolder['client'])) { // Au cas où la clé serait 'client'
+                                        $companyName = $sFolder['client'];
+                                    }
+                                @endphp
+                                @if($companyName)
+                                    - {{ $companyName }}
+                                @endif
+                            </li>
+                        @endforeach
+                    </ul>
+                @elseif(!empty($searchTermFolder) && empty($searchableFolders) && !$selectedFolder)
+                    <div class="mt-2 text-sm text-gray-500 p-3 bg-white border border-gray-300 rounded-md">Aucun dossier trouvé ou tous les dossiers correspondants sont déjà liés.</div>
+                @endif
+
+                @if($selectedFolder)
+                    <div class="mt-4 p-3 bg-green-100 border border-green-300 text-green-800 rounded-md shadow-sm">
+                        <p class="font-semibold">Dossier lié : {{ $selectedFolder->folder_number }}</p>
+                        <p class="text-sm">Client du dossier : {{ $selectedFolder->company?->name ?? ($selectedFolder->client ?? 'N/A') }}</p>
+                        <button type="button" wire:click="clearSelectedFolder"
+                                class="mt-2 text-sm text-red-600 hover:text-red-800 font-medium underline">
+                            Désélectionner le dossier
+                        </button>
+                    </div>
+                @endif
+            </div>
+            {{-- Fin Section de Recherche/Sélection de Dossier --}}
+
+
             <div class="grid grid-cols-2 gap-4">
-                <x-forms.select label="Société" model="company_id" :options="$companies" optionLabel="name"
+                {{-- Le company_id sera pré-rempli si un dossier est sélectionné --}}
+                <x-forms.select label="Société (Client)" model="company_id" :options="$companies" optionLabel="name"
                     optionValue="id" />
                 <x-forms.input label="Date de Facture" model="invoice_date" type="date" />
             </div>

@@ -25,6 +25,7 @@ class Invoice extends Model
         'total_usd',
         'global_invoice_id',
         'status',
+        'folder_id', // Ajout de folder_id
     ];
 
     protected $casts = [
@@ -52,5 +53,13 @@ class Invoice extends Model
     public function globalInvoice()
     {
         return $this->belongsTo(GlobalInvoice::class);
+    }
+
+    /**
+     * Get the folder that owns the invoice.
+     */
+    public function folder()
+    {
+        return $this->belongsTo(\App\Models\Folder::class);
     }
 }
