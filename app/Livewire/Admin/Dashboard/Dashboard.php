@@ -6,6 +6,7 @@ use App\Models\Folder;
 use App\Models\Invoice;
 use App\Models\GlobalInvoice;
 use App\Models\Licence;
+use App\Models\Company; // Ajout du modèle Company
 use Carbon\Carbon;
 use Livewire\Component;
 
@@ -34,6 +35,12 @@ class Dashboard extends Component
         $latestInvoices = Invoice::with('company')->latest()->take(5)->get();
         $latestGlobalInvoices = GlobalInvoice::with('company')->latest()->take(5)->get();
 
+        // Ajout de Statistiques Clients
+        $totalCompanies = Company::count();
+
+        // Ajout de Liste Récente Clients
+        $latestCompanies = Company::latest()->take(5)->get();
+
         return view('livewire.admin.dashboard.dashboard', compact(
             'totalFolders',
             'foldersThisMonth',
@@ -44,7 +51,9 @@ class Dashboard extends Component
             'expiringSoonLicences',
             'latestFolders',
             'latestInvoices',
-            'latestGlobalInvoices'
+            'latestGlobalInvoices',
+            'totalCompanies', // Ajout de totalCompanies au compact
+            'latestCompanies'  // Ajout de latestCompanies au compact
         ));
     }
 }
