@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Folder;
 
+use Livewire\Component;
 use App\Enums\DossierType;
 use App\Models\CustomsOffice;
 use App\Models\DeclarationType;
@@ -11,54 +12,92 @@ use App\Models\Transporter;
 use App\Services\Company\CompanyService;
 use App\Services\Folder\FolderService;
 use App\Services\Licence\LicenceService;
-use Livewire\Component;
 use Illuminate\Validation\Rules\Enum;
 
 class FolderCreate extends Component
 {
-    public $clients;
-    public $transporters;
-    public $suppliers;
-    public $locations;
-    public $customsOffices;
-    public $declarationTypes;
-    public $folder;
-    public $optionsSelect;
+    public $step = 1;
+
+    public $clients = [];
+    public $transporters = [];
+    public $suppliers = [];
+    public $locations = [];
+    public $customsOffices = [];
+    public $declarationTypes = [];
+    public $optionsSelect = [];
     public $licenseCodes = [];
     public $bivacCodes = [];
 
+    public $folder = [];
+
     public function mount()
     {
-        $this->clients = CompanyService::getAllCompanies();
-        $this->transporters = Transporter::all();
-        $this->suppliers = Supplier::all();
-        $this->locations = Location::all();
-        $this->customsOffices = CustomsOffice::all();
-        $this->declarationTypes = DeclarationType::all();
-        $this->folder = [
-            'folder_number' => FolderService::generateFolderNumber(),
-            'dossier_type' => DossierType::SANS->value,
-        ];
+        $this->clients = CompanyService::getAllCompanies()->map(fn($client) => [
+            'label' => $client->name,
+            'value' => $client->id
+        ])->toArray();
+
+        $this->transporters = Transporter::all()->map(fn($t) => [
+            'label' => $t->name,
+            'value' => $t->id
+        ])->toArray();
+
+        $this->suppliers = Supplier::all()->map(fn($s) => [
+            'label' => $s->name,
+            'value' => $s->id
+        ])->toArray();
+
+        $this->locations = Location::all()->map(fn($l) => [
+            'label' => $l->name,
+            'value' => $l->id
+        ])->toArray();
+
+        $this->customsOffices = CustomsOffice::all()->map(fn($o) => [
+            'label' => $o->name,
+            'value' => $o->id
+        ])->toArray();
+
+        $this->declarationTypes = DeclarationType::all()->map(fn($d) => [
+            'label' => $d->name,
+            'value' => $d->id
+        ])->toArray();
 
         $this->optionsSelect = DossierType::options();
-        $this->licenseCodes = \App\Models\Licence::all()
-            ->map(fn($license) => [
-                'label' => $license->license_number,
-                'value' => $license->id,
-            ])
-            ->toArray();
+
+        $this->licenseCodes = \App\Models\Licence::all()->map(fn($lic) => [
+            'label' => $lic->license_number,
+            'value' => $lic->id,
+        ])->toArray();
+
         $this->bivacCodes = [
             ['label' => 'BIVAC-01', 'value' => 'BIVAC-01'],
             ['label' => 'BIVAC-02', 'value' => 'BIVAC-02'],
         ];
+
+        $this->folder['folder_number'] = FolderService::generateFolderNumber();
+        $this->folder['dossier_type'] = DossierType::SANS->value;
     }
 
-    public function updated($propertyName)
+    public function updated($property)
     {
-        if (in_array($propertyName, ['folder.fob_amount', 'folder.insurance_amount'])) {
+        if (in_array($property, ['folder.fob_amount', 'folder.insurance_amount'])) {
             $fob = floatval($this->folder['fob_amount'] ?? 0);
             $insurance = floatval($this->folder['insurance_amount'] ?? 0);
             $this->folder['cif_amount'] = $fob + $insurance;
+        }
+    }
+
+    public function nextStep()
+    {
+        if ($this->step < 3) {
+            $this->step++;
+        }
+    }
+
+    public function previousStep()
+    {
+        if ($this->step > 1) {
+            $this->step--;
         }
     }
 
@@ -68,7 +107,6 @@ class FolderCreate extends Component
             'folder.folder_number' => 'required|string|max:255|unique:folders,folder_number',
             'folder.truck_number' => 'required|string|max:255',
             'folder.trailer_number' => 'nullable|string|max:255',
-            'folder.invoice_number' => 'nullable|string|max:255',
             'folder.transporter_id' => 'nullable|exists:transporters,id',
             'folder.driver_name' => 'nullable|string|max:255',
             'folder.driver_phone' => 'nullable|string|max:255',
@@ -84,33 +122,23 @@ class FolderCreate extends Component
             'folder.customs_agent' => 'nullable|string|max:255',
             'folder.container_number' => 'nullable|string|max:255',
             'folder.weight' => 'nullable|numeric',
-            'folder.quantity' => 'nullable|numeric',
             'folder.fob_amount' => 'nullable|numeric',
             'folder.insurance_amount' => 'nullable|numeric',
             'folder.cif_amount' => 'nullable|numeric',
             'folder.arrival_border_date' => 'nullable|date',
-            'folder.description' => 'nullable|string|max:1000',
-            'folder.dossier_type' => ['required', new Enum(DossierType::class)],
-
-
-            'folder.goods_type' => 'nullable|string|max:255',
-            'folder.agency' => 'nullable|string|max:255',
-            'folder.pre_alert_place' => 'nullable|string|max:255',
-            'folder.transport_mode' => 'nullable|string|max:255',
-            'folder.internal_reference' => 'nullable|string|max:255',
-            'folder.order_number' => 'nullable|string|max:255',
             'folder.folder_date' => 'nullable|date',
             'folder.tr8_number' => 'nullable|string|max:255',
             'folder.tr8_date' => 'nullable|date',
             'folder.t1_number' => 'nullable|string|max:255',
             'folder.t1_date' => 'nullable|date',
-            'folder.formalities_office_reference' => 'nullable|string|max:255',
             'folder.im4_number' => 'nullable|string|max:255',
             'folder.im4_date' => 'nullable|date',
             'folder.liquidation_number' => 'nullable|string|max:255',
             'folder.liquidation_date' => 'nullable|date',
             'folder.quitance_number' => 'nullable|string|max:255',
             'folder.quitance_date' => 'nullable|date',
+            'folder.dossier_type' => ['required', new Enum(DossierType::class)],
+            'folder.description' => 'nullable|string|max:1000',
         ];
 
         if ($this->folder['dossier_type'] === DossierType::AVEC->value) {
@@ -137,7 +165,7 @@ class FolderCreate extends Component
 
             if (!$success) {
                 $folder->delete();
-                session()->flash('error', '❌ Échec : la licence ne permet pas ce rattachement (poids, FOB ou quantité insuffisants).');
+                session()->flash('error', '❌ Échec : la licence ne permet pas ce rattachement.');
                 return;
             }
         }
@@ -145,10 +173,11 @@ class FolderCreate extends Component
         $this->reset('folder');
         $this->folder['folder_number'] = FolderService::generateFolderNumber();
         $this->folder['dossier_type'] = DossierType::SANS->value;
+        $this->step = 1;
 
-        session()->flash('message', '✅ Dossier créé avec succès et licence mise à jour.');
+        session()->flash('message', '✅ Dossier créé avec succès.');
     }
-    
+
     public function render()
     {
         return view('livewire.admin.folder.folder-create');
