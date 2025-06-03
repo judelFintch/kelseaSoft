@@ -140,18 +140,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/restore/{id}', CurrencyUpdate::class)->name('restore');
     });
 
-    Route::prefix('taxes')->name('taxes.')->group(function () {
-        Route::get('/index', Taxe::class)->name('index');
-       
-    });
-    Route::prefix('extraFees')->name('extraFees.')->group(function () {
-        Route::get('/index', ExtraFee::class)->name('index');
-        
-    });
-    Route::prefix('agencyFees')->name('agencyFees.')->group(function () {
-        Route::get('/index', ManageAgencyFee::class)->name('index');
-    });
-
     // Routes pour la facturation globale
     Route::prefix('admin/global-invoices')->name('admin.global-invoices.')->group(function () {
         Route::get('/', GlobalInvoiceIndex::class)->name('index');
@@ -159,6 +147,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/{globalInvoice}/download', [GlobalInvoiceShow::class, 'downloadPdf'])->name('download');
     });
 
+    Route::prefix('taxes')->name('taxes.')->group(function () {
+        Route::get('/index', Taxe::class)->name('index');
+    });
+    Route::prefix('extra-fees')->name('extra-fees.')->group(function () {
+        Route::get('/index', ExtraFee::class)->name('index');
+    });
+    Route::prefix('agency-fees')->name('agency-fees.')->group(function () {
+        Route::get('/index', ManageAgencyFee::class)->name('index');
+    });
 });
 
 require __DIR__ . '/auth.php';

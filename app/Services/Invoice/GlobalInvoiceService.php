@@ -5,7 +5,7 @@ namespace App\Services\Invoice;
 use App\Models\GlobalInvoice;
 use App\Models\GlobalInvoiceItem;
 use App\Models\Invoice;
-use App\Models\Company; // Supposition, à vérifier si Company model existe et est utilisé
+use App\Models\Company; 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
