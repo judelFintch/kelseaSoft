@@ -17,10 +17,11 @@ class GenerateInvoice extends Component
     public $step = 1;
 
     // Propriétés pour la sélection de dossier
-    public $folder_id = null;
-    public ?Folder $selectedFolder = null; // PHP 7.4+ pour le type nullable, sinon pas de type ou mixed
-    public string $searchTermFolder = '';
-    public array $searchableFolders = [];
+    public $folder_id = null; // Sera rempli par Livewire depuis la query string si présent
+    public ?Folder $selectedFolder = null;
+
+    // public string $searchTermFolder = ''; // Supprimé
+    // public array $searchableFolders = []; // Supprimé
 
     public $company_id;
     public $invoice_date;
@@ -43,24 +44,72 @@ class GenerateInvoice extends Component
 
     public array $categorySteps = [];
 
-    public function mount()
+    public function mount($folder_id = null) // Livewire injectera la valeur de la query string ici
     {
+        // Initialisation des données de base du formulaire
         $this->invoice_date = now()->toDateString();
         $this->taxes = Tax::all();
         $this->agencyFees = AgencyFee::all();
         $this->extraFees = ExtraFee::all();
         $this->currencies = Currency::all();
         $this->initCategorySteps();
-        $this->addItem(); // L'ajout initial d'item peut être revu après la sélection de dossier
-        $this->resetFolderSelection(); // Assurer un état initial propre pour la recherche de dossier
+        // $this->addItem(); // L'ajout initial d'item sera géré après le pré-remplissage du dossier
+
+        $this->folder_id = $folder_id; // Assigner le folder_id reçu
+        $this->selectedFolder = null; // S'assurer que selectedFolder est null initialement
+
+        if (!is_null($this->folder_id)) {
+            $folder = Folder::with('company', 'invoice')->find($this->folder_id);
+
+            if (!$folder) {
+                session()->flash('error', 'Dossier non trouvé.');
+                $this->folder_id = null; // Réinitialiser si non trouvé
+            } elseif ($folder->invoice()->exists()) { // Vérifier si le dossier a déjà une facture liée
+                session()->flash('error', "Le dossier N° {$folder->folder_number} est déjà facturé (Facture N° {$folder->invoice->invoice_number}). Impossible de créer une nouvelle facture pour ce dossier.");
+                $this->folder_id = null; // Réinitialiser pour éviter la liaison
+            } else {
+                // Dossier valide et non facturé, on peut pré-remplir
+                $this->selectedFolder = $folder;
+                $this->company_id = $folder->company_id;
+                $this->fob_amount = $folder->fob_amount ?? 0;
+                $this->insurance_amount = $folder->insurance_amount ?? 0;
+                $this->cif_amount = $folder->cif_amount ?? 0;
+                $this->weight = $folder->weight;
+                $this->product = $folder->description ?? ('Prestation selon dossier ' . $folder->folder_number);
+
+                $calculated_freight = ($this->cif_amount ?? 0) - ($this->fob_amount ?? 0) - ($this->insurance_amount ?? 0);
+                $this->freight_amount = $folder->freight_amount ?? ($calculated_freight > 0 ? $calculated_freight : 0);
+
+                // Réinitialiser et pré-remplir les items
+                $this->items = [];
+                $this->addItem('import_tax'); // Ajoute un item de base
+                if (count($this->items) > 0 && $this->items[0] !== null) {
+                    $this->items[0]['label'] = $this->product;
+                    $this->items[0]['amount_local'] = $this->fob_amount;
+                    $usdCurrency = Currency::where('code', 'USD')->first();
+                    if ($usdCurrency) {
+                        $this->items[0]['currency_id'] = $usdCurrency->id;
+                    }
+                    $this->updatedItems($this->items[0]['amount_local'], "0.amount_local");
+                }
+            }
+        }
+
+        // Si aucun dossier n'est sélectionné ou valide, initialiser un item vide par défaut
+        if (is_null($this->selectedFolder)) {
+            $this->items = []; // S'assurer que les items sont vides si aucun dossier
+            $this->addItem();
+        }
+
+        // Appelé pour s'assurer que les propriétés liées au dossier sont nulles si folder_id est null
+        // Ou pour initialiser $searchTermFolder et $searchableFolders si on les gardait.
+        // $this->resetFolderSelection(); // Pas nécessaire ici car $selectedFolder est déjà géré.
     }
 
     protected function resetFolderSelection(): void
     {
         $this->folder_id = null;
         $this->selectedFolder = null;
-        $this->searchTermFolder = '';
-        $this->searchableFolders = [];
     }
 
     public function initCategorySteps(): void
@@ -327,102 +376,38 @@ class GenerateInvoice extends Component
     }
 
     // ======================================================================
-    // Méthodes pour la sélection de dossier
+    // Les méthodes liées à la recherche de dossier interne sont supprimées
+    // updatedSearchTermFolder()
+    // selectFolder() -> la logique de pré-remplissage sera dans mount() ou une méthode appelée par mount()
     // ======================================================================
-
-    public function updatedSearchTermFolder(string $value): void
-    {
-        if (trim($value) === '') {
-            $this->searchableFolders = [];
-            // Ne pas réinitialiser folder_id et selectedFolder ici pour permettre à l'utilisateur de corriger.
-            // La réinitialisation se fait si on vide explicitement ou sélectionne ailleurs.
-            return;
-        }
-
-        $this->searchableFolders = Folder::where('folder_number', 'like', '%' . $value . '%')
-            ->whereDoesntHave('invoice') // Exclure les dossiers déjà facturés
-            ->orderBy('folder_number') // Optionnel: trier les résultats
-            ->take(5) // Limiter les résultats
-            ->get()
-            // ->toArray(); // Convertir en array si Folder contient des objets complexes non sérialisables par Livewire
-            // Si Folder est un modèle Eloquent simple, ->get() suffit.
-            ;
-    }
-
-    public function selectFolder(int $folderId): void
-    {
-        $folder = Folder::with('company')->find($folderId);
-
-        if ($folder) {
-            $this->folder_id = $folder->id;
-            $this->selectedFolder = $folder;
-
-            // Pré-remplissage des champs de la facture
-            // Assurez-vous que les noms de champ du Folder ($folder->...) correspondent à votre modèle Folder
-            $this->company_id = $folder->company_id;
-            $this->fob_amount = $folder->fob_amount ?? 0;
-            $this->insurance_amount = $folder->insurance_amount ?? 0;
-            $this->cif_amount = $folder->cif_amount ?? 0;
-            $this->weight = $folder->weight;
-            $this->product = $folder->description ?? ('Prestation selon dossier ' . $folder->folder_number);
-
-            $calculated_freight = ($this->cif_amount ?? 0) - ($this->fob_amount ?? 0) - ($this->insurance_amount ?? 0);
-            // Utiliser freight_amount du dossier s'il existe, sinon le calculer.
-            $this->freight_amount = $folder->freight_amount ?? ($calculated_freight > 0 ? $calculated_freight : 0);
-
-
-            // Réinitialiser et pré-remplir les items de la facture
-            $this->items = [];
-            $this->addItem('import_tax'); // Ajoute un item de base. La catégorie peut être dynamique ou configurable.
-
-            if (count($this->items) > 0 && $this->items[0] !== null) { // Vérifier que l'item existe
-                $this->items[0]['label'] = $this->product;
-                $this->items[0]['amount_local'] = $this->fob_amount; // Ou une autre valeur pertinente du dossier
-
-                $usdCurrency = Currency::where('code', 'USD')->first();
-                if ($usdCurrency) {
-                    $this->items[0]['currency_id'] = $usdCurrency->id;
-                }
-                // Déclencher la mise à jour pour recalculer amount_usd, amount_cdf de l'item
-                $this->updatedItems($this->items[0]['amount_local'], "0.amount_local");
-            }
-
-            $this->searchTermFolder = $folder->folder_number; // Afficher le numéro du dossier sélectionné dans le champ de recherche
-            $this->searchableFolders = []; // Cacher la liste de recherche
-        } else {
-            $this->resetFolderSelection();
-            $this->resetInvoiceFieldsFromFolder();
-        }
-    }
 
     /**
      * Réinitialise la sélection du dossier et les champs de facture associés.
+     * Appelé si l'utilisateur veut explicitement délier un dossier,
+     * ou si le dossier passé en paramètre est invalide.
      */
     public function clearSelectedFolder(): void
     {
-        $this->resetFolderSelection();
-        $this->resetInvoiceFieldsFromFolder();
+        $this->resetFolderSelection(); // Réinitialise folder_id et selectedFolder
+        $this->resetInvoiceFieldsFromFolder(); // Réinitialise les champs de la facture
     }
 
     /**
-     * Réinitialise les champs de la facture qui ont été pré-remplis à partir d'un dossier.
+     * Réinitialise les champs de la facture qui ont été pré-remplis à partir d'un dossier,
+     * ou à leurs valeurs par défaut si aucun dossier n'était sélectionné.
      */
     protected function resetInvoiceFieldsFromFolder(): void
     {
-        // Ne pas réinitialiser company_id si une compagnie doit toujours être sélectionnée,
-        // ou le réinitialiser si la sélection de dossier implique aussi la sélection de compagnie.
-        // $this->company_id = null;
-
-        // Réinitialiser aux valeurs par défaut du composant ou à des valeurs vides/nulles
+        // Réinitialiser aux valeurs par défaut du composant
+        $this->company_id = null; // Important de réinitialiser si le dossier le définissait
         $this->fob_amount = 0;
         $this->insurance_amount = 0;
         $this->cif_amount = 0;
-        $this->weight = '9000'; // Valeur par défaut du composant
-        $this->product = 'SOUFFRE'; // Valeur par défaut du composant
+        $this->weight = '9000';
+        $this->product = 'SOUFFRE';
         $this->freight_amount = 0;
 
-        // Réinitialiser les items
         $this->items = [];
-        $this->addItem(); // Ajouter un item initial vide
+        $this->addItem();
     }
 }

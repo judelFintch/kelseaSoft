@@ -52,6 +52,7 @@ class FolderList extends Component
             'customsOffice',
             'declarationType',
             'company',
+            'invoice', // Ajout de la relation invoice pour l'eager loading
         ])
             ->when($this->search, function ($query) {
                 $query->where('folder_number', 'like', '%' . $this->search . '%')
