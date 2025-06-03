@@ -5,7 +5,7 @@ namespace App\Livewire\Admin\Invoices;
 use Livewire\Component;
 use App\Models\Invoice;
 use Livewire\WithPagination;
-use App\Models\Invoice;
+// use App\Models\Invoice; // Suppression de l'importation dupliquée
 use App\Services\Invoice\GlobalInvoiceService; // Ajout du service
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log; // Pour le débogage potentiel

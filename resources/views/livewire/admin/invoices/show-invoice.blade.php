@@ -20,6 +20,22 @@
         </div>
     </div>
 
+    {{-- Section pour le Dossier Associé --}}
+    @if($invoice->folder)
+        <div class="mb-4 p-4 bg-sky-50 border border-sky-200 rounded-md">
+            <h4 class="text-md font-semibold mb-1 text-sky-700">Dossier Associé</h4>
+            <p>
+                <a href="{{ route('folder.show', $invoice->folder->id) }}" class="text-blue-600 hover:underline font-medium">
+                    Voir Dossier N° {{ $invoice->folder->folder_number ?? 'N/A' }}
+                </a>
+            </p>
+            <p class="text-sm text-gray-600 mt-1">
+                Référence client du dossier : {{ $invoice->folder->company?->name ?? ($invoice->folder->client ?? 'N/A') }}
+            </p>
+        </div>
+    @endif
+    {{-- Fin Section Dossier Associé --}}
+
     {{-- Informations douanières --}}
     <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
         <div><strong>Produit :</strong> {{ $invoice->product ?? '—' }}</div>
