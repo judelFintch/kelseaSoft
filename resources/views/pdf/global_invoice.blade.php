@@ -209,12 +209,12 @@
         <div class="footer" style="margin-top: 50px;">
             <p>Termes de paiement : Payable à 30 jours net.</p>
             <p>
-                Informations Bancaires : {{ config('app.bank_name', 'Nom de la Banque') }} - 
+                Informations Bancaires : {{ config('app.bank_name', 'Nom de la Banque') }} -
                 RIB : {{ config('app.bank_rib', 'XXXXXXXXXXXXXXXXXXXXXXXX') }}
             </p>
             <p>
-                {{ config('app.name', 'Votre Compagnie SARL') }} - 
-                Capital : XX.XXX DHS - 
+                {{ config('app.name', 'Votre Compagnie SARL') }} -
+                Capital : XX.XXX DHS -
                 Mentions légales supplémentaires si nécessaire.
             </p>
         </div>

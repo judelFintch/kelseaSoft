@@ -5,7 +5,7 @@
                 <h1 class="text-2xl font-semibold text-gray-700">
                     Détails de la Facture Globale : <span class="text-blue-600">{{ $globalInvoice->global_invoice_number }}</span>
                 </h1>
-                <button 
+                <button
                     wire:click="downloadPdf"
                     class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
                     <svg wire:loading wire:target="downloadPdf" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

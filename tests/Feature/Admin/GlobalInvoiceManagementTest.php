@@ -165,7 +165,7 @@ class GlobalInvoiceManagementTest extends TestCase
         Livewire::test(InvoiceIndex::class)
             ->set('selectedInvoices', $selectedInvoiceIds)
             ->call('createGlobalInvoice');
-        
+
         // Aucune NOUVELLE facture globale ne doit être créée.
         $this->assertEquals(1, GlobalInvoice::count()); // Seule $existingGlobalInvoice doit exister
 
@@ -231,5 +231,51 @@ class GlobalInvoiceManagementTest extends TestCase
         $response->assertStatus(200);
         $response->assertHeader('Content-Type', 'application/pdf');
         $response->assertHeader('Content-Disposition', 'attachment; filename="Facture_Globale_' . $globalInvoice->global_invoice_number . '.pdf"');
+    }
+
+    /** @test */
+    public function test_cannot_create_global_invoice_if_any_item_has_missing_description(): void
+    {
+        // 1. Arrange: Crée une facture avec un item ayant une description manquante
+        $invoiceWithMissingDesc = Invoice::factory()->for($this->company)->create(['status' => 'pending']);
+        InvoiceItem::factory()->for($invoiceWithMissingDesc)->create([
+            'description' => 'Produit Valide A',
+            'quantity' => 1,
+            'unit_price' => 10.00,
+            'total_price' => 10.00,
+        ]);
+        InvoiceItem::factory()->for($invoiceWithMissingDesc)->create([
+            'description' => null, // Description manquante
+            'quantity' => 2,
+            'unit_price' => 5.00,
+            'total_price' => 10.00,
+        ]);
+
+        $selectedInvoiceIds = [$invoiceWithMissingDesc->id];
+
+        // 2. Act: Tente de créer la facture globale
+        // Le composant InvoiceIndex devrait intercepter la ValidationException du service
+        // et mettre un message d'erreur dans la session.
+        Livewire::test(InvoiceIndex::class)
+            ->set('selectedInvoices', $selectedInvoiceIds)
+            ->call('createGlobalInvoice');
+
+        // 3. Assert
+        // Aucune GlobalInvoice ne doit être créée
+        $this->assertEquals(0, GlobalInvoice::count());
+        // Ou $this->assertDatabaseCount('global_invoices', 0);
+
+        // Vérifie la présence d'un message d'erreur dans la session flash
+        // Le message exact peut varier légèrement en fonction de la gestion des erreurs dans le composant Livewire.
+        // On vérifie la présence de la clé 'error' et une partie significative du message attendu.
+        Livewire::test(InvoiceIndex::class) // Nouvelle instance pour vérifier la session après l'appel
+            ->assertSessionHas('error', function ($value) {
+                return str_contains($value, "la description d'un ou plusieurs items de facture est manquante ou invalide");
+            });
+
+        // Vérifie que la facture originale n'a pas été modifiée
+        $originalInvoice = $invoiceWithMissingDesc->fresh();
+        $this->assertNull($originalInvoice->global_invoice_id);
+        $this->assertEquals('pending', $originalInvoice->status);
     }
 }

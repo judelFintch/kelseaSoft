@@ -60,7 +60,7 @@
                     <td class="border px-2 py-1">{{ $loop->iteration }}</td>
                     <td class="border px-2 py-1 font-semibold">{{ $invoice->invoice_number }}</td>
                     <td class="border px-2 py-1">{{ $invoice->invoice_date->format('d/m/Y') }}</td>
-                    <td class="border px-2 py-1">{{ $invoice->company->name }} 
+                    <td class="border px-2 py-1">{{ $invoice->company->name }}
                         @if ($companyIdForGlobalInvoice && $invoice->company_id !== $companyIdForGlobalInvoice && in_array($invoice->id, $selectedInvoices))
                             <span class="text-red-500 text-xs">(Ne correspond pas à la Cie. sélectionnée)</span>
                         @endif
