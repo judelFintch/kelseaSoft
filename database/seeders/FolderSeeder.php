@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Carbon\Carbon;
-use Faker\Factory as Faker;
+use App\Models\Folder;
+use App\Enums\DossierType;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class FolderSeeder extends Seeder
@@ -15,37 +14,40 @@ class FolderSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        $faker = Faker::create();
+        Folder::create([
+            'folder_number' => 'FD-' . strtoupper(Str::random(8)),
+            'truck_number' => 'TRK-123',
+            'trailer_number' => 'TRL-456',
+            'invoice_number' => 'INV-789',
 
-        foreach (range(1, 10) as $i) {
-            DB::table('folders')->insert([
-                'folder_number' => 'FD-'.strtoupper(Str::random(6)),
-                'truck_number' => 'TRK-'.$faker->randomNumber(4, true),
-                'trailer_number' => 'TRL-'.$faker->randomNumber(4, true),
-                'transporter_id' => DB::table('transporters')->inRandomOrder()->value('id'),
-                'driver_name' => $faker->name,
-                'driver_phone' => $faker->phoneNumber,
-                'driver_nationality' => $faker->country,
-                'origin_id' => DB::table('locations')->inRandomOrder()->value('id'),
-                'destination_id' => DB::table('locations')->inRandomOrder()->value('id'),
-                'supplier_id' => DB::table('suppliers')->inRandomOrder()->value('id'),
-                'client' => $faker->company,
-                'customs_office_id' => DB::table('customs_offices')->inRandomOrder()->value('id'),
-                'declaration_number' => strtoupper(Str::random(10)),
-                'declaration_type_id' => DB::table('declaration_types')->inRandomOrder()->value('id'),
-                'declarant' => $faker->name,
-                'customs_agent' => $faker->name,
-                'container_number' => 'CONT-'.strtoupper(Str::random(6)),
-                'weight' => $faker->randomFloat(2, 500, 30000),
-                'fob_amount' => $faker->randomFloat(2, 1000, 50000),
-                'insurance_amount' => $faker->randomFloat(2, 100, 5000),
-                'cif_amount' => $faker->randomFloat(2, 2000, 60000),
-                'arrival_border_date' => Carbon::now()->subDays(rand(1, 30)),
-                'description' => $faker->sentence(10),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+            'transporter_id' => 1,
+            'driver_name' => 'Jean Chauffeur',
+            'driver_phone' => '0999000111',
+            'driver_nationality' => 'Congolaise',
+
+            'origin_id' => 1,
+            'destination_id' => 2,
+            'supplier_id' => 1,
+            'client' => 'Client Exemple',
+            'customs_office_id' => 1,
+            'declaration_number' => 'DECL-0001',
+            'declaration_type_id' => 1,
+            'declarant' => 'Agent Kabila',
+            'customs_agent' => 'Douanier Mbayo',
+            'container_number' => 'CONT-001',
+
+            'weight' => 15000.75,
+            'quantity' => 100, // ✅ nouveau champ
+            'fob_amount' => 120000.00,
+            'insurance_amount' => 2500.00,
+            'cif_amount' => 122500.00,
+            'arrival_border_date' => now()->subDays(2),
+            'description' => 'Dossier test pour développement.',
+
+            'dossier_type' => DossierType::AVEC->value,
+            'license_code' => 'LIC-001',
+            'bivac_code' => 'BIV-001',
+            'license_id' => 1, // ✅ relation vers licence
+        ]);
     }
 }

@@ -1,95 +1,106 @@
-<div x-data="{ step: 1 }">
-    <x-ui.flash-message />
-    <x-ui.error-message />
-
-    <div class="max-w-5xl mx-auto p-6">
-        <form wire:submit.prevent="save()">
-            <!-- Barre de progression -->
-            <div class="mb-6">
-                <div class="flex items-center justify-between text-sm font-medium text-gray-700 dark:text-white/70 mb-2">
-                    <span x-text="`Étape ${step} sur 3`"></span>
-                    <span x-show="step === 1">Informations sur le Dossier</span>
-                    <span x-show="step === 2">Chauffeur & Logistique</span>
-                    <span x-show="step === 3">Financier & Description</span>
-                </div>
-                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-                    <div class="bg-brand-500 h-2 rounded-full transition-all duration-300" :style="`width: ${(step / 3) * 100}%`"></div>
-                </div>
-            </div>
-
-            <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-                <div class="px-5 py-4 sm:px-6 sm:py-5">
-                    <h3 class="text-lg font-medium text-gray-800 dark:text-white/90">Create Folder</h3>
-                </div>
-
-                <div class="divide-y divide-gray-100 p-5 sm:p-6 dark:divide-gray-800">
-                    <!-- Étape 1 -->
-                    <div x-show="step === 1" class="pb-5">
-                        <h4 class="mb-4 text-base font-medium text-gray-800 dark:text-white/90">Informations sur le Dossier</h4>
-                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                            <x-forms.input label="Numéro de Dossier" model="folder.folder_number" readonly />
-                            <x-forms.input label="Plaque du Camion" model="folder.truck_number" />
-                            <x-forms.input label="Numéro de la Remorque" model="folder.trailer_number" />
-                            <x-forms.select label="Transporteur" model="folder.transporter_id" :options="$transporters" option-label="name" option-value="id" placeholder="Sélectionnez un transporteur" />
-                        </div>
-                    </div>
-
-                    <!-- Étape 2 -->
-                    <div x-show="step === 2" class="py-5">
-                        <h4 class="mb-4 text-base font-medium text-gray-800 dark:text-white/90">Chauffeur & Logistique</h4>
-                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                            <x-forms.input label="Nom du Chauffeur" model="folder.driver_name" />
-                            <x-forms.input label="Téléphone du Chauffeur" model="folder.driver_phone" />
-                            <x-forms.input label="Nationalité du Chauffeur" model="folder.driver_nationality" />
-                            <x-forms.select label="Provenance" model="folder.origin_id" :options="$locations" option-label="name" option-value="id" placeholder="Sélectionnez une provenance" />
-                            <x-forms.select label="Destination" model="folder.destination_id" :options="$locations" option-label="name" option-value="id" placeholder="Sélectionnez une destination" />
-                            <x-forms.select label="Fournisseur" model="folder.supplier_id" :options="$suppliers" option-label="name" option-value="id" placeholder="Sélectionnez un fournisseur" />
-                            <x-forms.select label="Client" model="folder.client" :options="$clients" option-label="name" option-value="id" placeholder="Sélectionnez un client" />
-                            <x-forms.select label="Bureau de Douane" model="folder.customs_office_id" :options="$customsOffices" option-label="name" option-value="id" placeholder="Sélectionnez un bureau" />
-                            <x-forms.input label="Numéro TR8" model="folder.declaration_number" />
-                            <x-forms.select label="Type de Déclaration" model="folder.declaration_type_id" :options="$declarationTypes" option-label="name" option-value="id" placeholder="Sélectionnez un type de déclaration" />
-                            <x-forms.input label="Déclarant" model="folder.declarant" />
-                            <x-forms.input label="Agent de Douane" model="folder.customs_agent" />
-                            <x-forms.input label="Numéro de Conteneur" model="folder.container_number" />
-                        </div>
-                    </div>
-
-                    <!-- Étape 3 -->
-                    <div x-show="step === 3" class="pt-5">
-                        <h4 class="mb-4 text-base font-medium text-gray-800 dark:text-white/90">Financier & Description</h4>
-                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                            <x-forms.input label="Poids" model="folder.weight" type="number" />
-                            <x-forms.currency label="Montant FOB" model="folder.fob_amount" />
-                            <x-forms.currency label="Montant Assurance" model="folder.insurance_amount" />
-                            <x-forms.currency label="Montant CIF" model="folder.cif_amount" />
-                            <x-forms.date label="Date d'Arrivée à la Frontière" model="folder.arrival_border_date" />
-                            <x-forms.textarea label="Description" model="folder.description" rows="4" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-between items-center px-5 py-4 sm:px-6 sm:py-5">
-                    <button type="button" @click="step = Math.max(1, step - 1)"
-                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-white/80 dark:hover:bg-gray-600"
-                        x-show="step > 1">
-                        Previous
-                    </button>
-
-                    <div class="flex items-center gap-3 ml-auto">
-                        <button type="button" @click="step = Math.min(3, step + 1)"
-                            class="px-4 py-2 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600"
-                            x-show="step < 3">
-                            Next
-                        </button>
-
-                        <button type="submit"
-                            class="px-4 py-2 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600"
-                            x-show="step === 3">
-                            Save Folder
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
+<div class="p-6 space-y-6">
+    {{-- BARRE DE PROGRESSION --}}
+    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-6">
+        <div class="bg-blue-600 h-3 rounded-full transition-all duration-300"
+             style="width: {{ $step * 33.33 }}%;">
+        </div>
     </div>
+
+    <form wire:submit.prevent="save" class="space-y-6">
+        {{-- Navigation des étapes --}}
+        <div class="flex justify-between mb-4">
+            <x-forms.button type="button"
+                wire:click="previousStep"
+                class="bg-gray-500 text-white hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                :disabled="$step === 1">
+                Précédent
+            </x-forms.button>
+
+            <div class="font-semibold text-sm">Étape {{ $step }} / 3</div>
+
+            @if ($step < 3)
+                <x-forms.button type="button"
+                    wire:click="nextStep"
+                    class="bg-blue-600 text-white hover:bg-blue-700">
+                    Suivant
+                </x-forms.button>
+            @endif
+        </div>
+
+        {{-- ÉTAPE 1 --}}
+        @if ($step === 1)
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <x-forms.input label="Folder Number" wire:model.defer="folder.folder_number" required />
+                <x-forms.select label="Dossier Type" wire:model.defer="folder.dossier_type"
+                    :options="$optionsSelect" optionLabel="label" optionValue="value" placeholder="Sélectionner un type" required />
+                <x-forms.select label="Client" wire:model.defer="folder.client"
+                    :options="$clients" optionLabel="label" optionValue="value" placeholder="Choisir un client" />
+                <x-forms.input label="Truck Number" wire:model.defer="folder.truck_number" required />
+                <x-forms.input label="Trailer Number" wire:model.defer="folder.trailer_number" />
+                <x-forms.select label="Transporter" wire:model.defer="folder.transporter_id"
+                    :options="$transporters" optionLabel="label" optionValue="value" placeholder="Transporteur" />
+                <x-forms.input label="Driver Name" wire:model.defer="folder.driver_name" />
+                <x-forms.input label="Driver Phone" wire:model.defer="folder.driver_phone" />
+                <x-forms.input label="Driver Nationality" wire:model.defer="folder.driver_nationality" />
+            </div>
+        @endif
+
+        {{-- ÉTAPE 2 --}}
+        @if ($step === 2)
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <x-forms.select label="Origin" wire:model.defer="folder.origin_id"
+                    :options="$locations" optionLabel="label" optionValue="value" placeholder="Origine" />
+                <x-forms.select label="Destination" wire:model.defer="folder.destination_id"
+                    :options="$locations" optionLabel="label" optionValue="value" placeholder="Destination" />
+                <x-forms.select label="Supplier" wire:model.defer="folder.supplier_id"
+                    :options="$suppliers" optionLabel="label" optionValue="value" placeholder="Fournisseur" />
+                <x-forms.select label="Customs Office" wire:model.defer="folder.customs_office_id"
+                    :options="$customsOffices" optionLabel="label" optionValue="value" placeholder="Bureau de douane" />
+                <x-forms.input label="Declaration Number" wire:model.defer="folder.declaration_number" />
+                <x-forms.select label="Declaration Type" wire:model.defer="folder.declaration_type_id"
+                    :options="$declarationTypes" optionLabel="label" optionValue="value" placeholder="Type de déclaration" />
+                <x-forms.input label="Declarant" wire:model.defer="folder.declarant" />
+                <x-forms.input label="Customs Agent" wire:model.defer="folder.customs_agent" />
+                <x-forms.input label="Container Number" wire:model.defer="folder.container_number" />
+                <x-forms.input label="Arrival Border Date" type="date" wire:model.defer="folder.arrival_border_date" />
+                <x-forms.input label="Folder Date" type="date" wire:model.defer="folder.folder_date" />
+            </div>
+        @endif
+
+        {{-- ÉTAPE 3 --}}
+        @if ($step === 3)
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <x-forms.input label="FOB Amount" type="number" wire:model.defer="folder.fob_amount" />
+                <x-forms.input label="Insurance Amount" type="number" wire:model.defer="folder.insurance_amount" />
+                <x-forms.input label="CIF Amount" type="number" wire:model.defer="folder.cif_amount" readonly />
+                <x-forms.input label="Weight (kg)" type="number" wire:model.defer="folder.weight" />
+                <x-forms.input label="TR8 Number" wire:model.defer="folder.tr8_number" />
+                <x-forms.input label="TR8 Date" type="date" wire:model.defer="folder.tr8_date" />
+                <x-forms.input label="T1 Number" wire:model.defer="folder.t1_number" />
+                <x-forms.input label="T1 Date" type="date" wire:model.defer="folder.t1_date" />
+                <x-forms.input label="IM4 Number" wire:model.defer="folder.im4_number" />
+                <x-forms.input label="IM4 Date" type="date" wire:model.defer="folder.im4_date" />
+                <x-forms.input label="Liquidation Number" wire:model.defer="folder.liquidation_number" />
+                <x-forms.input label="Liquidation Date" type="date" wire:model.defer="folder.liquidation_date" />
+                <x-forms.input label="Quitance Number" wire:model.defer="folder.quitance_number" />
+                <x-forms.input label="Quitance Date" type="date" wire:model.defer="folder.quitance_date" />
+
+                @if ($folder['dossier_type'] === \App\Enums\DossierType::AVEC->value)
+                    <x-forms.select label="License" wire:model.defer="folder.license_id"
+                        :options="$licenseCodes" optionLabel="label" optionValue="value" placeholder="Licence" />
+                    <x-forms.select label="Bivac Code" wire:model.defer="folder.bivac_code"
+                        :options="$bivacCodes" optionLabel="label" optionValue="value" placeholder="Code Bivac" />
+                @endif
+
+                <x-forms.textarea label="Description" wire:model.defer="folder.description" rows="3" />
+            </div>
+
+            {{-- BOUTON DE SOUMISSION --}}
+            <div class="pt-6">
+                <x-forms.button type="submit" class="bg-green-600 text-white hover:bg-green-700">
+                    Enregistrer
+                </x-forms.button>
+            </div>
+        @endif
+    </form>
 </div>

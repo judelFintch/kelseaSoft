@@ -12,6 +12,9 @@ class FolderShow extends Component
     public function mount($id)
     {
         $this->folder = FolderService::getFolder($id);
+        if ($this->folder) {
+            $this->folder->load('invoice');
+        }
     }
 
     public function deleteFile($id)

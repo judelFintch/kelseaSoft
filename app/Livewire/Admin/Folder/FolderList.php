@@ -52,15 +52,16 @@ class FolderList extends Component
             'customsOffice',
             'declarationType',
             'company',
+            'invoice', // Ajout de la relation invoice pour l'eager loading
         ])
             ->when($this->search, function ($query) {
-                $query->where('folder_number', 'like', '%'.$this->search.'%')
-                    ->orWhere('truck_number', 'like', '%'.$this->search.'%')
-                    ->orWhere('client', 'like', '%'.$this->search.'%');
+                $query->where('folder_number', 'like', '%' . $this->search . '%')
+                    ->orWhere('truck_number', 'like', '%' . $this->search . '%')
+                    ->orWhere('client', 'like', '%' . $this->search . '%');
             })
-            ->when($this->filterTransporter, fn ($q) => $q->where('transporter_id', $this->filterTransporter))
-            ->when($this->filterDateFrom, fn ($q) => $q->whereDate('arrival_border_date', '>=', $this->filterDateFrom))
-            ->when($this->filterDateTo, fn ($q) => $q->whereDate('arrival_border_date', '<=', $this->filterDateTo))
+            ->when($this->filterTransporter, fn($q) => $q->where('transporter_id', $this->filterTransporter))
+            ->when($this->filterDateFrom, fn($q) => $q->whereDate('arrival_border_date', '>=', $this->filterDateFrom))
+            ->when($this->filterDateTo, fn($q) => $q->whereDate('arrival_border_date', '<=', $this->filterDateTo))
             ->latest()
             ->paginate($this->perPage);
 

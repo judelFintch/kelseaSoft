@@ -15,6 +15,28 @@ use App\Livewire\Admin\ManageCustomsRegimes\CustomsRegimesCreate;
 use App\Livewire\Admin\ManageMerchandiseType\MerchandiseTypeCreate;
 use App\Livewire\Admin\ManageSupplier\SupplierCreate;
 use App\Livewire\Admin\ManageTransporters\TransportersCreate;
+use App\Livewire\Admin\Licence\{
+    LicenceIndex,
+    LicenceCreate,
+    LicenceShow,
+    LicenceEdit,
+    LicenceDelete,
+    LicenceRestore
+};
+use App\Livewire\Admin\Billing\{BillingCreate, BillingIndex};
+
+use App\Livewire\Admin\Invoices\ShowInvoice;
+use App\Livewire\Admin\Invoices\GenerateInvoice;
+use App\Livewire\Admin\Invoices\InvoiceIndex;
+use App\Livewire\Admin\Invoices\UpdateInvoice;
+use App\Livewire\Admin\Invoices\GlobalInvoiceIndex; // Ajout pour GlobalInvoiceIndex
+use App\Livewire\Admin\Invoices\GlobalInvoiceShow;  // Ajout pour GlobalInvoiceShow
+
+use App\Livewire\Admin\Currency\CurrencyIndex;
+use App\Livewire\Admin\Currency\CurrencyUpdate;
+use App\Livewire\Admin\Taxes\Taxe;
+use App\Livewire\Admin\ManageExtraFees\ExtraFee;
+use App\Livewire\Admin\ManageAgencyFees\ManageAgencyFee;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -77,22 +99,63 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('supplier')->name('supplier.')->group(function () {
         Route::get('/create', SupplierCreate::class)->name('create');
-        Route::get('/edit/{id}', SupplierCreate::class)->name('edit');
-        Route::get('/list', SupplierCreate::class)->name('list');
-        Route::get('/show/{id}', SupplierCreate::class)->name('show');
-        Route::get('/delete/{id}', SupplierCreate::class)->name('delete');
-        Route::get('/restore/{id}', SupplierCreate::class)->name('restore');
     });
 
     Route::prefix('manageTransporter')->name('transporter.')->group(function () {
         Route::get('/create', TransportersCreate::class)->name('create');
-        Route::get('/edit/{id}', TransportersCreate::class)->name('edit');
-        Route::get('/list', TransportersCreate::class)->name('list');
-        Route::get('/show/{id}', TransportersCreate::class)->name('show');
-        Route::get('/delete/{id}', TransportersCreate::class)->name('delete');
-        Route::get('/restore/{id}', TransportersCreate::class)->name('restore');
     });
 
+    Route::prefix('licence')->name('licence.')->group(function () {
+        Route::get('/list', LicenceIndex::class)->name('list');
+        Route::get('/create', LicenceCreate::class)->name('create');
+        Route::get('/show/{id}', LicenceShow::class)->name('show');
+        Route::get('/edit/{id}', LicenceEdit::class)->name('edit');
+    });
+
+
+    Route::prefix('billing')->name('billing.')->group(function () {
+        Route::get('/create', BillingCreate::class)->name('create');
+        Route::get('/edit/{id}', BillingCreate::class)->name('edit');
+        Route::get('/list', BillingIndex::class)->name('list');
+        Route::get('/show/{id}', BillingCreate::class)->name('show');
+        Route::get('/delete/{id}', BillingCreate::class)->name('delete');
+        Route::get('/restore/{id}', BillingCreate::class)->name('restore');
+    });
+
+
+    Route::prefix('invoices')->name('invoices.')->group(function () {
+        Route::get('/invoices/{invoice}/show', ShowInvoice::class)->name('show');
+        Route::get('/generate', GenerateInvoice::class)->name('generate');
+        Route::get('/download/{invoiceId}', [GenerateInvoice::class, 'downloadPdf'])->name('download');
+        Route::get('/index', InvoiceIndex::class)->name('index');
+        Route::get('/invoices/{invoice}/edit', UpdateInvoice::class)->name('invoices.edit');
+    });
+
+    Route::prefix('currency')->name('currency.')->group(function () {
+
+        Route::get('/edit/{id}', CurrencyUpdate::class)->name('edit');
+        Route::get('/list', CurrencyIndex::class)->name('list');
+        Route::get('/show/{id}', CurrencyUpdate::class)->name('show');
+        Route::get('/delete/{id}', CurrencyUpdate::class)->name('delete');
+        Route::get('/restore/{id}', CurrencyUpdate::class)->name('restore');
+    });
+
+    // Routes pour la facturation globale
+    Route::prefix('admin/global-invoices')->name('admin.global-invoices.')->group(function () {
+        Route::get('/', GlobalInvoiceIndex::class)->name('index');
+        Route::get('/{globalInvoice}', GlobalInvoiceShow::class)->name('show');
+        Route::get('/{globalInvoice}/download', [GlobalInvoiceShow::class, 'downloadPdf'])->name('download');
+    });
+
+    Route::prefix('taxes')->name('taxes.')->group(function () {
+        Route::get('/index', Taxe::class)->name('index');
+    });
+    Route::prefix('extra-fees')->name('extra-fees.')->group(function () {
+        Route::get('/index', ExtraFee::class)->name('index');
+    });
+    Route::prefix('agency-fees')->name('agency-fees.')->group(function () {
+        Route::get('/index', ManageAgencyFee::class)->name('index');
+    });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
