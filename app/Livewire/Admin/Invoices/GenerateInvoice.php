@@ -37,68 +37,52 @@ class GenerateInvoice extends Component
     public $selectedFolder = null;
     public function mount(Folder $folder)
     {
-
+        // Chargement du dossier avec toutes ses relations
         $folder = FolderService::getFolder($folder->id);
-        $this->selectedFolder = $folder;
-        
 
-        dd($folder);
-        $this->invoice_date = now()->toDateString();
+        // Vérifie s'il existe déjà une facture liée à ce dossier
+        if ($folder->invoice()->exists()) {
+            session()->flash('error', "Le dossier N° {$folder->folder_number} est déjà facturé (Facture N° {$folder->invoice->invoice_number}). Impossible de créer une nouvelle facture.");
+            $this->resetForm();
+            return;
+        }
+
+        // Chargement des collections nécessaires
         $this->taxes = Tax::all();
         $this->agencyFees = AgencyFee::all();
         $this->extraFees = ExtraFee::all();
         $this->currencies = Currency::all();
+        $this->invoice_date = now()->toDateString();
         $this->initCategorySteps();
 
-        if ($folder_id) {
-            $folder = FolderService::getFolder($folder_id);
+        // Initialisation des données du dossier
+        $this->folder_id = $folder->id;
+        $this->selectedFolder = $folder;
+        $this->company_id = $folder->company_id;
+        $this->fob_amount = $folder->fob_amount ?? 0;
+        $this->insurance_amount = $folder->insurance_amount ?? 0;
+        $this->cif_amount = $folder->cif_amount ?? 0;
+        $this->weight = $folder->weight;
+        $this->product = $folder->description ?? ('Prestation selon dossier ' . $folder->folder_number);
 
-            if (!$folder) {
-                session()->flash('error', 'Dossier non trouvé.');
-                $this->resetForm();
-                return;
+        // Calcul automatique du fret si manquant
+        $calculated_freight = $this->cif_amount - $this->fob_amount - $this->insurance_amount;
+        $this->freight_amount = $folder->freight_amount ?? max($calculated_freight, 0);
+
+        // Pré-remplissage d’un premier item
+        $this->items = [];
+        $this->addItem('import_tax');
+
+        if (!empty($this->items) && isset($this->items[0])) {
+            $this->items[0]['label'] = $this->product;
+            $this->items[0]['amount_local'] = $this->fob_amount;
+
+            $usdCurrency = Currency::where('code', 'USD')->first();
+            if ($usdCurrency) {
+                $this->items[0]['currency_id'] = $usdCurrency->id;
             }
 
-            // Vérifie s'il existe déjà une facture liée à ce dossier
-            if ($folder->invoice()->exists()) {
-                session()->flash('error', "Le dossier N° {$folder->folder_number} est déjà facturé (Facture N° {$folder->invoice->invoice_number}). Impossible de créer une nouvelle facture.");
-                $this->folder_id = null;
-                $this->selectedFolder = null;
-                $this->items = [];
-                return;
-            }
-
-            // Initialisation à partir du dossier
-            $this->folder_id = $folder->id;
-            $this->selectedFolder = $folder;
-            $this->company_id = $folder->company_id;
-            $this->fob_amount = $folder->fob_amount ?? 0;
-            $this->insurance_amount = $folder->insurance_amount ?? 0;
-            $this->cif_amount = $folder->cif_amount ?? 0;
-            $this->weight = $folder->weight;
-            $this->product = $folder->description ?? ('Prestation selon dossier ' . $folder->folder_number);
-
-            // Calcul automatique du fret
-            $calculated_freight = $this->cif_amount - $this->fob_amount - $this->insurance_amount;
-            $this->freight_amount = $folder->freight_amount ?? max($calculated_freight, 0);
-
-            // Pré-remplir les items
-            $this->items = [];
-            $this->addItem('import_tax');
-
-            if (!empty($this->items) && $this->items[0] !== null) {
-                $this->items[0]['label'] = $this->product;
-                $this->items[0]['amount_local'] = $this->fob_amount;
-
-                $usdCurrency = Currency::where('code', 'USD')->first();
-                if ($usdCurrency) {
-                    $this->items[0]['currency_id'] = $usdCurrency->id;
-                }
-
-                $this->updatedItems($this->items[0]['amount_local'], "0.amount_local");
-            }
-        } else {
-            $this->resetForm();
+            $this->updatedItems($this->items[0]['amount_local'], "0.amount_local");
         }
     }
 
