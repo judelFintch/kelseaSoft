@@ -35,6 +35,10 @@ class FolderCreate extends Component
     public $destination_id;
     public $arrival_border_date;
     public $weight;
+    public $quantity;
+    public $fob_amount;
+    public $insurance_amount;
+    public $cif_amount;
 
     // Étape 3
     public $customs_office_id;
@@ -82,9 +86,10 @@ class FolderCreate extends Component
     public function generateFolderNumber(string $acronym)
     {
         $year = now()->format('y');
+        $systemAcronym = 'MDB';
         do {
             $random = random_int(1000, 9999);
-            $number = "{$year}/{$acronym}/{$random}";
+            $number = "{$year}/{$systemAcronym}/{$acronym}/{$random}";
         } while (Folder::where('folder_number', $number)->exists());
 
         $this->folder_number = $number;
@@ -155,6 +160,11 @@ class FolderCreate extends Component
 
         Folder::create([
             'folder_number' => $this->folder_number,
+            'invoice_number' => $this->invoice_number,
+            'quantity' => $this->quantity,
+            'fob_amount' => $this->fob_amount,
+            'insurance_amount' => $this->insurance_amount,
+            'cif_amount' => $this->cif_amount,
             'folder_date' => $this->folder_date,
             'company_id' => $this->company_id,
             'supplier_id' => $this->supplier_id,

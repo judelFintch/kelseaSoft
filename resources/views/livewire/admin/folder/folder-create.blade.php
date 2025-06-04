@@ -25,9 +25,8 @@
             <div class="space-y-4">
              <x-forms.select label="Client (Société)" model="company_id" :options="$companies" optionLabel="name" optionValue="id" required placeholder="Sélectionner un client" />
                 <x-forms.input label="Numéro de Dossier" model="folder_number" required />
-                 <x-forms.input label="Numéro de la facture" model="invoice_numbe" required />
+                 <x-forms.input label="Numéro de la facture" model="invoice_number" required />
                 <x-forms.input label="Date du Dossier" model="folder_date" type="date" required />
-               
                 <x-forms.select label="Fournisseur" model="supplier_id" :options="$suppliers" optionLabel="name" optionValue="id" placeholder="Sélectionner un fournisseur" />
                 <x-forms.input label="Nature Marchandise" model="goods_type" required />
                 <x-forms.textarea label="Description Générale" model="description" rows="3" />
@@ -48,6 +47,12 @@
                 <x-forms.select label="Lieu de Destination" model="destination_id" :options="$locations" optionLabel="name" optionValue="id" placeholder="Sélectionner destination" />
                 <x-forms.input label="Date d'Arrivée Frontière" model="arrival_border_date" type="date" />
                 <x-forms.input label="Poids (kg)" model="weight" type="number" step="0.01" />
+                 <x-forms.input label="Quantite de Marchandise" model="quantity" type="number" step="0.01" />
+                <x-forms.input label="Montant FOB " model="fob_amount" type="number" step="0.01" />
+                <x-forms.input label="Montant Assurance" model="insurance_amount" type="number" step="0.01" />
+                <x-forms.input label="Montant CIF " model="cif_amount" type="number" step="0.01" />
+
+
             </div>
         </div>
         @endif
