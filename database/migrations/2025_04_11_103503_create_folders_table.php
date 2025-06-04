@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('truck_number');
             $table->string('trailer_number')->nullable();
             $table->string('invoice_number')->nullable();
-
             $table->foreignId('transporter_id')->nullable()->constrained()->nullOnDelete();
             $table->string('driver_name')->nullable();
             $table->string('driver_phone')->nullable();
