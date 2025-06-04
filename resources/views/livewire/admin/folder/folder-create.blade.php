@@ -19,7 +19,7 @@
 
     <form wire:submit.prevent="save" class="space-y-8">
         {{-- Step 1: Basic Information --}}
-        <div x-data="{ active: @entangle('currentStep').live === 1 }" x-show="active" class="space-y-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm">
+        <div x-data="{ active: @entangle('currentStep').defer === 1 }" x-show="active" class="space-y-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm">
             <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 border-b pb-2 border-gray-300 dark:border-gray-600">Étape 1: Informations de Base</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <x-forms.input label="Numéro de Dossier" model="folder_number" required />
@@ -33,7 +33,7 @@
         </div>
 
         {{-- Step 2: Transport & Goods Details --}}
-        <div x-data="{ active: @entangle('currentStep').live === 2 }" x-show="active" class="space-y-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm">
+        <div x-data="{ active: @entangle('currentStep').defer === 2 }" x-show="active" class="space-y-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm">
             <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 border-b pb-2 border-gray-300 dark:border-gray-600">Étape 2: Détails Transport & Marchandises</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <x-forms.input label="Numéro Camion" model="truck_number" />
@@ -53,7 +53,7 @@
         </div>
 
         {{-- Step 3: Customs & Declaration Details --}}
-        <div x-data="{ active: @entangle('currentStep').live === 3 }" x-show="active" class="space-y-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm">
+        <div x-data="{ active: @entangle('currentStep').defer === 3 }" x-show="active" class="space-y-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm">
             <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 border-b pb-2 border-gray-300 dark:border-gray-600">Étape 3: Détails Douane & Déclaration</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <x-forms.select label="Lieu d'Origine" model="origin_id" :options="$locations" optionLabel="name" optionValue="id" placeholder="Sélectionner origine" />
@@ -68,7 +68,7 @@
         </div>
 
         {{-- Step 4: Tracking & Document Numbers --}}
-        <div x-data="{ active: @entangle('currentStep').live === 4 }" x-show="active" class="space-y-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm">
+        <div x-data="{ active: @entangle('currentStep').defer === 4 }" x-show="active" class="space-y-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm">
             <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 border-b pb-2 border-gray-300 dark:border-gray-600">Étape 4: Numéros de Suivi & Documents</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <x-forms.input label="Code Licence" model="license_code" />
@@ -88,7 +88,7 @@
         </div>
 
         {{-- Step 5: Description & Review --}}
-        <div x-data="{ active: @entangle('currentStep').live === 5 }" x-show="active" class="space-y-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm">
+        <div x-data="{ active: @entangle('currentStep').defer === 5 }" x-show="active" class="space-y-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm">
             <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 border-b pb-2 border-gray-300 dark:border-gray-600">Étape 5: Description</h3>
             <div>
                 <x-forms.textarea label="Description / Notes" model="description" rows="4" />
