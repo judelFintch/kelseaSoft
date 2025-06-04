@@ -392,18 +392,35 @@
                                 :class="(selected === 'Parametres') ? 'block' : 'hidden'">
                                 <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                     class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
+                                    @can('manage users')
                                     <li>
-                                        <a href="{{ route('currency.list') }}" class="menu-dropdown-item group"
-                                            :class="page === 'Applications' ? 'menu-dropdown-item-active' :
-                                                'menu-dropdown-item-inactive'">
-                                            Devise
+                                        <a href="{{ route('admin.user.index') }}" class="menu-dropdown-item group"
+                                            :class="page === 'Utilisateurs' || request()->routeIs('admin.user.*') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                                            Utilisateurs
                                         </a>
                                     </li>
+                                    @endcan
+                                    @can('manage roles')
                                     <li>
-                                        <a href="/utilisateurs" class="menu-dropdown-item group"
-                                            :class="page === 'Utilisateurs' ? 'menu-dropdown-item-active' :
+                                        <a href="{{ route('admin.role.index') }}" class="menu-dropdown-item group"
+                                            :class="page === 'Roles' || request()->routeIs('admin.role.*') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                                            Rôles
+                                        </a>
+                                    </li>
+                                    @endcan
+                                    @can('manage permissions')
+                                    <li>
+                                        <a href="{{ route('admin.permission.index') }}" class="menu-dropdown-item group"
+                                            :class="page === 'Permissions' || request()->routeIs('admin.permission.*') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                                            Permissions
+                                        </a>
+                                    </li>
+                                    @endcan
+                                    <li>
+                                        <a href="{{ route('currency.list') }}" class="menu-dropdown-item group"
+                                            :class="page === 'Devises' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
-                                            Utilisateurs
+                                            Devise
                                         </a>
                                     </li>
                                     <li>
