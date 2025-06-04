@@ -5,7 +5,7 @@ namespace App\Livewire\Admin\Folder;
 use App\Models\Company;
 use App\Models\Supplier;
 use App\Models\Transporter;
-use App\Models\Location; // For Origin/Destination
+use App\Models\Location;
 use App\Models\CustomsOffice;
 use App\Models\DeclarationType;
 use App\Models\Folder;
@@ -14,61 +14,35 @@ use Illuminate\Validation\Rule;
 
 class FolderCreate extends Component
 {
-    // Properties for multi-step form
     public int $currentStep = 1;
-    public int $totalSteps = 5; // Define total steps
+    public int $totalSteps = 3; // Simplified to 3 steps for now
 
-    // Step 1: Basic Information
+    // Step 1: Core Information
     public $folder_number = '';
     public $folder_date = '';
-    public $arrival_border_date = '';
-    public $company_id = null; // Client
+    public $company_id = null;    // Client
     public $supplier_id = null;
-    public $internal_reference = '';
-    public $order_number = '';
+    public $goods_type = '';      // Nature of goods (was 'product' in Invoice)
+    public $description = '';     // General description
 
-    // Step 2: Transport & Goods Details
+    // Step 2: Transport & Logistics
+    public $transporter_id = null;
     public $truck_number = '';
     public $trailer_number = '';
-    public $transporter_id = null;
-    public $driver_name = '';
-    public $driver_phone = '';
-    public $driver_nationality = '';
-    public $transport_mode = 'Route'; // Default value
-    public $goods_type = '';
-    public $weight = null;
-    public $quantity = null;
-    public $fob_amount = null;
-    public $insurance_amount = null;
-    public $cif_amount = null;
-
-    // Step 3: Customs & Declaration Details
+    public $transport_mode = 'Route';
     public $origin_id = null;
     public $destination_id = null;
+    public $arrival_border_date = '';
+    public $weight = null;        // kg
+
+    // Step 3: Customs & References
     public $customs_office_id = null;
     public $declaration_number = '';
     public $declaration_type_id = null;
-    public $declarant = '';
-    public $customs_agent = '';
-    public $container_number = '';
-
-    // Step 4: Tracking & Document Numbers
-    public $license_code = '';
-    public $bivac_code = '';
-    public $tr8_number = '';
-    public $tr8_date = '';
-    public $t1_number = '';
-    public $t1_date = '';
-    public $formalities_office_reference = '';
-    public $im4_number = '';
-    public $im4_date = '';
-    public $liquidation_number = '';
-    public $liquidation_date = '';
-    public $quitance_number = '';
-    public $quitance_date = '';
-
-    // Step 5: Description
-    public $description = '';
+    public $internal_reference = '';
+    public $order_number = '';
+    // We can add more financial fields like fob_amount etc. here if needed,
+    // similar to GenerateInvoice step 1, or keep it simpler for Folder creation.
 
     // Data for dropdowns
     public $companies = [];
@@ -117,62 +91,31 @@ class FolderCreate extends Component
                 $rules = [
                     'folder_number' => ['required', 'string', 'max:255', Rule::unique('folders', 'folder_number')->withoutTrashed()],
                     'folder_date' => 'required|date',
-                    'arrival_border_date' => 'nullable|date|after_or_equal:folder_date',
                     'company_id' => 'required|exists:companies,id',
                     'supplier_id' => 'nullable|exists:suppliers,id',
-                    'internal_reference' => 'nullable|string|max:255',
-                    'order_number' => 'nullable|string|max:255',
+                    'goods_type' => 'required|string|max:255',
+                    'description' => 'nullable|string|max:1000',
                 ];
                 break;
             case 2:
                 $rules = [
+                    'transporter_id' => 'required|exists:transporters,id',
                     'truck_number' => 'nullable|string|max:255',
                     'trailer_number' => 'nullable|string|max:255',
-                    'transporter_id' => 'required|exists:transporters,id',
-                    'driver_name' => 'nullable|string|max:255',
-                    'driver_phone' => 'nullable|string|max:255',
-                    'driver_nationality' => 'nullable|string|max:255',
                     'transport_mode' => 'required|string|in:Route,Air,Mer',
-                    'goods_type' => 'required|string|max:255',
+                    'origin_id' => 'nullable|exists:locations,id',
+                    'destination_id' => 'nullable|exists:locations,id',
+                    'arrival_border_date' => 'nullable|date|after_or_equal:folder_date',
                     'weight' => 'nullable|numeric|min:0',
-                    'quantity' => 'nullable|integer|min:0',
-                    'fob_amount' => 'nullable|numeric|min:0',
-                    'insurance_amount' => 'nullable|numeric|min:0',
-                    'cif_amount' => 'nullable|numeric|min:0',
                 ];
                 break;
             case 3:
                 $rules = [
-                    'origin_id' => 'nullable|exists:locations,id',
-                    'destination_id' => 'nullable|exists:locations,id',
                     'customs_office_id' => 'nullable|exists:customs_offices,id',
                     'declaration_number' => 'nullable|string|max:255',
                     'declaration_type_id' => 'nullable|exists:declaration_types,id',
-                    'declarant' => 'nullable|string|max:255',
-                    'customs_agent' => 'nullable|string|max:255',
-                    'container_number' => 'nullable|string|max:255',
-                ];
-                break;
-            case 4:
-                $rules = [
-                    'license_code' => 'nullable|string|max:255',
-                    'bivac_code' => 'nullable|string|max:255',
-                    'tr8_number' => 'nullable|string|max:255',
-                    'tr8_date' => 'nullable|date',
-                    't1_number' => 'nullable|string|max:255',
-                    't1_date' => 'nullable|date',
-                    'formalities_office_reference' => 'nullable|string|max:255',
-                    'im4_number' => 'nullable|string|max:255',
-                    'im4_date' => 'nullable|date',
-                    'liquidation_number' => 'nullable|string|max:255',
-                    'liquidation_date' => 'nullable|date',
-                    'quitance_number' => 'nullable|string|max:255',
-                    'quitance_date' => 'nullable|date',
-                ];
-                break;
-            case 5:
-                $rules = [
-                    'description' => 'nullable|string',
+                    'internal_reference' => 'nullable|string|max:255',
+                    'order_number' => 'nullable|string|max:255',
                 ];
                 break;
         }
@@ -196,19 +139,46 @@ class FolderCreate extends Component
         // Ensure unique folder_number check is strict on save
         $allRules['folder_number'] = ['required', 'string', 'max:255', Rule::unique('folders', 'folder_number')->withoutTrashed()];
 
-        $validatedData = $this->validate($allRules);
+        // Consolidate all properties to be saved
+        $this->validate($allRules); // Validate all data at once
 
-        Folder::create($validatedData);
+        // Collect all public properties that are actual folder fields
+        // This is safer than just $validatedData if some properties are not meant for the DB
+        $folderData = [
+            'folder_number' => $this->folder_number,
+            'folder_date' => $this->folder_date,
+            'company_id' => $this->company_id,
+            'supplier_id' => $this->supplier_id,
+            'goods_type' => $this->goods_type,
+            'description' => $this->description,
+            'transporter_id' => $this->transporter_id,
+            'truck_number' => $this->truck_number,
+            'trailer_number' => $this->trailer_number,
+            'transport_mode' => $this->transport_mode,
+            'origin_id' => $this->origin_id,
+            'destination_id' => $this->destination_id,
+            'arrival_border_date' => $this->arrival_border_date,
+            'weight' => $this->weight,
+            'customs_office_id' => $this->customs_office_id,
+            'declaration_number' => $this->declaration_number,
+            'declaration_type_id' => $this->declaration_type_id,
+            'internal_reference' => $this->internal_reference,
+            'order_number' => $this->order_number,
+            // Add any other fields from the properties list that should be saved to the Folder model
+            // For example, if you re-add driver_name, etc. list them here.
+        ];
+
+        Folder::create($folderData);
 
         session()->flash('success', 'Dossier créé avec succès.');
-        $this->reset();
-        $this->mount();
-        $this->currentStep = 1; // Reset to first step
+        $this->resetExcept('companies', 'suppliers', 'transporters', 'locations', 'customsOffices', 'declarationTypes', 'transportModes', 'totalSteps');
+        $this->mount(); // Re-initialize folder_date and potentially other defaults
+        $this->currentStep = 1;
     }
 
     public function render()
     {
         return view('livewire.admin.folder.folder-create')
-                    ->layout('components.layouts.app'); // Assuming your main layout is app.blade.php
+                ->layout('components.layouts.app');
     }
 }
