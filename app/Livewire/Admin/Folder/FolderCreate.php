@@ -2,180 +2,243 @@
 
 namespace App\Livewire\Admin\Folder;
 
-use Livewire\Component;
-use App\Enums\DossierType;
-use App\Models\CustomsOffice;
-use App\Models\DeclarationType;
-use App\Models\Location;
+use App\Models\Company;
 use App\Models\Supplier;
 use App\Models\Transporter;
-use App\Services\Company\CompanyService;
-use App\Services\Folder\FolderService;
-use App\Services\Licence\LicenceService;
-use Illuminate\Validation\Rules\Enum;
+use App\Models\Location; // For Origin/Destination
+use App\Models\CustomsOffice;
+use App\Models\DeclarationType;
+use App\Models\Folder;
+use Livewire\Component;
 
 class FolderCreate extends Component
 {
-    public $step = 1;
+    // Properties for multi-step form
+    public int $currentStep = 1;
+    public int $totalSteps = 5; // Define total steps
 
-    public $clients = [];
-    public $transporters = [];
+    // Step 1: Basic Information
+    public $folder_number = '';
+    public $folder_date = '';
+    public $arrival_border_date = '';
+    public $company_id = null; // Client
+    public $supplier_id = null;
+    public $internal_reference = '';
+    public $order_number = '';
+
+    // Step 2: Transport & Goods Details
+    public $truck_number = '';
+    public $trailer_number = '';
+    public $transporter_id = null;
+    public $driver_name = '';
+    public $driver_phone = '';
+    public $driver_nationality = '';
+    public $transport_mode = ''; // e.g., Route, Air, Mer
+    public $goods_type = ''; // Nature of goods
+    public $weight = null; // kg
+    public $quantity = null; // e.g., number of packages
+    public $fob_amount = null;
+    public $insurance_amount = null;
+    public $cif_amount = null; // Calculated or input
+
+    // Step 3: Customs & Declaration Details
+    public $origin_id = null; // Origin location
+    public $destination_id = null; // Destination location
+    public $customs_office_id = null;
+    public $declaration_number = '';
+    public $declaration_type_id = null;
+    public $declarant = ''; // Name of declarant
+    public $customs_agent = ''; // Name of customs agent
+    public $container_number = ''; // If applicable
+
+    // Step 4: Tracking & Document Numbers
+    public $license_code = ''; // e.g., Import license
+    public $bivac_code = '';
+    public $tr8_number = '';
+    public $tr8_date = '';
+    public $t1_number = '';
+    public $t1_date = '';
+    public $formalities_office_reference = '';
+    public $im4_number = '';
+    public $im4_date = '';
+    public $liquidation_number = '';
+    public $liquidation_date = '';
+    public $quitance_number = '';
+    public $quitance_date = '';
+
+    // Step 5: Description
+    public $description = '';
+
+    // Data for dropdowns
+    public $companies = [];
     public $suppliers = [];
+    public $transporters = [];
     public $locations = [];
     public $customsOffices = [];
     public $declarationTypes = [];
-    public $optionsSelect = [];
-    public $licenseCodes = [];
-    public $bivacCodes = [];
-
-    public $folder = [];
 
     public function mount()
     {
-        $this->clients = CompanyService::getAllCompanies()->map(fn($client) => [
-            'label' => $client->name,
-            'value' => $client->id
-        ])->toArray();
-
-        $this->transporters = Transporter::all()->map(fn($t) => [
-            'label' => $t->name,
-            'value' => $t->id
-        ])->toArray();
-
-        $this->suppliers = Supplier::all()->map(fn($s) => [
-            'label' => $s->name,
-            'value' => $s->id
-        ])->toArray();
-
-        $this->locations = Location::all()->map(fn($l) => [
-            'label' => $l->name,
-            'value' => $l->id
-        ])->toArray();
-
-        $this->customsOffices = CustomsOffice::all()->map(fn($o) => [
-            'label' => $o->name,
-            'value' => $o->id
-        ])->toArray();
-
-        $this->declarationTypes = DeclarationType::all()->map(fn($d) => [
-            'label' => $d->name,
-            'value' => $d->id
-        ])->toArray();
-
-        $this->optionsSelect = DossierType::options();
-
-        $this->licenseCodes = \App\Models\Licence::all()->map(fn($lic) => [
-            'label' => $lic->license_number,
-            'value' => $lic->id,
-        ])->toArray();
-
-        $this->bivacCodes = [
-            ['label' => 'BIVAC-01', 'value' => 'BIVAC-01'],
-            ['label' => 'BIVAC-02', 'value' => 'BIVAC-02'],
-        ];
-
-        $this->folder['folder_number'] = FolderService::generateFolderNumber();
-        $this->folder['dossier_type'] = DossierType::SANS->value;
-    }
-
-    public function updated($property)
-    {
-        if (in_array($property, ['folder.fob_amount', 'folder.insurance_amount'])) {
-            $fob = floatval($this->folder['fob_amount'] ?? 0);
-            $insurance = floatval($this->folder['insurance_amount'] ?? 0);
-            $this->folder['cif_amount'] = $fob + $insurance;
-        }
+        $this->folder_date = now()->toDateString();
+        // Load data for dropdowns
+        $this->companies = Company::all(['id', 'name']);
+        $this->suppliers = Supplier::all(['id', 'name']);
+        $this->transporters = Transporter::all(['id', 'name']);
+        $this->locations = Location::all(['id', 'name']); // For origin & destination
+        $this->customsOffices = CustomsOffice::all(['id', 'name']);
+        $this->declarationTypes = DeclarationType::all(['id', 'name']);
     }
 
     public function nextStep()
     {
-        if ($this->step < 3) {
-            $this->step++;
+        $this->validateStep($this->currentStep);
+        if ($this->currentStep < $this->totalSteps) {
+            $this->currentStep++;
         }
     }
 
     public function previousStep()
     {
-        if ($this->step > 1) {
-            $this->step--;
+        if ($this->currentStep > 1) {
+            $this->currentStep--;
         }
+    }
+
+    public function validateStep(int $step)
+    {
+        // Add step-specific validation rules here
+        $rules = [];
+        switch ($step) {
+            case 1:
+                $rules = [
+                    'folder_number' => 'required|string|unique:folders,folder_number',
+                    'folder_date' => 'required|date',
+                    'arrival_border_date' => 'nullable|date|after_or_equal:folder_date',
+                    'company_id' => 'required|exists:companies,id',
+                    'supplier_id' => 'nullable|exists:suppliers,id',
+                ];
+                break;
+            case 2:
+                $rules = [
+                    'truck_number' => 'nullable|string',
+                    'transporter_id' => 'required|exists:transporters,id',
+                    'goods_type' => 'required|string',
+                    'weight' => 'nullable|numeric|min:0',
+                    'fob_amount' => 'nullable|numeric|min:0',
+                ];
+                break;
+            // Add more cases for other steps
+        }
+        $this->validate($rules);
     }
 
     public function save()
     {
-        $rules = [
-            'folder.folder_number' => 'required|string|max:255|unique:folders,folder_number',
-            'folder.truck_number' => 'required|string|max:255',
-            'folder.trailer_number' => 'nullable|string|max:255',
-            'folder.transporter_id' => 'nullable|exists:transporters,id',
-            'folder.driver_name' => 'nullable|string|max:255',
-            'folder.driver_phone' => 'nullable|string|max:255',
-            'folder.driver_nationality' => 'nullable|string|max:255',
-            'folder.origin_id' => 'nullable|exists:locations,id',
-            'folder.destination_id' => 'nullable|exists:locations,id',
-            'folder.supplier_id' => 'nullable|exists:suppliers,id',
-            'folder.client' => 'nullable|string|max:255',
-            'folder.customs_office_id' => 'nullable|exists:customs_offices,id',
-            'folder.declaration_number' => 'nullable|string|max:255',
-            'folder.declaration_type_id' => 'nullable|exists:declaration_types,id',
-            'folder.declarant' => 'nullable|string|max:255',
-            'folder.customs_agent' => 'nullable|string|max:255',
-            'folder.container_number' => 'nullable|string|max:255',
-            'folder.weight' => 'nullable|numeric',
-            'folder.fob_amount' => 'nullable|numeric',
-            'folder.insurance_amount' => 'nullable|numeric',
-            'folder.cif_amount' => 'nullable|numeric',
-            'folder.arrival_border_date' => 'nullable|date',
-            'folder.folder_date' => 'nullable|date',
-            'folder.tr8_number' => 'nullable|string|max:255',
-            'folder.tr8_date' => 'nullable|date',
-            'folder.t1_number' => 'nullable|string|max:255',
-            'folder.t1_date' => 'nullable|date',
-            'folder.im4_number' => 'nullable|string|max:255',
-            'folder.im4_date' => 'nullable|date',
-            'folder.liquidation_number' => 'nullable|string|max:255',
-            'folder.liquidation_date' => 'nullable|date',
-            'folder.quitance_number' => 'nullable|string|max:255',
-            'folder.quitance_date' => 'nullable|date',
-            'folder.dossier_type' => ['required', new Enum(DossierType::class)],
-            'folder.description' => 'nullable|string|max:1000',
-        ];
+        // Validate all fields before saving
+        $this->validate([
+            // Step 1
+            'folder_number' => 'required|string|unique:folders,folder_number',
+            'folder_date' => 'required|date',
+            'arrival_border_date' => 'nullable|date|after_or_equal:folder_date',
+            'company_id' => 'required|exists:companies,id',
+            'supplier_id' => 'nullable|exists:suppliers,id',
+            'internal_reference' => 'nullable|string|max:255',
+            'order_number' => 'nullable|string|max:255',
 
-        if ($this->folder['dossier_type'] === DossierType::AVEC->value) {
-            $rules['folder.license_id'] = 'required|exists:licences,id';
-            $rules['folder.bivac_code'] = 'required|string|max:255';
-        }
+            // Step 2
+            'truck_number' => 'nullable|string|max:255',
+            'trailer_number' => 'nullable|string|max:255',
+            'transporter_id' => 'required|exists:transporters,id',
+            'driver_name' => 'nullable|string|max:255',
+            'driver_phone' => 'nullable|string|max:255',
+            'driver_nationality' => 'nullable|string|max:255',
+            'transport_mode' => 'nullable|string|max:255',
+            'goods_type' => 'required|string|max:255',
+            'weight' => 'nullable|numeric|min:0',
+            'quantity' => 'nullable|integer|min:0',
+            'fob_amount' => 'nullable|numeric|min:0',
+            'insurance_amount' => 'nullable|numeric|min:0',
+            'cif_amount' => 'nullable|numeric|min:0',
 
-        $validated = $this->validate($rules);
+            // Step 3
+            'origin_id' => 'nullable|exists:locations,id',
+            'destination_id' => 'nullable|exists:locations,id',
+            'customs_office_id' => 'nullable|exists:customs_offices,id',
+            'declaration_number' => 'nullable|string|max:255',
+            'declaration_type_id' => 'nullable|exists:declaration_types,id',
+            'declarant' => 'nullable|string|max:255',
+            'customs_agent' => 'nullable|string|max:255',
+            'container_number' => 'nullable|string|max:255',
 
-        $folder = FolderService::storeFolder([
-            ...$validated['folder'],
-            'license_id' => $this->folder['license_id'] ?? null,
+            // Step 4
+            'license_code' => 'nullable|string|max:255',
+            'bivac_code' => 'nullable|string|max:255',
+            'tr8_number' => 'nullable|string|max:255',
+            'tr8_date' => 'nullable|date',
+            't1_number' => 'nullable|string|max:255',
+            't1_date' => 'nullable|date',
+            'formalities_office_reference' => 'nullable|string|max:255',
+            'im4_number' => 'nullable|string|max:255',
+            'im4_date' => 'nullable|date',
+            'liquidation_number' => 'nullable|string|max:255',
+            'liquidation_date' => 'nullable|date',
+            'quitance_number' => 'nullable|string|max:255',
+            'quitance_date' => 'nullable|date',
+
+            // Step 5
+            'description' => 'nullable|string',
         ]);
 
-        if ($this->folder['dossier_type'] === DossierType::AVEC->value) {
-            $license = LicenceService::getLicenseById($this->folder['license_id']);
+        Folder::create([
+            'folder_number' => $this->folder_number,
+            'folder_date' => $this->folder_date,
+            'arrival_border_date' => $this->arrival_border_date,
+            'company_id' => $this->company_id,
+            'supplier_id' => $this->supplier_id,
+            'internal_reference' => $this->internal_reference,
+            'order_number' => $this->order_number,
+            'truck_number' => $this->truck_number,
+            'trailer_number' => $this->trailer_number,
+            'transporter_id' => $this->transporter_id,
+            'driver_name' => $this->driver_name,
+            'driver_phone' => $this->driver_phone,
+            'driver_nationality' => $this->driver_nationality,
+            'transport_mode' => $this->transport_mode,
+            'goods_type' => $this->goods_type,
+            'weight' => $this->weight,
+            'quantity' => $this->quantity,
+            'fob_amount' => $this->fob_amount,
+            'insurance_amount' => $this->insurance_amount,
+            'cif_amount' => $this->cif_amount,
+            'origin_id' => $this->origin_id,
+            'destination_id' => $this->destination_id,
+            'customs_office_id' => $this->customs_office_id,
+            'declaration_number' => $this->declaration_number,
+            'declaration_type_id' => $this->declaration_type_id,
+            'declarant' => $this->declarant,
+            'customs_agent' => $this->customs_agent,
+            'container_number' => $this->container_number,
+            'license_code' => $this->license_code,
+            'bivac_code' => $this->bivac_code,
+            'tr8_number' => $this->tr8_number,
+            'tr8_date' => $this->tr8_date,
+            't1_number' => $this->t1_number,
+            't1_date' => $this->t1_date,
+            'formalities_office_reference' => $this->formalities_office_reference,
+            'im4_number' => $this->im4_number,
+            'im4_date' => $this->im4_date,
+            'liquidation_number' => $this->liquidation_number,
+            'liquidation_date' => $this->liquidation_date,
+            'quitance_number' => $this->quitance_number,
+            'quitance_date' => $this->quitance_date,
+            'description' => $this->description,
+            // Add any other fields that need to be saved
+        ]);
 
-            if (!$license) {
-                session()->flash('error', '🚫 Licence introuvable.');
-                return;
-            }
-
-            $success = app(LicenceService::class)->attachFolderToLicense($folder, $license);
-
-            if (!$success) {
-                $folder->delete();
-                session()->flash('error', '❌ Échec : la licence ne permet pas ce rattachement.');
-                return;
-            }
-        }
-
-        $this->reset('folder');
-        $this->folder['folder_number'] = FolderService::generateFolderNumber();
-        $this->folder['dossier_type'] = DossierType::SANS->value;
-        $this->step = 1;
-
-        session()->flash('message', '✅ Dossier créé avec succès.');
+        session()->flash('success', 'Dossier créé avec succès.');
+        // Could also redirect: return redirect()->route('admin.folders.index');
+        $this->reset(); // Reset form fields
+        $this->mount(); // Reload initial data if needed
     }
 
     public function render()
