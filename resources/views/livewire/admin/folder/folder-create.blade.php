@@ -19,7 +19,7 @@
 
     <form wire:submit.prevent="save" class="space-y-8">
         {{-- Step 1: Basic Information (Simplified for Debugging) --}}
-        <div x-data="{ active: @entangle('currentStep').defer === 1 }" x-show="active" class="space-y-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm">
+        <div x-data="{ active: true }" x-show="active" class="space-y-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm">
             <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 border-b pb-2 border-gray-300 dark:border-gray-600">Étape 1: Informations de Base (Test de débogage)</h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -36,8 +36,8 @@
             </div>
 
             <p class="text-gray-700 dark:text-gray-200 mt-4">Valeur de currentStep (depuis Blade): {{ $currentStep }}</p>
-            <div x-data="{ alpineCurrentStep: @entangle('currentStep').defer }">
-                <p class="text-gray-700 dark:text-gray-200">Valeur de currentStep (via Alpine @entangle): <span x-text="alpineCurrentStep"></span></p>
+            <div>
+                <p class="text-gray-700 dark:text-gray-200">Valeur de currentStep (via Alpine @entangle): Désactivé pour test de syntaxe</p>
             </div>
             <p class="text-gray-700 dark:text-gray-200">Si vous voyez ceci, la section de l'étape 1 est au moins partiellement rendue par Blade.</p>
         </div>
