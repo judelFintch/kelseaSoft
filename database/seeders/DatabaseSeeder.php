@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
        // LicenceSeeder::class,
 
         // Dossiers créés après les entités de référence
-        FolderSeeder::class,
+        //FolderSeeder::class,
 
         // Facturation (actuellement en commentaire)
        // InvoiceItemSeeder::class,
