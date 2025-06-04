@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
 
         // Entreprises et licences liées aux dossiers
         CompanySeeder::class,
-        LicenceSeeder::class,
+       // LicenceSeeder::class,
 
         // Dossiers créés après les entités de référence
         FolderSeeder::class,

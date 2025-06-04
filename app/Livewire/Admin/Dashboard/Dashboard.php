@@ -12,6 +12,9 @@ use Livewire\Component;
 
 class Dashboard extends Component
 {
+
+    public $expiringSoonLicences = [];
+    public $activeLicences = [];
     public function render()
     {
         // Statistiques
@@ -25,8 +28,8 @@ class Dashboard extends Component
 
         // Pour les licences, supposons qu'il n'y a pas de champ de statut 'active' pour l'instant.
         // Si un champ comme `status = 'active'` existe, il faudrait l'ajouter aux conditions where.
-        $activeLicences = Licence::where('expiry_date', '>=', Carbon::now())->count();
-        $expiringSoonLicences = Licence::whereBetween('expiry_date', [Carbon::now(), Carbon::now()->addDays(30)])->count();
+      //  $activeLicences = Licence::where('expiry_date', '>=', Carbon::now())->count();
+      //  $expiringSoonLicences = Licence::whereBetween('expiry_date', [Carbon::now(), Carbon::now()->addDays(30)])->count();
 
         // Listes Récentes (les 5 derniers)
         // Assurez-vous que la relation vers Company dans Folder, Invoice, GlobalInvoice est bien 'company'.
