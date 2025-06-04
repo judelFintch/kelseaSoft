@@ -14,9 +14,7 @@ class TaxSeeder extends Seeder
      */
     public function run(): void
     {
-        $usd = 1;
-
-        $taxes = [
+        $taxesData = [
             ['code' => 'DDI', 'label' => 'Droits de Douanes à l’Import'],
             ['code' => 'DAI', 'label' => 'Droit d’accise à l’Import'],
             ['code' => 'RLT', 'label' => 'Redevance Logistique Terrestre'],
@@ -29,12 +27,11 @@ class TaxSeeder extends Seeder
             ['code' => 'ANAPI', 'label' => 'Retenue ANAPI'],
         ];
 
-        foreach ($taxes as $tax) {
-            Tax::create([
-                'code' => $tax['code'],
-                'label' => $tax['label'],
-                
-            ]);
+        foreach ($taxesData as $taxData) {
+            Tax::firstOrCreate(
+                ['code' => $taxData['code']], // Unique key to check
+                $taxData // Data to insert if not found
+            );
         }
     }
 }

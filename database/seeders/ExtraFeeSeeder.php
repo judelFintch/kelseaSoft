@@ -14,18 +14,21 @@ class ExtraFeeSeeder extends Seeder
      */
     public function run(): void
     {
-    $fees = [
-        ['label' => 'SEGUCE'],
-        ['label' => 'SCELLE Électronique'],
-        ['label' => 'NOTE ACCEPTATION (NAC)'],
-    ];
+        $feesData = [
+            ['label' => 'SEGUCE'],
+            ['label' => 'SCELLE Électronique'],
+            ['label' => 'NOTE ACCEPTATION (NAC)'],
+        ];
 
-    foreach ($fees as $fee) {
-        ExtraFee::create([
-        'label' => $fee['label'],
-        'code' => strtoupper(str_replace(' ', '_', $fee['label'])),
-        'description' => $fee['label'],
-        ]);
-    }
+        foreach ($feesData as $feeData) {
+            $code = strtoupper(str_replace([' ', 'É', '(', ')'], ['_', 'E', '', ''], $feeData['label']));
+            ExtraFee::firstOrCreate(
+                ['code' => $code], // Unique key to check
+                [
+                    'label' => $feeData['label'],
+                    'description' => $feeData['label'],
+                ]
+            );
+        }
     }
 }

@@ -39,6 +39,18 @@ use App\Livewire\Admin\ManageExtraFees\ExtraFee;
 use App\Livewire\Admin\ManageAgencyFees\ManageAgencyFee;
 use Illuminate\Support\Facades\Route;
 
+// User, Role, Permission Management Livewire Components
+use App\Livewire\Admin\User\UserIndex;
+use App\Livewire\Admin\User\UserCreate;
+use App\Livewire\Admin\User\UserEdit;
+use App\Livewire\Admin\Role\RoleIndex;
+use App\Livewire\Admin\Role\RoleCreate;
+use App\Livewire\Admin\Role\RoleEdit;
+use App\Livewire\Admin\Permission\PermissionIndex;
+use App\Livewire\Admin\Permission\PermissionCreate;
+use App\Livewire\Admin\Permission\PermissionEdit;
+
+
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -51,13 +63,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::prefix('company')->name('company.')->group(function () {
-        Route::get('/Dashaboard', CompanyIndex::class)->name('index');
-        Route::get('/create', CompanyCreate::class)->name('create');
-        Route::get('/edit/{id}', CompanyCreate::class)->name('edit');
-        Route::get('/list', CompanyList::class)->name('list');
-        Route::get('/show/{id}', CompanyShow::class)->name('show');
-        Route::get('/delete/{id}', CompanyCreate::class)->name('delete');
-        Route::get('/restore/{id}', CompanyCreate::class)->name('restore');
+        Route::get('/Dashaboard', CompanyIndex::class)->name('index')->middleware(['permission:view company']);
+        Route::get('/create', CompanyCreate::class)->name('create')->middleware(['permission:create company']);
+        Route::get('/edit/{id}', CompanyCreate::class)->name('edit')->middleware(['permission:edit company']);
+        Route::get('/list', CompanyList::class)->name('list')->middleware(['permission:view company']);
+        Route::get('/show/{id}', CompanyShow::class)->name('show')->middleware(['permission:view company']);
+        Route::get('/delete/{id}', CompanyCreate::class)->name('delete')->middleware(['permission:delete company']);
+        Route::get('/restore/{id}', CompanyCreate::class)->name('restore')->middleware(['permission:delete company']); // Assuming restore is a form of undelete
     });
 
     Route::prefix('folder')->name('folder.')->group(function () {
@@ -157,6 +169,30 @@ Route::middleware('auth')->group(function () {
         Route::get('/index', ManageAgencyFee::class)->name('index');
     });
 
+    // Admin Routes for User, Role, Permission Management
+    Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+        // User Management
+        Route::prefix('users')->name('user.')->middleware(['permission:manage users'])->group(function () {
+            Route::get('/', UserIndex::class)->name('index');
+            Route::get('/create', UserCreate::class)->name('create');
+            Route::get('/{user}/edit', UserEdit::class)->name('edit');
+        });
+
+        // Role Management
+        Route::prefix('roles')->name('role.')->middleware(['permission:manage roles'])->group(function () {
+            Route::get('/', RoleIndex::class)->name('index');
+            Route::get('/create', RoleCreate::class)->name('create');
+            Route::get('/{role}/edit', RoleEdit::class)->name('edit');
+        });
+
+        // Permission Management
+        Route::prefix('permissions')->name('permission.')->middleware(['permission:manage permissions'])->group(function () {
+            Route::get('/', PermissionIndex::class)->name('index');
+            // Optional: Routes for creating/editing permissions if enabled
+            // Route::get('/create', PermissionCreate::class)->name('create');
+            // Route::get('/{permission}/edit', PermissionEdit::class)->name('edit');
+        });
+    });
 });
 
 require __DIR__ . '/auth.php';
