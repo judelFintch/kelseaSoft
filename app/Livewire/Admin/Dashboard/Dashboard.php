@@ -13,8 +13,8 @@ use Livewire\Component;
 class Dashboard extends Component
 {
 
-    public $expiringSoonLicences = [];
-    public $activeLicences = [];
+    public $expiringSoonLicences =1;
+    public $activeLicences = 1;
    public function render()
 {
     // Statistiques
@@ -28,8 +28,8 @@ class Dashboard extends Component
     $totalCompanies = Company::count();
 
     // Licences
-    $this->activeLicences = Licence::where('expiry_date', '>=', Carbon::now())->count();
-    $this->expiringSoonLicences = Licence::whereBetween('expiry_date', [Carbon::now(), Carbon::now()->addDays(30)])->count();
+   // $this->activeLicences = Licence::where('expiry_date', '>=', Carbon::now())->count();
+   // $this->expiringSoonLicences = Licence::whereBetween('expiry_date', [Carbon::now(), Carbon::now()->addDays(30)])->count();
 
     // Derniers enregistrements
     $latestFolders = Folder::with('company')->latest()->take(5)->get();
