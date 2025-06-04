@@ -7,7 +7,7 @@ use App\Models\Role;
 use App\Models\Permission;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log; // Added for logging
 
 class UserSeeder extends Seeder
 {
@@ -16,70 +16,129 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create a 'root' role
-        $rootRole = Role::firstOrCreate([
-            'name' => 'root',
-            'display_name' => 'Root Administrator',
-            'description' => 'User with all permissions'
-        ]);
-
-        // Define all permissions (mirroring the ones in routes/web.php for now)
-        // In a real application, you might have a more robust way to manage this list
-        // or fetch them directly if they are already seeded by another seeder.
-        $permissions = [
-            'view company',
-            'create company',
-            'edit company',
-            'delete company',
-            'view user',
-            'create user',
-            'edit user',
-            'delete user',
-            // Permissions for user and role management
-            'manage users',
-            'manage roles',
-            'manage permissions',
-            // Add any other permissions defined in your application
+        // Define and Create Roles
+        $roleDefinitions = [
+            ['name' => 'root', 'display_name' => 'Root', 'description' => 'Super Administrator with all permissions'],
+            ['name' => 'admin', 'display_name' => 'Admin', 'description' => 'Administrator with most permissions'],
+            ['name' => 'editor', 'display_name' => 'Editor', 'description' => 'User who can create and edit content'],
+            ['name' => 'viewer', 'display_name' => 'Viewer', 'description' => 'User who can only view content'],
         ];
 
-        $permissionIds = [];
-        foreach ($permissions as $permissionName) {
-            $permission = Permission::firstOrCreate([
-                'name' => $permissionName,
-                'display_name' => ucwords(str_replace('_', ' ', $permissionName)),
-                'description' => ucwords(str_replace('_', ' ', $permissionName))
-            ]);
-            $permissionIds[] = $permission->id;
+        foreach ($roleDefinitions as $roleDef) {
+            Role::firstOrCreate(['name' => $roleDef['name']], $roleDef);
         }
 
-        // Assign all permissions to the 'root' role
-        // Use syncWithoutDetaching to avoid duplicate entries if seeder is run multiple times
-        $rootRole->permissions()->syncWithoutDetaching($permissionIds);
+        // Define and Create Permissions
+        $permissionNames = [
+            // RBAC Management
+            'manage users', 'manage roles', 'manage permissions',
+            // Company Management
+            'view company', 'create company', 'edit company', 'delete company',
+            // Folder Management
+            'view folder', 'create folder', 'edit folder', 'delete folder',
+            // Licence Management
+            'view licence', 'create licence', 'edit licence', 'delete licence',
+            // Invoice Management
+            'generate invoice', 'view invoice', 'edit invoice', 'download invoice',
+            'view global_invoice', 'download global_invoice',
+            // Settings & Financials
+            'manage taxes', 'manage extra_fees', 'manage agency_fees', 'manage currencies',
+            // Other common permissions
+            'view dashboard', 'manage settings', 'view reports', 'upload files',
+            'manage bivac', 'manage file_types', 'manage transporters', 'manage suppliers',
+            'manage locations', 'manage customs_offices', 'manage declaration_types',
+            'manage merchandise_types', 'manage customs_regimes',
+        ];
 
-        // Create a 'root' user
-        $rootUser = User::firstOrCreate(
-            ['email' => 'root@example.com'],
-            [
-                'name' => 'Root User',
-                'password' => Hash::make('password'), // Change this in a real application!
-            ]
-        );
+        foreach ($permissionNames as $permissionName) {
+            $displayName = ucwords(str_replace('_', ' ', $permissionName));
+            Permission::firstOrCreate(
+                ['name' => $permissionName],
+                ['display_name' => $displayName, 'description' => "Permission to " . $displayName]
+            );
+        }
 
-        // Assign the 'root' role to the 'root' user
-        // Use syncWithoutDetaching to avoid duplicate entries
-        $rootUser->roles()->syncWithoutDetaching([$rootRole->id]);
+        // --- Retrieve Roles and Permissions ---
+        $allPermissions = Permission::pluck('id', 'name'); // Fetches as 'name' => 'id'
 
-        // Create a regular admin user as in the original seeder for general use
-        $adminUser = User::firstOrCreate(
-            ['email' => 'admin@example.com'],
-            [
-                'name' => 'Admin User',
-                'password' => Hash::make('password'),
-            ]
-        );
-        // Optionally, assign some default role to the admin user if needed
-        // For example, if you create an 'admin' role with a subset of permissions:
-        // $adminRole = Role::firstOrCreate(['name' => 'admin', ...]);
-        // $adminUser->roles()->syncWithoutDetaching([$adminRole->id]);
+        $rootRole = Role::where('name', 'root')->first();
+        $adminRole = Role::where('name', 'admin')->first();
+        $editorRole = Role::where('name', 'editor')->first();
+        $viewerRole = Role::where('name', 'viewer')->first();
+
+        // --- Assign Permissions to Roles ---
+
+        // Root Role: Assign all permissions
+        if ($rootRole) {
+            $rootRole->permissions()->sync($allPermissions->values()->all());
+        } else {
+            Log::warning("UserSeeder: Root role not found, cannot assign permissions.");
+        }
+
+        // Admin Role Permissions
+        if ($adminRole) {
+            $adminPermissionNames = [
+                'manage users', 'manage roles', 'manage permissions', // Full RBAC control
+                'view company', 'create company', 'edit company', 'delete company', // Full Company control
+                'view folder', 'create folder', 'edit folder', 'delete folder', // Full Folder control
+                'view licence', 'create licence', 'edit licence', 'delete licence', // Full Licence control
+                'generate invoice', 'view invoice', 'edit invoice', 'download invoice', // Full Invoice control
+                'view global_invoice', 'download global_invoice',
+                'manage taxes', 'manage extra_fees', 'manage agency_fees', 'manage currencies', // Full Financials
+                'view dashboard', 'manage settings', 'view reports', 'upload files',
+                'manage bivac', 'manage file_types', 'manage transporters', 'manage suppliers',
+                'manage locations', 'manage customs_offices', 'manage declaration_types',
+                'manage merchandise_types', 'manage customs_regimes',
+            ];
+            $adminPermissionIds = $allPermissions->only($adminPermissionNames)->values()->all();
+            $adminRole->permissions()->sync($adminPermissionIds);
+        } else {
+            Log::warning("UserSeeder: Admin role not found, cannot assign permissions.");
+        }
+
+        // Editor Role Permissions
+        if ($editorRole) {
+            $editorPermissionNames = [
+                'view company', 'create company', 'edit company',
+                'view folder', 'create folder', 'edit folder',
+                'view licence', 'create licence', 'edit licence',
+                'generate invoice', 'view invoice', 'edit invoice', 'download invoice',
+                'upload files', 'view dashboard',
+            ];
+            $editorPermissionIds = $allPermissions->only($editorPermissionNames)->values()->all();
+            $editorRole->permissions()->sync($editorPermissionIds);
+        } else {
+            Log::warning("UserSeeder: Editor role not found, cannot assign permissions.");
+        }
+
+        // Viewer Role Permissions
+        if ($viewerRole) {
+            $viewerPermissionNames = [
+                'view company', 'view folder', 'view licence', 'view invoice', 'view global_invoice',
+                'download invoice', 'download global_invoice', 'view reports', 'view dashboard',
+            ];
+            $viewerPermissionIds = $allPermissions->only($viewerPermissionNames)->values()->all();
+            $viewerRole->permissions()->sync($viewerPermissionIds);
+        } else {
+            Log::warning("UserSeeder: Viewer role not found, cannot assign permissions.");
+        }
+
+        // --- Create Sample Users and Assign Roles ---
+        if ($rootRole) {
+            User::firstOrCreate(['email' => 'root@example.com'], ['name' => 'Root User', 'password' => Hash::make('password')])
+                ->roles()->sync([$rootRole->id]);
+        }
+        if ($adminRole) {
+            User::firstOrCreate(['email' => 'admin@example.com'], ['name' => 'Admin User', 'password' => Hash::make('password')])
+                ->roles()->sync([$adminRole->id]);
+        }
+        if ($editorRole) {
+            User::firstOrCreate(['email' => 'editor@example.com'], ['name' => 'Editor User', 'password' => Hash::make('password')])
+                ->roles()->sync([$editorRole->id]);
+        }
+        if ($viewerRole) {
+            User::firstOrCreate(['email' => 'viewer@example.com'], ['name' => 'Viewer User', 'password' => Hash::make('password')])
+                ->roles()->sync([$viewerRole->id]);
+        }
     }
 }
