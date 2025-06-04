@@ -13,6 +13,7 @@ class Folder extends Model
 {
     use HasFactory, SoftDeletes;
     use Sortable;
+    
 
     protected $fillable = [
         'folder_number',
@@ -44,6 +45,8 @@ class Folder extends Model
         'license_code',
         'bivac_code',
         'license_id',
+        'company_id',
+        
     ];
 
     protected $casts = [

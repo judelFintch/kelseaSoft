@@ -1,11 +1,10 @@
 <div class="w-full max-w-5xl mx-auto bg-white p-6 rounded-xl shadow space-y-6">
-    
+
     <h2 class="text-2xl font-bold">🧾 Nouvelle Facture</h2>
 
     @if (session()->has('success'))
         <div class="bg-green-100 text-green-700 px-4 py-2 rounded">{{ session('success') }}</div>
     @endif
-
     {{-- Barre de progression --}}
     <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
         <div class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300"
@@ -13,19 +12,25 @@
         </div>
     </div>
 
+  
+
     {{-- Étape 1 – Informations générales --}}
     @if ($step === 1)
         <div class="space-y-6">
 
             {{-- Affichage des Informations du Dossier Sélectionné/Chargé --}}
-            @if($selectedFolder)
+            @if ($selectedFolder)
                 <div class="p-4 my-2 bg-blue-50 border border-blue-300 text-blue-800 rounded-lg shadow">
-                    <h3 class="text-lg font-semibold mb-2">Facturation pour le Dossier : <span class="font-bold">{{ $selectedFolder->folder_number }}</span></h3>
-                    <p><strong>Client :</strong> {{ $selectedFolder->company?->name ?? ($selectedFolder->client ?? 'N/A') }}</p>
-                    <p class="text-sm"><strong>Description du dossier :</strong> {{ $selectedFolder->description ?? 'N/A' }}</p>
+                    <h3 class="text-lg font-semibold mb-2">Facturation pour le Dossier : <span
+                            class="font-bold">{{ $selectedFolder->folder_number }}</span></h3>
+                    <p><strong>Client :</strong>
+                        {{ $selectedFolder->company?->name ?? ($selectedFolder->client ?? 'N/A') }}</p>
+                    <p class="text-sm"><strong>Description du dossier :</strong>
+                        {{ $selectedFolder->description ?? 'N/A' }}</p>
 
-                    @if(method_exists($this, 'clearSelectedFolder'))
-                        <button type="button" wire:click="clearSelectedFolder" class="mt-3 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm transition duration-150 ease-in-out">
+                    @if (method_exists($this, 'clearSelectedFolder'))
+                        <button type="button" wire:click="clearSelectedFolder"
+                            class="mt-3 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm transition duration-150 ease-in-out">
                             Annuler la liaison / Saisir manuellement
                         </button>
                     @endif
@@ -34,15 +39,29 @@
                 {{-- Ce cas se produit si folder_id était dans l'URL mais invalide (déjà facturé / non trouvé). --}}
                 {{-- Le message flash d'erreur est géré par la session plus haut, mais on peut ajouter un indicateur. --}}
                 <div class="p-4 my-2 bg-yellow-50 border border-yellow-300 text-yellow-800 rounded-lg shadow">
-                     <p>Le dossier avec l'ID {{ $folder_id }} n'a pas pu être chargé pour la facturation. Vérifiez les messages d'erreur ou saisissez manuellement.</p>
+                    <p>Le dossier avec l'ID {{ $folder_id }} n'a pas pu être chargé pour la facturation. Vérifiez les
+                        messages d'erreur ou saisissez manuellement.</p>
                 </div>
             @endif
             {{-- Fin Affichage Informations Dossier --}}
 
             <div class="grid grid-cols-2 gap-4">
                 {{-- Le company_id sera pré-rempli si un dossier est sélectionné --}}
-                <x-forms.select label="Société (Client)" model="company_id" :options="$companies" optionLabel="name"
-                    optionValue="id" />
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Société
+                            (Client)</label>
+                        <input type="text" value="{{ $selectedFolder?->company?->name }}"
+                            class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:outline-none focus:ring-0 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                            readonly>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Acronyme</label>
+                        <input type="text" value="{{ $selectedFolder?->company?->acronym }}"
+                            class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:outline-none focus:ring-0 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                            readonly>
+                    </div>
+                </div>
                 <x-forms.input label="Date de Facture" model="invoice_date" type="date" />
             </div>
 

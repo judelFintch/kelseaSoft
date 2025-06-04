@@ -37,6 +37,7 @@ class CompanySeeder extends Seeder
                 'is_deleted' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
+                'acronym' => strtoupper(Str::random(3)), // Assuming acronym is a 3-letter code
             ]);
         }
     }

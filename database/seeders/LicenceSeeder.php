@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use App\Models\Licence;
+use App\Models\Licence as LicenceModel;
 
 
 class LicenceSeeder extends Seeder
@@ -17,8 +17,8 @@ class LicenceSeeder extends Seeder
     {
         //
         for ($i = 1; $i <= 10; $i++) {
-            if (!Licence::where('license_number', 'LIC-001')->exists()) {
-                Licence::create([
+            if (!LicenceModel::where('license_number', 'LIC-001')->exists()) {
+                LicenceModel::create([
                     'license_number' => 'LIC-001',
                     'license_type' => 'Import',
                     'license_category' => 'Générale',

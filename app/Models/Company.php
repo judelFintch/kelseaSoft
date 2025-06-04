@@ -24,6 +24,7 @@ class Company extends Model
         'email',
         'physical_address',
         'is_deleted',
+        'acronym',
     ];
 
     public function scopeNotDeleted(Builder $query)

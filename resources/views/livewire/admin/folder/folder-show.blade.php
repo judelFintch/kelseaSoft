@@ -2,16 +2,33 @@
     <!-- Header + Actions -->
     <div class="flex justify-between items-center mb-4">
         <div>
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-white">📁 Dossier : {{ $folder->folder_number }}</h2>
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-white">📁 Dossier : {{ $folder->folder_number }}
+            </h2>
             <p class="text-sm text-gray-500 dark:text-gray-400">📅 Arrivée : {{ $folder->arrival_border_date }}</p>
         </div>
         <div class="flex gap-3">
+            {{-- Conditional Invoicing Button --}}
+            @if ($folder->invoice)
+                <a href="{{ route('invoices.show', $folder->invoice->id) }}"
+                    class="inline-flex items-center px-3 py-1.5 text-sm bg-sky-100 text-sky-700 rounded hover:bg-sky-200 dark:bg-sky-700 dark:text-sky-100 dark:hover:bg-sky-600">
+                    📄 Voir la facture
+                </a>
+            @else
+                <a href="{{ route('invoices.generate', ['folder' => $folder]) }}"
+                    class="inline-flex items-center px-3 py-1.5 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200 dark:bg-green-700 dark:text-green-100 dark:hover:bg-green-600">
+                    ➕ Facturer
+                </a>
+            @endif
+
             <a href="{{ route('folder.edit', $folder) }}"
-               class="inline-flex items-center px-3 py-1.5 text-sm bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200">✏️ Modifier</a>
+                class="inline-flex items-center px-3 py-1.5 text-sm bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 dark:bg-indigo-700 dark:text-indigo-100 dark:hover:bg-indigo-600">✏️
+                Modifier</a>
             <button wire:click="confirmDelete"
-                    class="inline-flex items-center px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200">🗑 Supprimer</button>
+                class="inline-flex items-center px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 dark:bg-red-700 dark:text-red-100 dark:hover:bg-red-600">🗑
+                Supprimer</button>
             <button wire:click="printPdf"
-                    class="inline-flex items-center px-3 py-1.5 text-sm bg-gray-100 text-gray-800 rounded hover:bg-gray-200">🖨️ Imprimer</button>
+                class="inline-flex items-center px-3 py-1.5 text-sm bg-gray-100 text-gray-800 rounded hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">🖨️
+                Imprimer</button>
         </div>
     </div>
 
@@ -19,13 +36,16 @@
     <div class="border-b border-gray-200 dark:border-gray-700 mb-6">
         <nav class="-mb-px flex flex-wrap gap-6 text-sm font-semibold">
             <button @click="tab = 'details'"
-                :class="tab === 'details' ? 'border-b-2 border-indigo-500 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-indigo-500'"
+                :class="tab === 'details' ? 'border-b-2 border-indigo-500 text-indigo-600 dark:text-indigo-400' :
+                    'border-transparent text-gray-500 dark:text-gray-400 hover:text-indigo-500'"
                 class="flex items-center gap-1 px-1 pb-3 transition">📄 Détails</button>
             <button @click="tab = 'files'"
-                :class="tab === 'files' ? 'border-b-2 border-green-500 text-green-600 dark:text-green-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-green-500'"
+                :class="tab === 'files' ? 'border-b-2 border-green-500 text-green-600 dark:text-green-400' :
+                    'border-transparent text-gray-500 dark:text-gray-400 hover:text-green-500'"
                 class="flex items-center gap-1 px-1 pb-3 transition">📁 Fichiers</button>
             <button @click="tab = 'progress'"
-                :class="tab === 'progress' ? 'border-b-2 border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-blue-500'"
+                :class="tab === 'progress' ? 'border-b-2 border-blue-500 text-blue-600 dark:text-blue-400' :
+                    'border-transparent text-gray-500 dark:text-gray-400 hover:text-blue-500'"
                 class="flex items-center gap-1 px-1 pb-3 transition">⏳ Progression</button>
         </nav>
     </div>
@@ -82,7 +102,7 @@
                 ];
             @endphp
 
-            @foreach($fields as $field)
+            @foreach ($fields as $field)
                 <div class="bg-indigo-50 dark:bg-indigo-900/20 p-3 rounded-lg shadow-sm">
                     <p class="text-xs uppercase text-gray-500 dark:text-gray-400">{{ $field['label'] }}</p>
                     <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $field['value'] }}</p>
@@ -97,11 +117,13 @@
             </div>
 
             {{-- Section pour la Facture Associée --}}
-            @if($folder->invoice)
-                <div class="sm:col-span-1 lg:col-span-1 bg-green-50 dark:bg-green-900/20 p-4 rounded-lg shadow-sm border-l-4 border-green-500">
+            @if ($folder->invoice)
+                <div
+                    class="sm:col-span-1 lg:col-span-1 bg-green-50 dark:bg-green-900/20 p-4 rounded-lg shadow-sm border-l-4 border-green-500">
                     <h4 class="text-md font-semibold mb-2 text-gray-700 dark:text-gray-200">Facture Associée</h4>
                     <p>
-                        <a href="{{ route('invoices.show', $folder->invoice->id) }}" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+                        <a href="{{ route('invoices.show', $folder->invoice->id) }}"
+                            class="text-blue-600 dark:text-blue-400 hover:underline font-medium">
                             Voir Facture N° {{ $folder->invoice->invoice_number ?? 'N/A' }}
                         </a>
                     </p>
@@ -123,7 +145,7 @@
             <h4 class="text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">📊 Suivi de progression</h4>
             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 overflow-hidden">
                 <div class="bg-green-500 h-full transition-all duration-500"
-                     style="width: {{ $folder->progress_percentage ?? 60 }}%"></div>
+                    style="width: {{ $folder->progress_percentage ?? 60 }}%"></div>
             </div>
             <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">
                 {{ $folder->progress_percentage ?? 60 }}% terminé

@@ -8,29 +8,21 @@ use Livewire\Component;
 class CompanyCreate extends Component
 {
     public $name;
-
+    public $acronym; // <-- Ajout
     public $business_category;
-
     public $tax_id;
-
     public $code;
-
     public $national_identification;
-
     public $commercial_register;
-
     public $import_export_number;
-
     public $nbc_number;
-
     public $phone_number;
-
     public $email;
-
     public $physical_address;
 
     protected $rules = [
         'name' => 'required|string|max:255',
+        'acronym' => 'nullable|string|max:10', // <-- Validation ajoutée
         'business_category' => 'nullable|string|max:255',
         'tax_id' => 'nullable|string|max:50',
         'code' => 'nullable|string|max:50',
@@ -48,13 +40,11 @@ class CompanyCreate extends Component
         $validatedData = $this->validate();
 
         try {
-            $debug = CompanyService::createCompany($validatedData);
+            CompanyService::createCompany($validatedData);
             session()->flash('message', 'Company created successfully!');
-
             $this->reset();
         } catch (\Exception $e) {
             session()->flash('error', 'An error occurred while creating the company.');
-
         }
     }
 
