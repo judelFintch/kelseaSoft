@@ -158,6 +158,8 @@ class FolderCreate extends Component
             ['folder_number' => ['required', 'string', Rule::unique('folders', 'folder_number')->withoutTrashed()]]
         ));
 
+       
+
         Folder::create([
             'folder_number' => $this->folder_number,
             'invoice_number' => $this->invoice_number,

@@ -125,7 +125,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('invoices')->name('invoices.')->group(function () {
         Route::get('/invoices/{invoice}/show', ShowInvoice::class)->name('show');
-        Route::get('/generate', GenerateInvoice::class)->name('generate');
+        Route::get('/generate/{folder}', GenerateInvoice::class)->name('generate');
         Route::get('/download/{invoiceId}', [GenerateInvoice::class, 'downloadPdf'])->name('download');
         Route::get('/index', InvoiceIndex::class)->name('index');
         Route::get('/invoices/{invoice}/edit', UpdateInvoice::class)->name('invoices.edit');
@@ -156,6 +156,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('agency-fees')->name('agency-fees.')->group(function () {
         Route::get('/index', ManageAgencyFee::class)->name('index');
     });
+
 });
 
 require __DIR__ . '/auth.php';

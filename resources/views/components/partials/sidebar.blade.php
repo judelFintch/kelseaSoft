@@ -336,13 +336,7 @@
                                 :class="(selected === 'Declarations') ? 'block' : 'hidden'">
                                 <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                     class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
-                                    <li>
-                                        <a href="{{ route('invoices.generate') }}" class="menu-dropdown-item group"
-                                            :class="page === 'declarationListe' ? 'menu-dropdown-item-active' :
-                                                'menu-dropdown-item-inactive'">
-                                            Nouvelle Facture
-                                        </a>
-                                    </li>
+                                  
                                     <li>
                                         <a href="{{ route('invoices.index') }}" class="menu-dropdown-item group"
                                             :class="page === 'declarationCreate' ? 'menu-dropdown-item-active' :

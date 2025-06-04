@@ -13,7 +13,7 @@ class FolderShow extends Component
     {
         $this->folder = FolderService::getFolder($id);
         if ($this->folder) {
-            $this->folder->load('invoice');
+            $this->folder->load('invoice', 'company');
         }
     }
 
