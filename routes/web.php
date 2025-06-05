@@ -169,6 +169,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/index', ManageAgencyFee::class)->name('index');
     });
 
+    Route::prefix('agents')->name('agents.')->group(function () {
+        Route::get('/list', \App\Livewire\Admin\Agent\AgentIndex::class)->name('list');
+        Route::get('/create', \App\Livewire\Admin\Agent\AgentCreate::class)->name('create');
+    });
+
+    Route::prefix('payrolls')->name('payrolls.')->group(function () {
+        Route::get('/list', \App\Livewire\Admin\Payroll\PayrollIndex::class)->name('list');
+        Route::get('/create', \App\Livewire\Admin\Payroll\PayrollCreate::class)->name('create');
+    });
+
     // Admin Routes for User, Role, Permission Management
     Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
         // User Management
