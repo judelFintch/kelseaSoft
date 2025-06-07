@@ -29,7 +29,7 @@
                 <label for="document_type" class="block text-sm text-gray-700 dark:text-gray-200 font-medium">
                     🗂️ Type de document
                 </label>
-                <x-forms.select id="document_type" wire:model.live="documentType" :options="$documentTypes" option-label="name"
+                <x-forms.select id="document_type" wire:model="documentType" :options="$documentTypes" option-label="name"
                     option-value="id" placeholder="Sélectionnez un type de document" />
                 @error('documentType')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
