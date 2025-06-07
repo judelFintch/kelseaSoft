@@ -8,6 +8,12 @@
             <p>{{ session('success') }}</p>
         </div>
     @endif
+    @if (session()->has('error'))
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md shadow-sm dark:bg-red-700 dark:text-red-100" role="alert">
+            <p class="font-bold">Erreur</p>
+            <p>{{ session('error') }}</p>
+        </div>
+    @endif
     {{-- Progress Bar --}}
     <div class="mb-8">
         <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
@@ -24,12 +30,24 @@
             <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 border-b pb-2 mb-6 border-gray-300 dark:border-gray-600">Étape 1: Informations de Base</h3>
             <div class="space-y-4">
              <x-forms.select label="Client (Société)" model="company_id" :options="$companies" optionLabel="name" optionValue="id" required placeholder="Sélectionner un client" />
+             <x-forms.select label="Type de Dossier" model="dossier_type" :options="\App\Enums\DossierType::options()" optionLabel="label" optionValue="value" required />
                 <x-forms.input label="Numéro de Dossier" model="folder_number" required />
                  <x-forms.input label="Numéro de la facture" model="invoice_number" required />
                 <x-forms.input label="Date du Dossier" model="folder_date" type="date" required />
                 <x-forms.select label="Fournisseur" model="supplier_id" :options="$suppliers" optionLabel="name" optionValue="id" placeholder="Sélectionner un fournisseur" />
                 <x-forms.input label="Nature Marchandise" model="goods_type" required />
                 <x-forms.textarea label="Description Générale" model="description" rows="3" />
+            </div>
+        </div>
+        @endif
+
+        {{-- Step 4: Licence Selection --}}
+        @if ($dossier_type === 'avec' && $currentStep === 4)
+        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm animate-fadeIn">
+            <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 border-b pb-2 mb-6 border-gray-300 dark:border-gray-600">Étape 4: Licence</h3>
+            <div class="space-y-4">
+                <x-forms.select label="Licence" model="license_id" :options="$licenses" optionLabel="license_number" optionValue="id" placeholder="Sélectionner une licence" />
+                <x-forms.input label="Code Licence" model="license_code" />
             </div>
         </div>
         @endif

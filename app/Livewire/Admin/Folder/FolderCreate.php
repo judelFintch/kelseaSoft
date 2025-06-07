@@ -10,6 +10,9 @@ use App\Models\Transporter;
 use App\Models\Location;
 use App\Models\CustomsOffice;
 use App\Models\DeclarationType;
+use App\Models\Licence;
+use App\Enums\DossierType;
+use App\Services\Folder\FolderService;
 use Illuminate\Validation\Rule;
 
 class FolderCreate extends Component
@@ -21,6 +24,7 @@ class FolderCreate extends Component
     public $folder_number;
     public $folder_date;
     public $company_id;
+    public $dossier_type = DossierType::SANS->value;
     public $invoice_number;
     public $supplier_id;
     public $goods_type;
@@ -47,6 +51,13 @@ class FolderCreate extends Component
     public $internal_reference;
     public $order_number;
 
+    // Étape 4 - Licence
+    public $license_id;
+    public $license_code;
+
+    // Liste des licences disponibles pour la société
+    public $licenses = [];
+
     // Pour les select
     public $companies = [];
     public $suppliers = [];
@@ -72,6 +83,8 @@ class FolderCreate extends Component
             ['id' => 'Multimodal', 'name' => 'Multimodal'],
         ];
 
+        $this->licenses = [];
+
         $this->generateFolderNumber('GEN'); // par défaut
     }
 
@@ -80,6 +93,41 @@ class FolderCreate extends Component
         $company = Company::find($value);
         if ($company) {
             $this->generateFolderNumber($company->acronym ?? 'GEN');
+            if ($this->dossier_type === DossierType::AVEC->value) {
+                $this->loadCompanyLicenses();
+            }
+        }
+    }
+
+    public function updatedDossierType($value)
+    {
+        if ($value === DossierType::AVEC->value) {
+            $this->totalSteps = 4;
+            $this->loadCompanyLicenses();
+        } else {
+            $this->totalSteps = 3;
+            $this->license_id = null;
+            $this->license_code = null;
+        }
+    }
+
+    public function updatedLicenseId($value)
+    {
+        if ($value) {
+            $license = Licence::find($value);
+            if ($license) {
+                $this->license_code = $license->license_number;
+            }
+        }
+    }
+
+    protected function loadCompanyLicenses()
+    {
+        $this->licenses = [];
+        if ($this->company_id) {
+            $this->licenses = Licence::where('company_id', $this->company_id)
+                ->get(['id', 'license_number'])
+                ->toArray();
         }
     }
 
@@ -121,6 +169,7 @@ class FolderCreate extends Component
         return match ($step) {
             1 => [
                 'company_id' => 'required|exists:companies,id',
+                'dossier_type' => 'required|in:sans,avec',
                 'folder_number' => ['required', 'string', Rule::unique('folders', 'folder_number')->withoutTrashed()],
                 'invoice_number' => 'required|string|max:255',
                 'folder_date' => 'required|date',
@@ -145,52 +194,72 @@ class FolderCreate extends Component
                 'internal_reference' => 'nullable|string|max:255',
                 'order_number' => 'nullable|string|max:255',
             ],
+            4 => [
+                'license_id' => 'required|exists:licences,id',
+                'license_code' => 'required|string|max:255',
+            ],
             default => [],
         };
     }
 
     public function save()
     {
-        $this->validate(array_merge(
+        $rules = array_merge(
             $this->getStepRules(1),
             $this->getStepRules(2),
-            $this->getStepRules(3),
-            ['folder_number' => ['required', 'string', Rule::unique('folders', 'folder_number')->withoutTrashed()]]
-        ));
+            $this->getStepRules(3)
+        );
+
+        if ($this->dossier_type === DossierType::AVEC->value) {
+            $rules = array_merge($rules, $this->getStepRules(4));
+        }
+
+        $rules['folder_number'] = ['required', 'string', Rule::unique('folders', 'folder_number')->withoutTrashed()];
+
+        $this->validate($rules);
 
        
 
-        Folder::create([
-            'folder_number' => $this->folder_number,
-            'invoice_number' => $this->invoice_number,
-            'quantity' => $this->quantity,
-            'fob_amount' => $this->fob_amount,
-            'insurance_amount' => $this->insurance_amount,
-            'cif_amount' => $this->cif_amount,
-            'folder_date' => $this->folder_date,
-            'company_id' => $this->company_id,
-            'supplier_id' => $this->supplier_id,
-            'goods_type' => $this->goods_type,
-            'description' => $this->description,
-            'invoice_number' => $this->invoice_number,
-            'transporter_id' => $this->transporter_id,
-            'truck_number' => $this->truck_number,
-            'trailer_number' => $this->trailer_number,
-            'transport_mode' => $this->transport_mode,
-            'origin_id' => $this->origin_id,
-            'destination_id' => $this->destination_id,
-            'arrival_border_date' => $this->arrival_border_date,
-            'weight' => $this->weight,
-            'customs_office_id' => $this->customs_office_id,
-            'declaration_number' => $this->declaration_number,
-            'declaration_type_id' => $this->declaration_type_id,
-            'internal_reference' => $this->internal_reference,
-            'order_number' => $this->order_number,
-        ]);
+        try {
+            FolderService::storeFolder([
+                'folder_number' => $this->folder_number,
+                'invoice_number' => $this->invoice_number,
+                'quantity' => $this->quantity,
+                'fob_amount' => $this->fob_amount,
+                'insurance_amount' => $this->insurance_amount,
+                'cif_amount' => $this->cif_amount,
+                'folder_date' => $this->folder_date,
+                'company_id' => $this->company_id,
+                'supplier_id' => $this->supplier_id,
+                'goods_type' => $this->goods_type,
+                'description' => $this->description,
+                'transporter_id' => $this->transporter_id,
+                'truck_number' => $this->truck_number,
+                'trailer_number' => $this->trailer_number,
+                'transport_mode' => $this->transport_mode,
+                'origin_id' => $this->origin_id,
+                'destination_id' => $this->destination_id,
+                'arrival_border_date' => $this->arrival_border_date,
+                'weight' => $this->weight,
+                'customs_office_id' => $this->customs_office_id,
+                'declaration_number' => $this->declaration_number,
+                'declaration_type_id' => $this->declaration_type_id,
+                'internal_reference' => $this->internal_reference,
+                'order_number' => $this->order_number,
+                'dossier_type' => $this->dossier_type,
+                'license_id' => $this->dossier_type === DossierType::AVEC->value ? $this->license_id : null,
+                'license_code' => $this->dossier_type === DossierType::AVEC->value ? $this->license_code : null,
+            ]);
 
-        session()->flash('success', 'Dossier créé avec succès.');
+            session()->flash('success', 'Dossier créé avec succès.');
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+            return;
+        }
 
         $this->resetExcept('companies', 'suppliers', 'transporters', 'locations', 'customsOffices', 'declarationTypes', 'transportModes', 'totalSteps');
+        $this->licenses = [];
+        $this->dossier_type = DossierType::SANS->value;
         $this->currentStep = 1;
         $this->folder_date = now()->toDateString();
     }
