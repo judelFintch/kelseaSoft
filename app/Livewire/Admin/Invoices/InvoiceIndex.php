@@ -92,6 +92,19 @@ class InvoiceIndex extends Component
         }
     }
 
+    public function deleteInvoice($invoiceId): void
+    {
+        $invoice = Invoice::findOrFail($invoiceId);
+
+        try {
+            $invoice->delete();
+            session()->flash('success', "Facture {$invoice->invoice_number} supprimée avec succès.");
+        } catch (\Exception $e) {
+            session()->flash('error', "Erreur lors de la suppression : " . $e->getMessage());
+        }
+    }
+
+
 
     public function exportPdf($invoiceId)
     {
@@ -110,7 +123,7 @@ class InvoiceIndex extends Component
         );
     }
 
-    
+
     public function render()
     {
         $invoices = Invoice::with('company')

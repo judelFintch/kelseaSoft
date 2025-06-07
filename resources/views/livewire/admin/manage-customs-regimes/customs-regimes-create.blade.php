@@ -13,7 +13,7 @@
                 <div>
                     <x-forms.input 
                         label="Customs Regime Name" 
-                        wire:model.live="name" 
+                        wire:model="name" 
                         placeholder="e.g., Transit, Import, Export" 
                     />
                     @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror

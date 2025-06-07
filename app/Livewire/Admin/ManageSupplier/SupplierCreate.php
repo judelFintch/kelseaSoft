@@ -10,20 +10,10 @@ class SupplierCreate extends Component
 {
     use WithPagination;
 
-    public $name;
-
-    public $phone;
-
-    public $email;
-
-    public $country;
-
+    public $name, $phone, $email, $country;
     public $editingId = null;
-
     public $search = '';
-
     public $confirmingReset = false;
-
     public $confirmingDelete = null;
 
     protected $rules = [
@@ -47,18 +37,15 @@ class SupplierCreate extends Component
             ]
         );
 
-        session()->flash('success', 'Supplier '.($this->editingId ? 'updated' : 'added').' successfully.');
+        session()->flash('success', 'Supplier ' . ($this->editingId ? 'updated' : 'added') . ' successfully.');
 
-        $this->reset(['name', 'phone', 'email', 'country', 'editingId']);
+        $this->resetForm();
     }
 
     public function edit($id)
     {
         $supplier = Supplier::findOrFail($id);
-        $this->name = $supplier->name;
-        $this->phone = $supplier->phone;
-        $this->email = $supplier->email;
-        $this->country = $supplier->country;
+        $this->fill($supplier->only('name', 'phone', 'email', 'country'));
         $this->editingId = $supplier->id;
     }
 
@@ -86,17 +73,16 @@ class SupplierCreate extends Component
 
     public function render()
     {
-        $suppliers = Supplier::where(function ($query) {
-            $query->where('name', 'like', '%'.$this->search.'%')
-                ->orWhere('phone', 'like', '%'.$this->search.'%')
-                ->orWhere('email', 'like', '%'.$this->search.'%')
-                ->orWhere('country', 'like', '%'.$this->search.'%');
-        })
+        $suppliers = Supplier::query()
+            ->when($this->search, fn($q) =>
+                $q->where('name', 'like', "%{$this->search}%")
+                  ->orWhere('phone', 'like', "%{$this->search}%")
+                  ->orWhere('email', 'like', "%{$this->search}%")
+                  ->orWhere('country', 'like', "%{$this->search}%")
+            )
             ->orderBy('name')
             ->paginate(10);
 
-        return view('livewire.admin.manage-supplier.supplier-create', [
-            'suppliers' => $suppliers,
-        ]);
+        return view('livewire.admin.manage-supplier.supplier-create', compact('suppliers'));
     }
 }

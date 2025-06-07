@@ -24,7 +24,8 @@
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Générer Facture Globale ({{ count($selectedInvoices) }} sélectionnée(s))
             </button>
-            <span wire:loading wire:target="createGlobalInvoice" class="ml-2 text-sm text-gray-600">Création en cours...</span>
+            <span wire:loading wire:target="createGlobalInvoice" class="ml-2 text-sm text-gray-600">Création en
+                cours...</span>
             @if ($companyIdForGlobalInvoice)
                 <span class="ml-2 text-sm text-gray-500">
                     Pour la compagnie ID: {{ $companyIdForGlobalInvoice }}
@@ -52,8 +53,9 @@
         <tbody>
             @forelse ($invoices as $invoice)
                 <tr>
-                    
-                <tr class="{{ $invoice->global_invoice_id ? 'bg-green-50' : '' }} {{ in_array($invoice->id, $selectedInvoices) ? 'bg-yellow-50' : '' }}">
+
+                <tr
+                    class="{{ $invoice->global_invoice_id ? 'bg-green-50' : '' }} {{ in_array($invoice->id, $selectedInvoices) ? 'bg-yellow-50' : '' }}">
                     <td class="border px-2 py-1 text-center">
                         <input type="checkbox" wire:model.live="selectedInvoices" value="{{ $invoice->id }}"
                             {{ $invoice->global_invoice_id !== null ? 'disabled' : '' }}
@@ -63,7 +65,10 @@
                     <td class="border px-2 py-1 font-semibold">{{ $invoice->invoice_number }}</td>
                     <td class="border px-2 py-1">{{ $invoice->invoice_date->format('d/m/Y') }}</td>
                     <td class="border px-2 py-1">{{ $invoice->company->name }}
-                        @if ($companyIdForGlobalInvoice && $invoice->company_id !== $companyIdForGlobalInvoice && in_array($invoice->id, $selectedInvoices))
+                        @if (
+                            $companyIdForGlobalInvoice &&
+                                $invoice->company_id !== $companyIdForGlobalInvoice &&
+                                in_array($invoice->id, $selectedInvoices))
                             <span class="text-red-500 text-xs">(Ne correspond pas à la Cie. sélectionnée)</span>
                         @endif
                     </td>
@@ -84,6 +89,16 @@
                             class="text-blue-600 hover:underline text-sm cursor-pointer">
                             👁 Voir
                         </a>
+                        <a href=""
+                            class="text-yellow-600 hover:underline text-sm cursor-pointer">
+                            ✏️ Modifier
+                        </a>
+
+                        <button wire:click="deleteInvoice({{ $invoice->id }})"
+                            onclick="return confirm('Confirmer la suppression de cette facture ?')"
+                            class="text-red-600 hover:underline text-sm cursor-pointer">
+                            🗑 Supprimer
+                        </button>
 
                         <button wire:click="exportPdf({{ $invoice->id }})"
                             class="text-green-600 hover:underline text-sm cursor-pointer">

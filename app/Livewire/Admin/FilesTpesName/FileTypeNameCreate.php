@@ -9,7 +9,6 @@ use Livewire\WithPagination;
 class FileTypeNameCreate extends Component
 {
     use WithPagination;
-
     public $name;
 
     public $editingId = null;

@@ -169,6 +169,7 @@ class GenerateInvoice extends Component
 
     public function save(): void
     {
+
         $this->validate([
             'company_id' => 'required|integer|exists:companies,id',
             'invoice_date' => 'required|date',
@@ -191,6 +192,8 @@ class GenerateInvoice extends Component
             'items.*.extra_fee_id' => 'nullable|integer|exists:extra_fees,id',
             'folder_id' => ['nullable', 'integer', 'exists:folders,id', \Illuminate\Validation\Rule::unique('invoices', 'folder_id')->whereNull('deleted_at')->ignore($this->invoice_id ?? null)],
         ]);
+
+        dd($this->items); // Pour déboguer avant de sauvegarder
 
         // Prépare et valide les labels des items
         foreach ($this->items as $index => &$itemRef) { // Utiliser une référence différente

@@ -141,6 +141,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/download/{invoiceId}', [GenerateInvoice::class, 'downloadPdf'])->name('download');
         Route::get('/index', InvoiceIndex::class)->name('index');
         Route::get('/invoices/{invoice}/edit', UpdateInvoice::class)->name('invoices.edit');
+        
     });
 
     Route::prefix('currency')->name('currency.')->group(function () {

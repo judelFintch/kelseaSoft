@@ -10,6 +10,7 @@ use App\Models\Transporter;
 use App\Models\Location;
 use App\Models\CustomsOffice;
 use App\Models\DeclarationType;
+use App\Models\MerchandiseType;
 use Illuminate\Validation\Rule;
 
 class FolderCreate extends Component
@@ -47,7 +48,7 @@ class FolderCreate extends Component
     public $internal_reference;
     public $order_number;
 
-    // Pour les select
+    // Collections dynamiques
     public $companies = [];
     public $suppliers = [];
     public $transporters = [];
@@ -55,16 +56,20 @@ class FolderCreate extends Component
     public $customsOffices = [];
     public $declarationTypes = [];
     public $transportModes = [];
+    public $merchandiseTypes = [];
 
     public function mount()
     {
         $this->folder_date = now()->toDateString();
+
         $this->companies = Company::orderBy('name')->get(['id', 'name', 'acronym']);
         $this->suppliers = Supplier::orderBy('name')->get(['id', 'name']);
         $this->transporters = Transporter::orderBy('name')->get(['id', 'name']);
         $this->locations = Location::orderBy('name')->get(['id', 'name']);
         $this->customsOffices = CustomsOffice::orderBy('name')->get(['id', 'name']);
         $this->declarationTypes = DeclarationType::orderBy('name')->get(['id', 'name']);
+        $this->merchandiseTypes = MerchandiseType::orderBy('name')->get(['id', 'name']);
+
         $this->transportModes = [
             ['id' => 'Route', 'name' => 'Route'],
             ['id' => 'Air', 'name' => 'Air'],
@@ -77,8 +82,7 @@ class FolderCreate extends Component
 
     public function updatedCompanyId($value)
     {
-        $company = Company::find($value);
-        if ($company) {
+        if ($company = Company::find($value)) {
             $this->generateFolderNumber($company->acronym ?? 'GEN');
         }
     }
@@ -87,6 +91,7 @@ class FolderCreate extends Component
     {
         $year = now()->format('y');
         $systemAcronym = 'MDB';
+
         do {
             $random = random_int(1000, 9999);
             $number = "{$year}/{$systemAcronym}/{$acronym}/{$random}";
@@ -112,8 +117,7 @@ class FolderCreate extends Component
 
     public function validateStep(int $step)
     {
-        $rules = $this->getStepRules($step);
-        $this->validate($rules);
+        $this->validate($this->getStepRules($step));
     }
 
     protected function getStepRules(int $step): array
@@ -137,6 +141,10 @@ class FolderCreate extends Component
                 'destination_id' => 'nullable|exists:locations,id',
                 'arrival_border_date' => 'nullable|date|after_or_equal:folder_date',
                 'weight' => 'nullable|numeric|min:0',
+                'quantity' => 'nullable|numeric|min:0',
+                'fob_amount' => 'nullable|numeric|min:0',
+                'insurance_amount' => 'nullable|numeric|min:0',
+                'cif_amount' => 'nullable|numeric|min:0',
             ],
             3 => [
                 'customs_office_id' => 'nullable|exists:customs_offices,id',
@@ -158,8 +166,6 @@ class FolderCreate extends Component
             ['folder_number' => ['required', 'string', Rule::unique('folders', 'folder_number')->withoutTrashed()]]
         ));
 
-       
-
         Folder::create([
             'folder_number' => $this->folder_number,
             'invoice_number' => $this->invoice_number,
@@ -172,7 +178,6 @@ class FolderCreate extends Component
             'supplier_id' => $this->supplier_id,
             'goods_type' => $this->goods_type,
             'description' => $this->description,
-            'invoice_number' => $this->invoice_number,
             'transporter_id' => $this->transporter_id,
             'truck_number' => $this->truck_number,
             'trailer_number' => $this->trailer_number,
@@ -190,7 +195,11 @@ class FolderCreate extends Component
 
         session()->flash('success', 'Dossier créé avec succès.');
 
-        $this->resetExcept('companies', 'suppliers', 'transporters', 'locations', 'customsOffices', 'declarationTypes', 'transportModes', 'totalSteps');
+        $this->resetExcept([
+            'companies', 'suppliers', 'transporters', 'locations',
+            'customsOffices', 'declarationTypes', 'merchandiseTypes', 'transportModes', 'totalSteps'
+        ]);
+
         $this->currentStep = 1;
         $this->folder_date = now()->toDateString();
     }
