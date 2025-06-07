@@ -5,9 +5,42 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\Licence
+ *
+ * @property int $id
+ * @property string $license_number
+ * @property string $license_type
+ * @property string|null $license_category
+ * @property string $currency
+ * @property int $max_folders
+ * @property int $remaining_folders
+ * @property float $initial_weight
+ * @property float $remaining_weight
+ * @property float $initial_fob_amount
+ * @property float $remaining_fob_amount
+ * @property float $quantity_total
+ * @property float $remaining_quantity
+ * @property float|null $freight_amount
+ * @property float|null $insurance_amount
+ * @property float|null $other_fees
+ * @property float|null $cif_amount
+ * @property string|null $payment_mode
+ * @property string|null $payment_beneficiary
+ * @property string|null $transport_mode
+ * @property string|null $transport_reference
+ * @property \Illuminate\Support\Carbon|null $invoice_date
+ * @property \Illuminate\Support\Carbon|null $validation_date
+ * @property \Illuminate\Support\Carbon|null $expiry_date
+ * @property string|null $customs_regime
+ * @property int|null $customs_office_id
+ * @property int|null $supplier_id
+ * @property int|null $company_id
+ * @property string|null $notes
+ */
+
 class Licence extends Model
 {
-    //
     use SoftDeletes;
 
     protected $fillable = [
@@ -58,21 +91,26 @@ class Licence extends Model
     ];
 
     // 🔗 Relations
-    public function supplier()
-    {
-        return $this->belongsTo(Supplier::class);
-    }
 
+    // Entreprise propriétaire de la licence
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
 
+    // Fournisseur lié à la licence
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
+
+    // Bureau de douane
     public function customsOffice()
     {
         return $this->belongsTo(CustomsOffice::class);
     }
 
+    // Dossiers rattachés à cette licence
     public function folders()
     {
         return $this->hasMany(Folder::class);

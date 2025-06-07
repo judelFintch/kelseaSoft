@@ -3,10 +3,12 @@
 namespace App\Livewire\Admin\Licence;
 
 use App\Models\Licence;
+use App\Models\Company;
 use Livewire\Component;
 
 class LicenceCreate extends Component
 {
+    // Champs de formulaire
     public $license_number;
     public $license_type;
     public $license_category;
@@ -20,12 +22,15 @@ class LicenceCreate extends Component
     public $freight_amount;
     public $insurance_amount;
     public $other_fees;
-    public $cif_amount; 
+    public $cif_amount;
 
     public $payment_mode;
 
+    // Relation principale
+    public $company_id;
+
     protected $rules = [
-        'license_number' => 'required',
+        'license_number' => 'required|unique:licences,license_number',
         'license_type' => 'required|string',
         'license_category' => 'nullable|string',
         'currency' => 'required|string',
@@ -41,12 +46,11 @@ class LicenceCreate extends Component
         'cif_amount' => 'nullable|numeric',
 
         'payment_mode' => 'nullable|string',
+        'company_id' => 'required|exists:companies,id',
     ];
 
     public function save()
     {
-
-
         $this->validate();
 
         Licence::create([
@@ -70,14 +74,20 @@ class LicenceCreate extends Component
             'cif_amount' => $this->cif_amount,
 
             'payment_mode' => $this->payment_mode,
+            'company_id' => $this->company_id,
         ]);
 
         session()->flash('success', 'Licence enregistrée avec succès.');
-        $this->reset(); // Réinitialise les champs après création
+        $this->reset();
     }
 
     public function render()
     {
-        return view('livewire.admin.licence.licence-create');
+        return view('livewire.admin.licence.licence-create', [
+            'companies' => Company::where('status', 'active')
+                                  ->where('is_deleted', false)
+                                  ->orderBy('name')
+                                  ->get(),
+        ]);
     }
 }

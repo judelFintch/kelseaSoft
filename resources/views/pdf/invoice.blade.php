@@ -43,15 +43,14 @@
             <td>
                 <strong>Client :</strong><br>
                 {{ $invoice->company->name }}<br>
-                Usine de Luilu, Commune de Dilala<br>
-                Ville de Kolwezi, Province du Lualaba<br>
-                République Démocratique du Congo<br>
+                {{ $invoice->company->address ?? 'Avenue Kasa-Vubu, Immeuble M. de la Paix' }}<br>
+    
                 RCCM : {{ $invoice->company->rccm ?? 'CD/KZ/KCM/14-B-020' }}<br>
                 TAX N° : {{ $invoice->company->tax_number ?? 'A07040104' }}<br>
                 VAT N° : {{ $invoice->company->vat_number ?? '0479/DGI/DGE/DIG/MB/TVA/2011' }}<br>
                 ID NAT : {{ $invoice->company->id_nat ?? '14-B0500-N455970' }}
             </td>
-            <td class="right">
+            <td class="right " style="border: 1px solid black; padding-left: 10px;">
                 Lubumbashi le {{ Carbon::parse($invoice->invoice_date)->format('d/m/Y') }}<br><br>
                 <strong>NOTRE COMPTE</strong> 1081911
             </td>
