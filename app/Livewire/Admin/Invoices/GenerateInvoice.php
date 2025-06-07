@@ -184,7 +184,7 @@ class GenerateInvoice extends Component
             'currency_id' => 'required|integer|exists:currencies,id', // Devise principale de la facture
             'exchange_rate' => 'required|numeric|min:0', // Taux de la devise principale (ex: USD vers CDF)
             'items' => 'present|array|min:1', // Doit avoir au moins un item
-            'items.*.label' => 'required_if:items.*.category,extra_fee|string|max:255',
+            
             'items.*.amount_local' => 'required|numeric|min:0',
             'items.*.currency_id' => 'required|integer|exists:currencies,id', // Devise de l'item
             'items.*.tax_id' => 'nullable|integer|exists:taxes,id',
@@ -193,8 +193,7 @@ class GenerateInvoice extends Component
             'folder_id' => ['nullable', 'integer', 'exists:folders,id', \Illuminate\Validation\Rule::unique('invoices', 'folder_id')->whereNull('deleted_at')->ignore($this->invoice_id ?? null)],
         ]);
 
-        dd($this->items); // Pour déboguer avant de sauvegarder
-
+       
         // Prépare et valide les labels des items
         foreach ($this->items as $index => &$itemRef) { // Utiliser une référence différente
             if (empty($itemRef['currency_id'])) {
