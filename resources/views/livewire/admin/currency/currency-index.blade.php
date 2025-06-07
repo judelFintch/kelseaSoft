@@ -1,4 +1,4 @@
-<div class="w-full max-w-3xl mx-auto bg-white p-6 rounded-xl shadow space-y-6"
+<div class="w-full  mx-auto bg-white p-6 rounded-xl shadow space-y-6"
      x-data="{ showForm: @js($currencyIdBeingUpdated !== null) }">
 
     <h2 class="text-xl font-bold flex justify-between items-center">

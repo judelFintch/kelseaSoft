@@ -9,47 +9,49 @@ use App\Models\Licence;
 use App\Models\Company; // Ajout du modèle Company
 use Carbon\Carbon;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class Dashboard extends Component
 {
 
-    public $expiringSoonLicences =1;
+    public $expiringSoonLicences = 1;
     public $activeLicences = 1;
-   public function render()
-{
-    // Statistiques
-    $totalFolders = Folder::count();
-    $foldersThisMonth = Folder::where('created_at', '>=', Carbon::now()->startOfMonth())->count();
+    public function render()
+    {
 
-    $totalInvoices = Invoice::count();
-    $invoicesThisMonth = Invoice::where('created_at', '>=', Carbon::now()->startOfMonth())->count();
+        // Statistiques
+        $totalFolders = Folder::count();
+        $foldersThisMonth = Folder::where('created_at', '>=', Carbon::now()->startOfMonth())->count();
 
-    $totalGlobalInvoices = GlobalInvoice::count();
-    $totalCompanies = Company::count();
+        $totalInvoices = Invoice::count();
+        $invoicesThisMonth = Invoice::where('created_at', '>=', Carbon::now()->startOfMonth())->count();
 
-    // Licences
-   // $this->activeLicences = Licence::where('expiry_date', '>=', Carbon::now())->count();
-   // $this->expiringSoonLicences = Licence::whereBetween('expiry_date', [Carbon::now(), Carbon::now()->addDays(30)])->count();
+        $totalGlobalInvoices = GlobalInvoice::count();
+        $totalCompanies = Company::count();
 
-    // Derniers enregistrements
-    $latestFolders = Folder::with('company')->latest()->take(5)->get();
-    $latestInvoices = Invoice::with('company')->latest()->take(5)->get();
-    $latestGlobalInvoices = GlobalInvoice::with('company')->latest()->take(5)->get();
-    $latestCompanies = Company::latest()->take(5)->get();
+        // Licences
+        // $this->activeLicences = Licence::where('expiry_date', '>=', Carbon::now())->count();
+        // $this->expiringSoonLicences = Licence::whereBetween('expiry_date', [Carbon::now(), Carbon::now()->addDays(30)])->count();
 
-    return view('livewire.admin.dashboard.dashboard', [
-        'totalFolders' => $totalFolders,
-        'foldersThisMonth' => $foldersThisMonth,
-        'totalInvoices' => $totalInvoices,
-        'invoicesThisMonth' => $invoicesThisMonth,
-        'totalGlobalInvoices' => $totalGlobalInvoices,
-        'totalCompanies' => $totalCompanies,
-        'activeLicences' => $this->activeLicences,
-        'expiringSoonLicences' => $this->expiringSoonLicences,
-        'latestFolders' => $latestFolders,
-        'latestInvoices' => $latestInvoices,
-        'latestGlobalInvoices' => $latestGlobalInvoices,
-        'latestCompanies' => $latestCompanies,
-    ]);
-}
+        // Derniers enregistrements
+        $latestFolders = Folder::with('company')->latest()->take(5)->get();
+        $latestInvoices = Invoice::with('company')->latest()->take(5)->get();
+        $latestGlobalInvoices = GlobalInvoice::with('company')->latest()->take(5)->get();
+        $latestCompanies = Company::latest()->take(5)->get();
+
+        return view('livewire.admin.dashboard.dashboard', [
+            'totalFolders' => $totalFolders,
+            'foldersThisMonth' => $foldersThisMonth,
+            'totalInvoices' => $totalInvoices,
+            'invoicesThisMonth' => $invoicesThisMonth,
+            'totalGlobalInvoices' => $totalGlobalInvoices,
+            'totalCompanies' => $totalCompanies,
+            'activeLicences' => $this->activeLicences,
+            'expiringSoonLicences' => $this->expiringSoonLicences,
+            'latestFolders' => $latestFolders,
+            'latestInvoices' => $latestInvoices,
+            'latestGlobalInvoices' => $latestGlobalInvoices,
+            'latestCompanies' => $latestCompanies,
+        ]);
+    }
 }

@@ -23,7 +23,6 @@ class UserSeeder extends Seeder
             ['name' => 'editor', 'display_name' => 'Editor', 'description' => 'User who can create and edit content'],
             ['name' => 'viewer', 'display_name' => 'Viewer', 'description' => 'User who can only view content'],
         ];
-
         foreach ($roleDefinitions as $roleDef) {
             Role::firstOrCreate(['name' => $roleDef['name']], $roleDef);
         }
@@ -31,23 +30,50 @@ class UserSeeder extends Seeder
         // Define and Create Permissions
         $permissionNames = [
             // RBAC Management
-            'manage users', 'manage roles', 'manage permissions',
+            'manage users',
+            'manage roles',
+            'manage permissions',
             // Company Management
-            'view company', 'create company', 'edit company', 'delete company',
+            'view company',
+            'create company',
+            'edit company',
+            'delete company',
             // Folder Management
-            'view folder', 'create folder', 'edit folder', 'delete folder',
+            'view folder',
+            'create folder',
+            'edit folder',
+            'delete folder',
             // Licence Management
-            'view licence', 'create licence', 'edit licence', 'delete licence',
+            'view licence',
+            'create licence',
+            'edit licence',
+            'delete licence',
             // Invoice Management
-            'generate invoice', 'view invoice', 'edit invoice', 'download invoice',
-            'view global_invoice', 'download global_invoice',
+            'generate invoice',
+            'view invoice',
+            'edit invoice',
+            'download invoice',
+            'view global_invoice',
+            'download global_invoice',
             // Settings & Financials
-            'manage taxes', 'manage extra_fees', 'manage agency_fees', 'manage currencies',
+            'manage taxes',
+            'manage extra_fees',
+            'manage agency_fees',
+            'manage currencies',
             // Other common permissions
-            'view dashboard', 'manage settings', 'view reports', 'upload files',
-            'manage bivac', 'manage file_types', 'manage transporters', 'manage suppliers',
-            'manage locations', 'manage customs_offices', 'manage declaration_types',
-            'manage merchandise_types', 'manage customs_regimes',
+            'view dashboard',
+            'manage settings',
+            'view reports',
+            'upload files',
+            'manage bivac',
+            'manage file_types',
+            'manage transporters',
+            'manage suppliers',
+            'manage locations',
+            'manage customs_offices',
+            'manage declaration_types',
+            'manage merchandise_types',
+            'manage customs_regimes',
         ];
 
         foreach ($permissionNames as $permissionName) {
@@ -78,17 +104,44 @@ class UserSeeder extends Seeder
         // Admin Role Permissions
         if ($adminRole) {
             $adminPermissionNames = [
-                'manage users', 'manage roles', 'manage permissions', // Full RBAC control
-                'view company', 'create company', 'edit company', 'delete company', // Full Company control
-                'view folder', 'create folder', 'edit folder', 'delete folder', // Full Folder control
-                'view licence', 'create licence', 'edit licence', 'delete licence', // Full Licence control
-                'generate invoice', 'view invoice', 'edit invoice', 'download invoice', // Full Invoice control
-                'view global_invoice', 'download global_invoice',
-                'manage taxes', 'manage extra_fees', 'manage agency_fees', 'manage currencies', // Full Financials
-                'view dashboard', 'manage settings', 'view reports', 'upload files',
-                'manage bivac', 'manage file_types', 'manage transporters', 'manage suppliers',
-                'manage locations', 'manage customs_offices', 'manage declaration_types',
-                'manage merchandise_types', 'manage customs_regimes',
+                'manage users',
+                'manage roles',
+                'manage permissions', // Full RBAC control
+                'view company',
+                'create company',
+                'edit company',
+                'delete company', // Full Company control
+                'view folder',
+                'create folder',
+                'edit folder',
+                'delete folder', // Full Folder control
+                'view licence',
+                'create licence',
+                'edit licence',
+                'delete licence', // Full Licence control
+                'generate invoice',
+                'view invoice',
+                'edit invoice',
+                'download invoice', // Full Invoice control
+                'view global_invoice',
+                'download global_invoice',
+                'manage taxes',
+                'manage extra_fees',
+                'manage agency_fees',
+                'manage currencies', // Full Financials
+                'view dashboard',
+                'manage settings',
+                'view reports',
+                'upload files',
+                'manage bivac',
+                'manage file_types',
+                'manage transporters',
+                'manage suppliers',
+                'manage locations',
+                'manage customs_offices',
+                'manage declaration_types',
+                'manage merchandise_types',
+                'manage customs_regimes',
             ];
             $adminPermissionIds = $allPermissions->only($adminPermissionNames)->values()->all();
             $adminRole->permissions()->sync($adminPermissionIds);
@@ -99,11 +152,21 @@ class UserSeeder extends Seeder
         // Editor Role Permissions
         if ($editorRole) {
             $editorPermissionNames = [
-                'view company', 'create company', 'edit company',
-                'view folder', 'create folder', 'edit folder',
-                'view licence', 'create licence', 'edit licence',
-                'generate invoice', 'view invoice', 'edit invoice', 'download invoice',
-                'upload files', 'view dashboard',
+                'view company',
+                'create company',
+                'edit company',
+                'view folder',
+                'create folder',
+                'edit folder',
+                'view licence',
+                'create licence',
+                'edit licence',
+                'generate invoice',
+                'view invoice',
+                'edit invoice',
+                'download invoice',
+                'upload files',
+                'view dashboard',
             ];
             $editorPermissionIds = $allPermissions->only($editorPermissionNames)->values()->all();
             $editorRole->permissions()->sync($editorPermissionIds);
@@ -114,8 +177,15 @@ class UserSeeder extends Seeder
         // Viewer Role Permissions
         if ($viewerRole) {
             $viewerPermissionNames = [
-                'view company', 'view folder', 'view licence', 'view invoice', 'view global_invoice',
-                'download invoice', 'download global_invoice', 'view reports', 'view dashboard',
+                'view company',
+                'view folder',
+                'view licence',
+                'view invoice',
+                'view global_invoice',
+                'download invoice',
+                'download global_invoice',
+                'view reports',
+                'view dashboard',
             ];
             $viewerPermissionIds = $allPermissions->only($viewerPermissionNames)->values()->all();
             $viewerRole->permissions()->sync($viewerPermissionIds);
