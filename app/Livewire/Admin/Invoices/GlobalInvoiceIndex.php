@@ -32,6 +32,6 @@ class GlobalInvoiceIndex extends Component
 
         return view('livewire.admin.invoices.global-invoice-index', [
             'globalInvoices' => $globalInvoices,
-        ])->layout('layouts.admin'); // Supposant une layout admin existante
+        ]);
     }
 }
