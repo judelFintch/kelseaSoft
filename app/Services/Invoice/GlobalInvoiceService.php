@@ -105,28 +105,37 @@ class GlobalInvoiceService
         }
 
         return DB::transaction(function () use ($invoices, $companyId) {
-            $itemsToCopy = [];
-            $totalGlobalAmount = 0;
+            $aggregated = [];
 
             foreach ($invoices as $invoice) {
                 foreach ($invoice->items as $item) {
-                    if (is_null($item->description) || trim($item->description) === '') {
+                    if (is_null($item->label) || trim($item->label) === '') {
                         throw ValidationException::withMessages([
-                            'items' => "L'article {$item->id} n'a pas de description",
+                            'items' => "L'article {$item->id} n'a pas de libellé",
                         ]);
                     }
 
-                    $itemsToCopy[] = [
-                        'description' => $item->description,
-                        'quantity' => $item->quantity,
-                        'unit_price' => $item->unit_price,
-                        'total_price' => $item->total_price,
-                        'original_item_ids' => json_encode([$item->id]),
-                    ];
+                    $key = $item->label;
 
-                    $totalGlobalAmount += $item->total_price;
+                    if (!isset($aggregated[$key])) {
+                        $aggregated[$key] = [
+                            'description' => $item->label,
+                            'quantity' => 0,
+                            'unit_price' => $item->amount_usd,
+                            'total_price' => 0,
+                            'original_item_ids' => [],
+                        ];
+                    }
+
+                    $aggregated[$key]['quantity'] += 1;
+                    $aggregated[$key]['total_price'] += $item->amount_usd;
+                    $aggregated[$key]['unit_price'] = $item->amount_usd; // in case amounts vary
+                    $aggregated[$key]['original_item_ids'][] = $item->id;
                 }
             }
+
+            $itemsToCopy = array_values($aggregated);
+            $totalGlobalAmount = array_sum(array_column($itemsToCopy, 'total_price'));
 
             $globalInvoiceNumber = $this->generateGlobalInvoiceNumber();
 

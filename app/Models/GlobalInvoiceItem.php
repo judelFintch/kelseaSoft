@@ -19,6 +19,10 @@ class GlobalInvoiceItem extends Model
         'original_item_ids',
     ];
 
+    protected $casts = [
+        'original_item_ids' => 'array',
+    ];
+
     /**
      * Get the global invoice that owns the item.
      */
