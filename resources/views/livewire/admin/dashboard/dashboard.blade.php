@@ -79,10 +79,10 @@
         <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Clients Récents</h3>
             @forelse($latestCompanies as $company)
-                <div class="mb-3">
+                <a href="{{ route('company.show', $company->id) }}" class="block mb-3 hover:underline">
                     <p class="text-gray-700 dark:text-gray-300 font-medium">{{ $company->name }}</p>
                     <p class="text-sm text-gray-500">{{ $company->email ?? 'Email non défini' }}</p>
-                </div>
+                </a>
             @empty
                 <p class="text-gray-500 text-sm">Aucun client trouvé.</p>
             @endforelse
@@ -92,10 +92,10 @@
         <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Dossiers Récents</h3>
             @forelse($latestFolders as $folder)
-                <div class="mb-3">
+                <a href="{{ route('folder.show', $folder->id) }}" class="block mb-3 hover:underline">
                     <p class="text-gray-700 dark:text-gray-300 font-medium">N° {{ $folder->folder_number }}</p>
                     <p class="text-sm text-gray-500">{{ $folder->company?->name ?? 'Client inconnu' }}</p>
-                </div>
+                </a>
             @empty
                 <p class="text-gray-500 text-sm">Aucun dossier récent.</p>
             @endforelse
@@ -105,10 +105,10 @@
         <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Factures Récentes</h3>
             @forelse($latestInvoices as $invoice)
-                <div class="mb-3">
+                <a href="{{ route('invoices.show', $invoice->id) }}" class="block mb-3 hover:underline">
                     <p class="text-gray-700 dark:text-gray-300 font-medium">Facture {{ $invoice->invoice_number }}</p>
                     <p class="text-sm text-gray-500">Montant : {{ number_format($invoice->total_usd, 2, ',', ' ') }} $</p>
-                </div>
+                </a>
             @empty
                 <p class="text-gray-500 text-sm">Aucune facture disponible.</p>
             @endforelse
