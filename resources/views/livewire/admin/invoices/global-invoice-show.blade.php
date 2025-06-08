@@ -112,7 +112,7 @@
                                         <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{{ $invoice->invoice_date->format('d/m/Y') }}</td>
                                         <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 text-right">{{ number_format($invoice->total_usd, 2) }}</td>
                                         <td class="px-4 py-4 whitespace-nowrap text-sm text-center">
-                                            <a href="{{ route('admin.invoices.show', $invoice->id) }}" target="_blank" class="text-blue-600 hover:text-blue-900 font-medium">
+                                            <a href="{{ route('invoices.show', $invoice->id) }}" target="_blank" class="text-blue-600 hover:text-blue-900 font-medium">
                                                 Voir Originale
                                             </a>
                                         </td>
