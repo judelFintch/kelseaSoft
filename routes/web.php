@@ -138,7 +138,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('invoices')->name('invoices.')->group(function () {
         Route::get('/invoices/{invoice}/show', ShowInvoice::class)->name('show');
         Route::get('/generate/{folder}', GenerateInvoice::class)->name('generate');
-        Route::get('/download/{invoiceId}', [GenerateInvoice::class, 'downloadPdf'])->name('download');
+        Route::get('/download/{invoice}', [ShowInvoice::class, 'downloadPdf'])->name('download');
         Route::get('/index', InvoiceIndex::class)->name('index');
         Route::get('/invoices/{invoice}/edit', UpdateInvoice::class)->name('invoices.edit');
         
