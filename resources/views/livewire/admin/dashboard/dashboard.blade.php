@@ -21,6 +21,35 @@
         </div>
     </div>
 
+    <!-- Quick Links Section -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+        @php
+            $quickLinks = [
+                ['label' => 'Clients', 'route' => route('company.list'), 'icon' => '🏢'],
+                ['label' => 'Dossiers', 'route' => route('folder.list'), 'icon' => '📁'],
+                ['label' => 'Factures', 'route' => route('invoices.index'), 'icon' => '🧾'],
+                ['label' => 'Licences', 'route' => route('licence.list'), 'icon' => '🔐'],
+                ['label' => 'Factures Globales', 'route' => route('admin.global-invoices.index'), 'icon' => '💼'],
+                ['label' => 'Taxes', 'route' => route('taxes.index'), 'icon' => '💰'],
+                ['label' => 'Autres Frais', 'route' => route('extra-fees.index'), 'icon' => '💸'],
+                ['label' => 'Frais Agence', 'route' => route('agency-fees.index'), 'icon' => '🏦'],
+                ['label' => 'Régimes Douaniers', 'route' => route('customsRegimes.list'), 'icon' => '🛃'],
+                ['label' => 'Transporteurs', 'route' => route('transporter.create'), 'icon' => '🚚'],
+                ['label' => 'Fournisseurs', 'route' => route('supplier.create'), 'icon' => '📦'],
+                ['label' => 'Devises', 'route' => route('currency.list'), 'icon' => '💱'],
+                ['label' => 'Utilisateurs', 'route' => route('admin.user.index'), 'icon' => '👥'],
+                ['label' => 'Rôles', 'route' => route('admin.role.index'), 'icon' => '🛡️'],
+                ['label' => 'Permissions', 'route' => route('admin.permission.index'), 'icon' => '🔑'],
+            ];
+        @endphp
+        @foreach ($quickLinks as $link)
+            <a href="{{ $link['route'] }}" class="p-4 rounded-lg shadow bg-white hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-center text-sm font-medium text-gray-700 dark:text-gray-200">
+                <div class="text-2xl mb-1">{{ $link['icon'] }}</div>
+                {{ $link['label'] }}
+            </a>
+        @endforeach
+    </div>
+
     <!-- KPIs Section -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         @php
