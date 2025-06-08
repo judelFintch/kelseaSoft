@@ -24,6 +24,18 @@ class ShowInvoice extends Component
     /**
      * Téléchargement de la facture au format PDF.
      */
+
+    public function downloadPdf(): StreamedResponse
+    {
+        $filename = 'Facture_' . $this->invoice->invoice_number . '.pdf';
+
+        $pdf = Pdf::loadView('pdf.invoice', ['invoice' => $this->invoice]);
+
+        return response()->streamDownload(
+            fn () => print($pdf->output()),
+            $filename
+        );
+    }
     
 
     /**
