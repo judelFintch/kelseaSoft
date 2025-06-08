@@ -11,6 +11,9 @@ use App\Models\Location;
 use App\Models\CustomsOffice;
 use App\Models\DeclarationType;
 use App\Models\MerchandiseType;
+use App\Models\Licence;
+use App\Enums\DossierType;
+use App\Services\Folder\FolderService;
 use Illuminate\Validation\Rule;
 
 class FolderCreate extends Component
@@ -26,6 +29,11 @@ class FolderCreate extends Component
     public $supplier_id;
     public $goods_type;
     public $description;
+    public $dossier_type = 'sans';
+    public $license_id;
+
+    public $licenses = [];
+    public $dossierTypeOptions = [];
 
     // Étape 2
     public $transporter_id;
@@ -69,6 +77,9 @@ class FolderCreate extends Component
         $this->customsOffices = CustomsOffice::orderBy('name')->get(['id', 'name']);
         $this->declarationTypes = DeclarationType::orderBy('name')->get(['id', 'name']);
         $this->merchandiseTypes = MerchandiseType::orderBy('name')->get(['id', 'name']);
+
+        $this->licenses = Licence::orderBy('license_number')->get(['id', 'license_number']);
+        $this->dossierTypeOptions = DossierType::options();
 
         $this->transportModes = [
             ['id' => 'Route', 'name' => 'Route'],
@@ -131,6 +142,8 @@ class FolderCreate extends Component
                 'supplier_id' => 'nullable|exists:suppliers,id',
                 'goods_type' => 'required|string|max:255',
                 'description' => 'nullable|string|max:1000',
+                'dossier_type' => 'required|in:'.DossierType::SANS->value.','.DossierType::AVEC->value,
+                'license_id' => 'required_if:dossier_type,'.DossierType::AVEC->value.'|nullable|exists:licences,id',
             ],
             2 => [
                 'transporter_id' => 'required|exists:transporters,id',
@@ -166,7 +179,8 @@ class FolderCreate extends Component
             ['folder_number' => ['required', 'string', Rule::unique('folders', 'folder_number')->withoutTrashed()]]
         ));
 
-        Folder::create([
+        try {
+            FolderService::storeFolder([
             'folder_number' => $this->folder_number,
             'invoice_number' => $this->invoice_number,
             'quantity' => $this->quantity,
@@ -191,13 +205,17 @@ class FolderCreate extends Component
             'declaration_type_id' => $this->declaration_type_id,
             'internal_reference' => $this->internal_reference,
             'order_number' => $this->order_number,
+            'dossier_type' => $this->dossier_type,
+            'license_id' => $this->license_id,
         ]);
-
-        session()->flash('success', 'Dossier créé avec succès.');
+            session()->flash('success', 'Dossier créé avec succès.');
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+        }
 
         $this->resetExcept([
             'companies', 'suppliers', 'transporters', 'locations',
-            'customsOffices', 'declarationTypes', 'merchandiseTypes', 'transportModes', 'totalSteps'
+            'customsOffices', 'declarationTypes', 'merchandiseTypes', 'transportModes', 'licenses', 'dossierTypeOptions', 'totalSteps'
         ]);
 
         $this->currentStep = 1;
