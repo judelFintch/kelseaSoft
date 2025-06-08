@@ -239,7 +239,7 @@ class GlobalInvoiceManagementTest extends TestCase
             'unit_price' => 10.00,
             'total_price' => 10.00,
         ]);
-        InvoiceItem::factory()->for($invoiceWithMissingDesc)->create([
+        $missingItem = InvoiceItem::factory()->for($invoiceWithMissingDesc)->create([
             'description' => null, // Description manquante
             'quantity' => 2,
             'unit_price' => 5.00,
@@ -262,7 +262,9 @@ class GlobalInvoiceManagementTest extends TestCase
 
         // Vérifie qu'un message d'erreur est présent dans la session
         Livewire::test(InvoiceIndex::class)
-            ->assertSessionHas('error');
+            ->assertSessionHas('error', function ($message) use ($missingItem) {
+                return str_contains($message, "L'article {$missingItem->id} n'a pas de description");
+            });
 
         // Vérifie que la facture originale n'a pas été modifiée
         $originalInvoice = $invoiceWithMissingDesc->fresh();
