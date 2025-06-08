@@ -9,6 +9,7 @@ use App\Models\ExtraFee;
 use App\Models\Invoice;
 use App\Models\Tax;
 use App\Models\Folder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use App\Services\Folder\FolderService;
 use Livewire\Component;
@@ -282,21 +283,25 @@ class GenerateInvoice extends Component
             'status' => 'pending', // Statut initial par défaut
         ];
 
-        $invoice = Invoice::create($invoiceData);
+        $invoice = DB::transaction(function () use ($invoiceData) {
+            $invoice = Invoice::create($invoiceData);
 
-        foreach ($this->items as $itemData) {
-            $invoice->items()->create([
-                'label' => $itemData['label'],
-                'category' => $itemData['category'],
-                'amount_usd' => $itemData['amount_usd'],
-                'amount_cdf' => $itemData['amount_cdf'],
-                'currency_id' => $itemData['currency_id'],
-                'exchange_rate' => $itemData['exchange_rate'],
-                'tax_id' => $itemData['tax_id'] ?? null,
-                'agency_fee_id' => $itemData['agency_fee_id'] ?? null,
-                'extra_fee_id' => $itemData['extra_fee_id'] ?? null,
-            ]);
-        }
+            foreach ($this->items as $itemData) {
+                $invoice->items()->create([
+                    'label' => $itemData['label'],
+                    'category' => $itemData['category'],
+                    'amount_usd' => $itemData['amount_usd'],
+                    'amount_cdf' => $itemData['amount_cdf'],
+                    'currency_id' => $itemData['currency_id'],
+                    'exchange_rate' => $itemData['exchange_rate'],
+                    'tax_id' => $itemData['tax_id'] ?? null,
+                    'agency_fee_id' => $itemData['agency_fee_id'] ?? null,
+                    'extra_fee_id' => $itemData['extra_fee_id'] ?? null,
+                ]);
+            }
+
+            return $invoice;
+        });
 
         session()->flash('success', 'Facture enregistrée avec succès: ' . $invoice->invoice_number);
         $this->resetForm();
