@@ -105,55 +105,20 @@ class GlobalInvoiceService
         }
 
         return DB::transaction(function () use ($invoices, $companyId) {
-            $aggregatedItems = [];
+            $itemsToCopy = [];
             $totalGlobalAmount = 0;
 
             foreach ($invoices as $invoice) {
                 foreach ($invoice->items as $item) {
-                    // Clé d'agrégation: description et prix unitaire.
-                    // Pourrait être affiné (ex: normaliser la description, ajouter la devise si multi-devises)
-                    $aggregationKey = md5(strtolower(trim($item->description)) . '_' . $item->unit_price);
+                    $itemsToCopy[] = [
+                        'description' => $item->description,
+                        'quantity' => $item->quantity,
+                        'unit_price' => $item->unit_price,
+                        'total_price' => $item->total_price,
+                        'original_item_ids' => json_encode([$item->id]),
+                    ];
 
-                    if (!isset($aggregatedItems[$aggregationKey])) {
-                        $aggregatedItems[$aggregationKey] = [
-                            'description' => $item->description,
-                            'quantity' => 0,
-                            'unit_price' => $item->unit_price,
-                            'total_price' => 0,
-                            'original_item_ids' => [],
-                        ];
-                    }
-
-                    $aggregatedItems[$aggregationKey]['quantity'] += $item->quantity;
-                    $aggregatedItems[$aggregationKey]['total_price'] += $item->total_price; // ou recalculer: $item->quantity * $item->unit_price
-                    $aggregatedItems[$aggregationKey]['original_item_ids'][] = $item->id;
-                }
-            }
-
-            // Recalculer total_price pour chaque item agrégé et le total global
-            foreach ($aggregatedItems as &$aggItem) { // Notez le '&' pour modifier l'array directement
-                // S'assurer que total_price est bien la somme des (quantité * prix unitaire) si la logique originale des items le fait
-                // Ici, on suppose que $item->total_price était déjà correct.
-                // Si on veut recalculer: $aggItem['total_price'] = $aggItem['quantity'] * $aggItem['unit_price'];
-                $totalGlobalAmount += $aggItem['total_price'];
-            }
-            unset($aggItem); // Important après une boucle avec référence
-
-            // Validation des descriptions agrégées avant la création de GlobalInvoice et ses items
-            foreach ($aggregatedItems as $key => $aggItemData) {
-                if (empty(trim($aggItemData['description']))) {
-                    // Tenter de retrouver les IDs des items originaux pour donner plus de contexte si possible
-                    // Note: $aggItemData['original_item_ids'] contient les IDs des InvoiceItems originaux
-                    $originalInvoiceItemIds = $aggItemData['original_item_ids'] ?? [];
-                    $contextMessage = "";
-                    if (!empty($originalInvoiceItemIds)) {
-                        // Pourrait chercher les numéros de facture des items originaux si nécessaire pour un meilleur message.
-                        // Pour l'instant, listons les IDs des items problématiques.
-                        $contextMessage = " (Items originaux concernés IDs: " . implode(', ', $originalInvoiceItemIds) . ")";
-                    }
-                    throw ValidationException::withMessages([
-                        'invoice_items' => "Impossible de créer la facture globale : la description d'un ou plusieurs items de facture est manquante ou invalide." . $contextMessage
-                    ]);
+                    $totalGlobalAmount += $item->total_price;
                 }
             }
 
@@ -163,22 +128,15 @@ class GlobalInvoiceService
                 'global_invoice_number' => $globalInvoiceNumber,
                 'company_id' => $companyId,
                 'issue_date' => Carbon::today(),
-                'due_date' => null, // À définir selon la logique métier, ex: issue_date + 30 jours
+                'due_date' => null, // À définir selon la logique métier
                 'total_amount' => $totalGlobalAmount,
-                'notes' => 'Facture globale générée automatiquement.', // Optionnel
+                'notes' => 'Facture globale générée automatiquement.',
             ]);
 
-            foreach ($aggregatedItems as $aggItemData) {
-                $globalInvoice->globalInvoiceItems()->create([
-                    'description' => $aggItemData['description'],
-                    'quantity' => $aggItemData['quantity'],
-                    'unit_price' => $aggItemData['unit_price'],
-                    'total_price' => $aggItemData['total_price'],
-                    'original_item_ids' => json_encode($aggItemData['original_item_ids']),
-                ]);
+            foreach ($itemsToCopy as $itemData) {
+                $globalInvoice->globalInvoiceItems()->create($itemData);
             }
 
-            // Mettre à jour les factures originales
             $invoiceStatusForGrouped = 'grouped_in_global_invoice'; // Ou une constante/enum
             foreach ($invoices as $invoice) {
                 $invoice->global_invoice_id = $globalInvoice->id;
