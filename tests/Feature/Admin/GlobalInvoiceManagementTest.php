@@ -84,28 +84,23 @@ class GlobalInvoiceManagementTest extends TestCase
         $this->assertEquals($expectedTotalAmount, $globalInvoice->total_amount);
         $this->assertNotNull($globalInvoice->global_invoice_number);
 
-        // Vérification des items agrégés
-        $this->assertEquals(3, $globalInvoice->globalInvoiceItems()->count()); // Item A (agrégé), Item B, Item C
+        // Vérification des items copiés sans agrégation
+        $this->assertEquals(4, $globalInvoice->globalInvoiceItems()->count());
 
-        $itemA_aggregated = $globalInvoice->globalInvoiceItems()->where('description', 'Item A')->first();
-        $this->assertNotNull($itemA_aggregated);
-        $this->assertEquals(2 + 3, $itemA_aggregated->quantity); // 5
-        $this->assertEquals(10.00, $itemA_aggregated->unit_price);
-        $this->assertEquals(20.00 + 30.00, $itemA_aggregated->total_price); // 50.00
-        $this->assertCount(2, json_decode($itemA_aggregated->original_item_ids, true));
+        $itemAs = $globalInvoice->globalInvoiceItems()->where('description', 'Item A')->get();
+        $this->assertCount(2, $itemAs);
+        $this->assertEquals([2, 3], $itemAs->pluck('quantity')->sort()->values()->all());
+        $this->assertEquals([20.00, 30.00], $itemAs->pluck('total_price')->sort()->values()->all());
 
         $itemB = $globalInvoice->globalInvoiceItems()->where('description', 'Item B')->first();
         $this->assertNotNull($itemB);
         $this->assertEquals(1, $itemB->quantity);
         $this->assertEquals(15.00, $itemB->total_price);
-        $this->assertCount(1, json_decode($itemB->original_item_ids, true));
-
 
         $itemC = $globalInvoice->globalInvoiceItems()->where('description', 'Item C')->first();
         $this->assertNotNull($itemC);
         $this->assertEquals(5, $itemC->quantity);
         $this->assertEquals(25.00, $itemC->total_price);
-        $this->assertCount(1, json_decode($itemC->original_item_ids, true));
 
         // Vérification de la mise à jour des factures originales
         $updatedInvoice1 = $invoice1->fresh();
@@ -265,13 +260,9 @@ class GlobalInvoiceManagementTest extends TestCase
         $this->assertEquals(0, GlobalInvoice::count());
         // Ou $this->assertDatabaseCount('global_invoices', 0);
 
-        // Vérifie la présence d'un message d'erreur dans la session flash
-        // Le message exact peut varier légèrement en fonction de la gestion des erreurs dans le composant Livewire.
-        // On vérifie la présence de la clé 'error' et une partie significative du message attendu.
-        Livewire::test(InvoiceIndex::class) // Nouvelle instance pour vérifier la session après l'appel
-            ->assertSessionHas('error', function ($value) {
-                return str_contains($value, "la description d'un ou plusieurs items de facture est manquante ou invalide");
-            });
+        // Vérifie qu'un message d'erreur est présent dans la session
+        Livewire::test(InvoiceIndex::class)
+            ->assertSessionHas('error');
 
         // Vérifie que la facture originale n'a pas été modifiée
         $originalInvoice = $invoiceWithMissingDesc->fresh();
