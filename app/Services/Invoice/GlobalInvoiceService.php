@@ -110,6 +110,12 @@ class GlobalInvoiceService
 
             foreach ($invoices as $invoice) {
                 foreach ($invoice->items as $item) {
+                    if (is_null($item->description) || trim($item->description) === '') {
+                        throw ValidationException::withMessages([
+                            'items' => "L'article {$item->id} n'a pas de description",
+                        ]);
+                    }
+
                     $itemsToCopy[] = [
                         'description' => $item->description,
                         'quantity' => $item->quantity,
