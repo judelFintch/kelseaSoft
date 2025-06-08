@@ -23,6 +23,8 @@ class Invoice extends Model
         'invoice_date',
         'payment_mode',
         'total_usd',
+        'currency_id',
+        'exchange_rate',
         'global_invoice_id',
         'status',
         'folder_id', // Ajout de folder_id
