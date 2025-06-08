@@ -21,6 +21,17 @@ class GlobalInvoice extends Model
     ];
 
     /**
+     * Casts to native types.
+     *
+     * This ensures date attributes are automatically converted to
+     * Carbon instances so view code can safely call date methods.
+     */
+    protected $casts = [
+        'issue_date' => 'date',
+        'due_date'   => 'date',
+    ];
+
+    /**
      * Get the company that owns the global invoice.
      */
     public function company(): BelongsTo
