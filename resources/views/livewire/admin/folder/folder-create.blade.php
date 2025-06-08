@@ -8,6 +8,12 @@
             <p>{{ session('success') }}</p>
         </div>
     @endif
+    @if (session()->has('error'))
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md shadow-sm dark:bg-red-700 dark:text-red-100" role="alert">
+            <p class="font-bold">Erreur</p>
+            <p>{{ session('error') }}</p>
+        </div>
+    @endif
 
     {{-- Barre de progression --}}
     <div class="mb-8">
@@ -31,6 +37,10 @@
                 <x-forms.select label="Fournisseur" model="supplier_id" :options="$suppliers" optionLabel="name" optionValue="id" placeholder="Sélectionner un fournisseur" />
                 <x-forms.select label="Nature Marchandise" model="goods_type" :options="$merchandiseTypes" optionLabel="name" optionValue="name" required placeholder="Sélectionner un type de marchandise" />
                 <x-forms.textarea label="Description Générale" model="description" rows="3" />
+                <x-forms.select label="Type de Dossier" model="dossier_type" :options="$dossierTypeOptions" optionLabel="label" optionValue="value" required />
+                @if($dossier_type === 'avec')
+                    <x-forms.select label="Licence" model="license_id" :options="$licenses" optionLabel="license_number" optionValue="id" placeholder="Sélectionner une licence" />
+                @endif
             </div>
         </div>
         @endif
