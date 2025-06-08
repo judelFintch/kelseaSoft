@@ -264,7 +264,6 @@ class GenerateInvoice extends Component
         $this->items = $processedItems; // Mettre à jour les items avec les montants recalculés
         $this->total_usd = $totalUsdFromItems;
         $invoiceData = [
-            'invoice_number' => 'MDBKCCGL' . str_pad((Invoice::max('id') ?? 0) + 1, 6, '0', STR_PAD_LEFT),
             'company_id' => $this->company_id,
             'invoice_date' => Carbon::parse($this->invoice_date),
             'product' => $this->product,
@@ -284,6 +283,8 @@ class GenerateInvoice extends Component
         ];
 
         $invoice = DB::transaction(function () use ($invoiceData) {
+            $maxId = DB::table('invoices')->lockForUpdate()->max('id') ?? 0;
+            $invoiceData['invoice_number'] = 'MDBKCCGL' . str_pad($maxId + 1, 6, '0', STR_PAD_LEFT);
             $invoice = Invoice::create($invoiceData);
 
             foreach ($this->items as $itemData) {
