@@ -105,6 +105,18 @@ class FolderCreate extends Component
         }
     }
 
+    public function updated($property)
+    {
+        if (in_array($property, ['fob_amount', 'insurance_amount', 'freight_amount'])) {
+            $this->calculateCif();
+        }
+    }
+
+    public function calculateCif()
+    {
+        $this->cif_amount = (float)$this->fob_amount + (float)$this->insurance_amount + (float)$this->freight_amount;
+    }
+
     public function generateFolderNumber(string $acronym)
     {
         $year = now()->format('y');
