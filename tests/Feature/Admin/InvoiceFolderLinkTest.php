@@ -144,6 +144,9 @@ class InvoiceFolderLinkTest extends TestCase
             'fob_amount' => $folder->fob_amount,
         ]);
         $this->assertEquals(1, Invoice::where('folder_id', $folder->id)->count());
+        $invoice = Invoice::where('folder_id', $folder->id)->first();
+        $expectedPrefix = 'MDB' . strtoupper($this->company->acronym);
+        $this->assertMatchesRegularExpression('/^' . $expectedPrefix . '\\d{3}-' . date('my') . '$/', $invoice->invoice_number);
         // Le test du message flash de succès peut être instable si le composant est réinitialisé différemment.
         // session()->get('success') pourrait être vérifié directement si Livewire::assertSessionHas ne fonctionne pas comme attendu après un call.
     }

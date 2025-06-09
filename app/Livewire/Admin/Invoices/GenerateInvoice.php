@@ -12,6 +12,7 @@ use App\Models\Folder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use App\Services\Folder\FolderService;
+use App\Services\Invoice\InvoiceService;
 use Livewire\Component;
 
 class GenerateInvoice extends Component
@@ -274,8 +275,7 @@ class GenerateInvoice extends Component
                 'status' => 'pending',
             ];
             $invoice = DB::transaction(function () use ($invoiceData) {
-                $maxId = DB::table('invoices')->lockForUpdate()->max('id') ?? 0;
-                $invoiceData['invoice_number'] = 'MDBK' . str_pad($maxId + 1, 6, '0', STR_PAD_LEFT);
+                $invoiceData['invoice_number'] = InvoiceService::generateInvoiceNumber($this->company_id);
                 $invoice = Invoice::create($invoiceData);
 
                 foreach ($this->items as $itemData) {

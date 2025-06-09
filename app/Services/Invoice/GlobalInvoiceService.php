@@ -11,60 +11,17 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Validation\ValidationException;
+use App\Services\Invoice\InvoiceService;
 
 
 class GlobalInvoiceService
 {
     /**
-     * Génère un numéro unique pour la facture globale.
-     * Format: GLOB-YYYY-XXXX (XXXX est un numéro séquentiel)
-     *
-     * @return string
-     * @throws Exception
+     * Génère un numéro unique pour la facture globale en utilisant le service commun.
      */
-    public function generateGlobalInvoiceNumber(): string
+    public function generateGlobalInvoiceNumber(int $companyId): string
     {
-        $year = Carbon::now()->year;
-        $prefix = "GLOB-{$year}-";
-
-        do {
-            // Récupère le dernier numéro de facture globale pour l'année en cours
-            $lastInvoice = GlobalInvoice::where('global_invoice_number', 'like', $prefix . '%')
-                ->orderBy('global_invoice_number', 'desc')
-                ->first();
-
-            $nextSequentialNumber = 1;
-            if ($lastInvoice) {
-                // Extrait le numéro séquentiel et l'incrémente
-                // Exemple: GLOB-2023-0001 -> 0001
-                $lastSequentialPart = substr($lastInvoice->global_invoice_number, strlen($prefix));
-                if (is_numeric($lastSequentialPart)) {
-                    $nextSequentialNumber = intval($lastSequentialPart) + 1;
-                } else {
-                    // Cas de secours si le format n'est pas comme attendu, bien que peu probable
-                    // ou si le dernier numéro était GLOB-YYYY- (sans partie numérique)
-                    // On cherche le max des numéros existants qui ont un suffixe numérique
-                    $maxNumber = GlobalInvoice::where('global_invoice_number', 'like', $prefix . '%')
-                        ->get()
-                        ->map(function ($gi) use ($prefix) {
-                            $numPart = str_replace($prefix, '', $gi->global_invoice_number);
-                            return is_numeric($numPart) ? intval($numPart) : 0;
-                        })
-                        ->max();
-                    $nextSequentialNumber = ($maxNumber ?? 0) + 1;
-                }
-            }
-
-            // Formate le numéro séquentiel sur 4 chiffres (ex: 0001, 0010, 0100, 1000)
-            $sequentialFormatted = str_pad($nextSequentialNumber, 4, '0', STR_PAD_LEFT);
-            $newInvoiceNumber = $prefix . $sequentialFormatted;
-
-            // Vérifie si ce numéro existe déjà (pour gérer les rares cas de concurrence)
-            $exists = GlobalInvoice::where('global_invoice_number', $newInvoiceNumber)->exists();
-
-        } while ($exists); // Si le numéro existe, on régénère
-
-        return $newInvoiceNumber;
+        return InvoiceService::generateInvoiceNumber($companyId, true);
     }
 
     /**
@@ -137,7 +94,7 @@ class GlobalInvoiceService
             $itemsToCopy = array_values($aggregated);
             $totalGlobalAmount = array_sum(array_column($itemsToCopy, 'total_price'));
 
-            $globalInvoiceNumber = $this->generateGlobalInvoiceNumber();
+            $globalInvoiceNumber = $this->generateGlobalInvoiceNumber($companyId);
 
             $globalInvoice = GlobalInvoice::create([
                 'global_invoice_number' => $globalInvoiceNumber,
