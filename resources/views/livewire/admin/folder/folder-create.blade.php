@@ -63,7 +63,7 @@
                 <x-forms.input label="Montant FOB" model="fob_amount" type="number" step="0.01" />
                 <x-forms.input label="Montant Assurance" model="insurance_amount" type="number" step="0.01" />
                 <x-forms.input label="Fret" model="freight_amount" type="number" step="0.01" />
-                <x-forms.input label="Montant CIF" model="cif_amount" type="number" step="0.01" />
+                <x-forms.input label="Montant CIF" model="cif_amount" type="number" step="0.01" disabled />
             </div>
         </div>
         @endif
