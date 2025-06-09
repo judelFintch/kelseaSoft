@@ -18,37 +18,34 @@ class GenerateInvoice extends Component
 {
     public $step = 1;
 
-
     public $folder_id;
     public $company_id;
     public $invoice_date;
     public $product;
     public $weight;
     public $operation_code;
-    public $fob_amount = 0;
+    public $default_fob_amount = 0;
     public $insurance_amount = 0;
     public $freight_amount = 0;
     public $cif_amount = 0;
     public $payment_mode = 'provision';
     public $currency_id = 1;
-    public $exchange_rate = 1.0;
+    public $exchange_rate = 500;
     public $items = [];
     public $taxes = [], $agencyFees = [], $extraFees = [], $currencies = [];
     public array $categorySteps = [];
     public $selectedFolder = null;
+
     public function mount(Folder $folder)
     {
-        // Chargement du dossier avec toutes ses relations
         $folder = FolderService::getFolder($folder->id);
 
-        // Vérifie s'il existe déjà une facture liée à ce dossier
         if ($folder->invoice()->exists()) {
             session()->flash('error', "Le dossier N° {$folder->folder_number} est déjà facturé (Facture N° {$folder->invoice->invoice_number}). Impossible de créer une nouvelle facture.");
             $this->resetForm();
             return;
         }
 
-        // Chargement des collections nécessaires
         $this->taxes = Tax::all();
         $this->agencyFees = AgencyFee::all();
         $this->extraFees = ExtraFee::all();
@@ -56,37 +53,32 @@ class GenerateInvoice extends Component
         $this->invoice_date = now()->toDateString();
         $this->initCategorySteps();
 
-        // Initialisation des données du dossier
         $this->folder_id = $folder->id;
         $this->selectedFolder = $folder;
         $this->company_id = $folder->company_id;
-        $this->fob_amount = $folder->fob_amount ?? 0;
+        $this->default_fob_amount = $folder->fob_amount ?? 0;
         $this->insurance_amount = $folder->insurance_amount ?? 0;
         $this->cif_amount = $folder->cif_amount ?? 0;
         $this->weight = $folder->weight;
         $this->product = $folder->description ?? ('Prestation selon dossier ' . $folder->folder_number);
 
-        // Calcul automatique du fret si manquant
-        $calculated_freight = $this->cif_amount - $this->fob_amount - $this->insurance_amount;
+        $calculated_freight = $this->cif_amount - $this->default_fob_amount - $this->insurance_amount;
         $this->freight_amount = $folder->freight_amount ?? max($calculated_freight, 0);
 
-        // Pré-remplissage d’un premier item
         $this->items = [];
         $this->addItem('import_tax');
 
         if (!empty($this->items) && isset($this->items[0])) {
             $this->items[0]['label'] = $this->product;
-            $this->items[0]['amount_local'] = $this->fob_amount;
+            $this->items[0]['amount_local'];
 
             $usdCurrency = Currency::where('code', 'USD')->first();
             if ($usdCurrency) {
                 $this->items[0]['currency_id'] = $usdCurrency->id;
             }
-
             $this->updatedItems($this->items[0]['amount_local'], "0.amount_local");
         }
     }
-
 
     protected function resetFolderSelection(): void
     {
@@ -107,9 +99,12 @@ class GenerateInvoice extends Component
             $localAmount = (float)($item['amount_local'] ?? 0);
             $selectedCurrencyId = (int)($item['currency_id'] ?? 1);
             $selectedCurrency = Currency::find($selectedCurrencyId);
+
             if ($selectedCurrency) {
-                $rate = $selectedCurrency->exchange_rate ?: 1;
+                // 🟢 Taux saisi dans le formulaire principal
+                $rate = $this->exchange_rate ?: 1;
                 $item['exchange_rate'] = $rate;
+
                 if (strtoupper($selectedCurrency->code) === 'USD') {
                     $item['amount_usd'] = $localAmount;
                     $item['amount_cdf'] = round($localAmount * $rate, 2);
@@ -123,7 +118,6 @@ class GenerateInvoice extends Component
             }
         }
     }
-
     public function updatedExchangeRate($value): void
     {
         foreach ($this->items as $index => &$item) {
@@ -134,13 +128,14 @@ class GenerateInvoice extends Component
 
     public function addItem($category = 'import_tax'): void
     {
+        $defaultAmount = 0;
         $this->items[] = [
             'label' => '',
             'category' => $category,
             'currency_id' => $this->currency_id ?? 1,
-            'exchange_rate' => 1.0,
-            'amount_local' => $this->fob_amount,
-            'amount_usd' => 0,
+            'exchange_rate' => $this->exchange_rate,
+            'amount_local' => $defaultAmount,
+            'amount_usd' => 0.00,
             'converted_amount' => 0,
             'tax_id' => null,
             'agency_fee_id' => null,
@@ -170,7 +165,6 @@ class GenerateInvoice extends Component
 
     public function save(): void
     {
-
         $this->validate([
             'company_id' => 'required|integer|exists:companies,id',
             'invoice_date' => 'required|date',
@@ -182,41 +176,31 @@ class GenerateInvoice extends Component
             'freight_amount' => 'nullable|numeric|min:0',
             'cif_amount' => 'nullable|numeric|min:0',
             'payment_mode' => 'required|string',
-            'currency_id' => 'required|integer|exists:currencies,id', // Devise principale de la facture
-            'exchange_rate' => 'required|numeric|min:0', // Taux de la devise principale (ex: USD vers CDF)
-            'items' => 'present|array|min:1', // Doit avoir au moins un item
-            
+            'currency_id' => 'required|integer|exists:currencies,id',
+            'exchange_rate' => 'required|numeric|min:0',
+            'items' => 'present|array|min:1',
             'items.*.amount_local' => 'required|numeric|min:0',
-            'items.*.currency_id' => 'required|integer|exists:currencies,id', // Devise de l'item
+            'items.*.currency_id' => 'required|integer|exists:currencies,id',
             'items.*.tax_id' => 'required_if:items.*.category,import_tax|integer|exists:taxes,id',
             'items.*.agency_fee_id' => 'required_if:items.*.category,agency_fee|integer|exists:agency_fees,id',
             'items.*.extra_fee_id' => 'required_if:items.*.category,extra_fee|integer|exists:extra_fees,id',
             'folder_id' => ['nullable', 'integer', 'exists:folders,id', \Illuminate\Validation\Rule::unique('invoices', 'folder_id')->whereNull('deleted_at')->ignore($this->invoice_id ?? null)],
         ]);
 
-        // Remove any items missing required reference IDs based on their category
         $this->items = array_values(array_filter($this->items, function ($item) {
-            if ($item['category'] === 'import_tax' && empty($item['tax_id'])) {
-                return false;
-            }
-            if ($item['category'] === 'agency_fee' && empty($item['agency_fee_id'])) {
-                return false;
-            }
-            if ($item['category'] === 'extra_fee' && empty($item['extra_fee_id'])) {
-                return false;
-            }
+            if ($item['category'] === 'import_tax' && empty($item['tax_id'])) return false;
+            if ($item['category'] === 'agency_fee' && empty($item['agency_fee_id'])) return false;
+            if ($item['category'] === 'extra_fee' && empty($item['extra_fee_id'])) return false;
             return true;
         }));
 
-       
-        // Prépare et valide les labels des items
-        foreach ($this->items as $index => &$itemRef) { // Utiliser une référence différente
+        foreach ($this->items as $index => &$itemRef) {
             if (empty($itemRef['currency_id'])) {
                 $this->addError("items.{$index}.currency_id", "La devise pour l'item est requise.");
-                return; // Arrête la sauvegarde si une devise d'item est manquante
+                return;
             }
 
-            if (empty($itemRef['label'])) { // Utilise le label entré par l'utilisateur pour extra_fee si dispo
+            if (empty($itemRef['label'])) {
                 switch ($itemRef['category']) {
                     case 'import_tax':
                         $tax = Tax::find($itemRef['tax_id']);
@@ -227,17 +211,15 @@ class GenerateInvoice extends Component
                         $itemRef['label'] = $agency?->label ?? 'Frais agence inconnu';
                         break;
                     case 'extra_fee':
-
-                        $itemRef['label'] = $itemRef['label'] ?: 'Frais divers';
+                        $itemRef['label'] = 'Frais divers';
                         break;
                     default:
-                        $itemRef['label'] = 'Item inconnu'; // Fallback général
+                        $itemRef['label'] = 'Item inconnu';
                 }
             }
         }
-        unset($itemRef); // Important après la boucle par référence
+        unset($itemRef);
 
-        // Recalcul et conversion finale des montants des items
         $processedItems = [];
         $totalUsdFromItems = 0;
 
@@ -246,10 +228,10 @@ class GenerateInvoice extends Component
             $itemCurrencyId = (int)($itemArray['currency_id'] ?? $this->currency_id);
             $itemCurrency = Currency::find($itemCurrencyId);
 
-            $itemArray['currency_id'] = $itemCurrencyId; // Assurer que l'ID est bien dans l'array
+            $itemArray['currency_id'] = $itemCurrencyId;
 
             if ($itemCurrency) {
-                $itemExchangeRate = $itemCurrency->exchange_rate ?: 1.0; // Taux de la devise de l'item vers la devise de référence (supposée USD)
+                $itemExchangeRate = $itemCurrency->exchange_rate ?: 1.0;
                 $itemArray['exchange_rate'] = $itemExchangeRate;
 
                 if ($itemCurrency->code === 'USD') {
@@ -257,26 +239,24 @@ class GenerateInvoice extends Component
                 } elseif ($itemExchangeRate != 0) {
                     $itemArray['amount_usd'] = round($localAmount / $itemExchangeRate, 2);
                 } else {
-                    $itemArray['amount_usd'] = 0; // Taux de change nul, impossible de convertir
+                    $itemArray['amount_usd'] = 0;
                 }
-                // Conversion de amount_usd en amount_cdf pour l'item
-                $cdfCurrency = Currency::where('code', 'CDF')->first();
-                // Utilise le taux de change principal de la facture (USD -> CDF) pour convertir l'amount_usd de l'item en CDF
-                $usdToCdfRate = $this->exchange_rate; // Taux principal de la facture
-                if ($cdfCurrency && $this->currency_id == $cdfCurrency->id) { // Si la devise principale est CDF
 
-                }
+                $usdToCdfRate = $this->exchange_rate;
                 $itemArray['amount_cdf'] = round($itemArray['amount_usd'] * $usdToCdfRate, 2);
-            } else { // Devise de l'item non trouvée
+            } else {
                 $itemArray['amount_usd'] = 0;
                 $itemArray['amount_cdf'] = 0;
                 $itemArray['exchange_rate'] = 1.0;
             }
+
             $totalUsdFromItems += $itemArray['amount_usd'];
             $processedItems[] = $itemArray;
         }
-        $this->items = $processedItems; // Mettre à jour les items avec les montants recalculés
+
+        $this->items = $processedItems;
         $this->total_usd = $totalUsdFromItems;
+
         $invoiceData = [
             'company_id' => $this->company_id,
             'invoice_date' => Carbon::parse($this->invoice_date),
@@ -288,12 +268,11 @@ class GenerateInvoice extends Component
             'freight_amount' => $this->freight_amount,
             'cif_amount' => $this->cif_amount,
             'payment_mode' => $this->payment_mode,
-            'currency_id' => $this->currency_id,       // Devise principale de la facture
-            'exchange_rate' => $this->exchange_rate,   // Taux de change principal (USD vers CDF)
-            'total_usd' => $this->total_usd,           // Total en USD, calculé à partir des items
-            // 'converted_total' => $this->total_usd * $this->exchange_rate, // Si la facture doit avoir un total converti en CDF
+            'currency_id' => $this->currency_id,
+            'exchange_rate' => $this->exchange_rate,
+            'total_usd' => $this->total_usd,
             'folder_id' => $this->folder_id,
-            'status' => 'pending', // Statut initial par défaut
+            'status' => 'pending',
         ];
 
         $invoice = DB::transaction(function () use ($invoiceData) {
@@ -331,8 +310,7 @@ class GenerateInvoice extends Component
             'weight' => '9000',
             'operation_code' => 'MBDKCCGL',
             'payment_mode' => 'provision',
-            'currency_id' => Currency::where('code', 'USD')->first()?->id ?? 1, // Default to USD
-            // Taux de change principal (USD vers CDF). À ajuster si la devise de référence change.
+            'currency_id' => Currency::where('code', 'USD')->first()?->id ?? 1,
             'exchange_rate' => Currency::where('code', 'CDF')->first()?->exchange_rate ?? $this->exchange_rate ?? 2800,
             'items' => [],
             'company_id' => null,
@@ -340,7 +318,7 @@ class GenerateInvoice extends Component
             'insurance_amount' => 0,
             'freight_amount' => 0,
             'cif_amount' => 0,
-            'total_usd' => 0, // Assurer la réinitialisation du total
+            'total_usd' => 0,
         ];
 
         foreach ($defaultValues as $key => $value) {
@@ -348,6 +326,7 @@ class GenerateInvoice extends Component
                 $this->$key = $value;
             }
         }
+
         $this->resetFolderSelection();
         $this->addItem();
         $this->clearValidation();
@@ -359,16 +338,17 @@ class GenerateInvoice extends Component
             'companies' => Company::all(),
         ]);
     }
+
     public function clearSelectedFolder(): void
     {
-        $this->resetFolderSelection(); // Réinitialise folder_id et selectedFolder
-        $this->resetInvoiceFieldsFromFolder(); // Réinitialise les champs de la facture
+        $this->resetFolderSelection();
+        $this->resetInvoiceFieldsFromFolder();
     }
 
     protected function resetInvoiceFieldsFromFolder(): void
     {
-        $this->company_id = null; // Important de réinitialiser si le dossier le définissait
-        $this->fob_amount = 0;
+        $this->company_id = null;
+        $this->default_fob_amount = 0;
         $this->insurance_amount = 0;
         $this->cif_amount = 0;
         $this->weight = '9000';

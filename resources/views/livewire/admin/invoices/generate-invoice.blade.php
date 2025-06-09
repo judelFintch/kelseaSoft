@@ -72,7 +72,7 @@
             </div>
 
             <div class="grid grid-cols-4 gap-4">
-                <x-forms.input label="FOB ($)" model="fob_amount" type="number" step="0.01" />
+                <x-forms.input label="FOB ($)" model="default_fob_amount" type="number" step="0.01" />
                 <x-forms.input label="Assurance ($)" model="insurance_amount" type="number" step="0.01" />
                 <x-forms.input label="Fret ($)" model="freight_amount" type="number" step="0.01" />
                 <x-forms.input label="CIF ($)" model="cif_amount" type="number" step="0.01" />
@@ -81,7 +81,11 @@
             <div class="grid grid-cols-3 gap-4">
                 <x-forms.select label="Devise principale" model="currency_id" :options="$currencies" optionLabel="code"
                     optionValue="id" />
-                <x-forms.input label="Taux de change vers CDF" model="exchange_rate" type="number" step="0.000001" />
+                    <input type="text" wire:model.live="exchange_rate"
+                        class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:outline-none focus:ring-0 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                       >
+
+              
                 <x-forms.select label="Mode de paiement" model="payment_mode" :options="[['id' => 'provision', 'name' => 'Provision'], ['id' => 'comptant', 'name' => 'Comptant']]" optionLabel="name"
                     optionValue="id" />
             </div>
