@@ -50,6 +50,11 @@
                                 <a href="{{ route('admin.global-invoices.show', $globalInvoice->id) }}" class="text-blue-600 hover:text-blue-900 font-medium">
                                     Voir Détails
                                 </a>
+                                <button wire:click="deleteGlobalInvoice({{ $globalInvoice->id }})"
+                                        onclick="return confirm('Confirmer la suppression de cette facture globale ?')"
+                                        class="text-red-600 hover:underline text-sm cursor-pointer">
+                                    🗑 Supprimer
+                                </button>
                                 {{-- Possibilité d'ajouter d'autres actions comme "Télécharger PDF" directement ici --}}
                             </td>
                         </tr>
