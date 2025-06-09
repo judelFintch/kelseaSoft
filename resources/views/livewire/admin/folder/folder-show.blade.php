@@ -4,7 +4,7 @@
         <div>
             <h2 class="text-xl font-semibold text-gray-800 dark:text-white">📁 Dossier : {{ $folder->folder_number }}
             </h2>
-            <p class="text-sm text-gray-500 dark:text-gray-400">📅 Arrivée : {{ optional($folder->arrival_border_date)->format('Y-m-d') ?? '—' }}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">📅 Arrivée : {{ optional($folder->arrival_border_date)->format('d/m/Y') ?? '—' }}</p>
         </div>
         <div class="flex gap-3">
             {{-- Conditional Invoicing Button --}}
@@ -65,14 +65,14 @@
                     ['label' => 'Transport Mode', 'value' => $folder->transport_mode ?? '—'],
                     ['label' => 'Internal Reference', 'value' => $folder->internal_reference ?? '—'],
                     ['label' => 'Order Number', 'value' => $folder->order_number ?? '—'],
-                    ['label' => 'Folder Date', 'value' => $folder->folder_date ?? '—'],
+                    ['label' => 'Folder Date', 'value' => optional($folder->folder_date)->format('d/m/Y') ?? '—'],
                     ['label' => 'Transporter', 'value' => optional($folder->transporter)->name ?? '—'],
                     ['label' => 'Driver Name', 'value' => $folder->driver_name ?? '—'],
                     ['label' => 'Driver Phone', 'value' => $folder->driver_phone ?? '—'],
                     ['label' => 'Nationality', 'value' => $folder->driver_nationality ?? '—'],
                     ['label' => 'Origin', 'value' => optional($folder->origin)->name ?? '—'],
                     ['label' => 'Destination', 'value' => optional($folder->destination)->name ?? '—'],
-                    ['label' => 'Client (texte)', 'value' => $folder->client ?? '—'],
+                    ['label' => 'Client', 'value' => $folder->client ?? '—'],
                     ['label' => 'Entreprise', 'value' => optional($folder->company)->name ?? '—'],
                     ['label' => 'Supplier', 'value' => optional($folder->supplier)->name ?? '—'],
                     ['label' => 'Customs Office', 'value' => optional($folder->customsOffice)->name ?? '—'],
@@ -86,20 +86,24 @@
                     ['label' => 'FOB Amount', 'value' => number_format($folder->fob_amount ?? 0, 2)],
                     ['label' => 'Insurance Amount', 'value' => number_format($folder->insurance_amount ?? 0, 2)],
                     ['label' => 'CIF Amount', 'value' => number_format($folder->cif_amount ?? 0, 2)],
-                    ['label' => 'Arrival Border Date', 'value' => optional($folder->arrival_border_date)->format('Y-m-d') ?? '—'],
+                    ['label' => 'Freight Amount', 'value' => number_format($folder->freight_amount ?? 0, 2)],
+                    ['label' => 'Currency', 'value' => optional($folder->currency)->code ?? '—'],
+                    ['label' => 'Dossier Type', 'value' => optional($folder->dossier_type)->label() ?? '—'],
+                    ['label' => 'License Number', 'value' => optional($folder->license)->license_number ?? '—'],
+                    ['label' => 'Arrival Border Date', 'value' => optional($folder->arrival_border_date)->format('d/m/Y') ?? '—'],
                     ['label' => 'License Code', 'value' => $folder->license_code ?? '—'],
                     ['label' => 'BIVAC Code', 'value' => $folder->bivac_code ?? '—'],
                     ['label' => 'TR8 Number', 'value' => $folder->tr8_number ?? '—'],
-                    ['label' => 'TR8 Date', 'value' => $folder->tr8_date ?? '—'],
+                    ['label' => 'TR8 Date', 'value' => optional($folder->tr8_date)->format('d/m/Y') ?? '—'],
                     ['label' => 'T1 Number', 'value' => $folder->t1_number ?? '—'],
-                    ['label' => 'T1 Date', 'value' => $folder->t1_date ?? '—'],
+                    ['label' => 'T1 Date', 'value' => optional($folder->t1_date)->format('d/m/Y') ?? '—'],
                     ['label' => 'Formalities Office Ref', 'value' => $folder->formalities_office_reference ?? '—'],
                     ['label' => 'IM4 Number', 'value' => $folder->im4_number ?? '—'],
-                    ['label' => 'IM4 Date', 'value' => $folder->im4_date ?? '—'],
+                    ['label' => 'IM4 Date', 'value' => optional($folder->im4_date)->format('d/m/Y') ?? '—'],
                     ['label' => 'Liquidation Number', 'value' => $folder->liquidation_number ?? '—'],
-                    ['label' => 'Liquidation Date', 'value' => $folder->liquidation_date ?? '—'],
+                    ['label' => 'Liquidation Date', 'value' => optional($folder->liquidation_date)->format('d/m/Y') ?? '—'],
                     ['label' => 'Quitance Number', 'value' => $folder->quitance_number ?? '—'],
-                    ['label' => 'Quitance Date', 'value' => $folder->quitance_date ?? '—'],
+                    ['label' => 'Quitance Date', 'value' => optional($folder->quitance_date)->format('d/m/Y') ?? '—'],
                 ];
             @endphp
 
