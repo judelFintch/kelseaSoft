@@ -101,7 +101,6 @@ class GenerateInvoice extends Component
             $selectedCurrency = Currency::find($selectedCurrencyId);
 
             if ($selectedCurrency) {
-                // 🟢 Taux saisi dans le formulaire principal
                 $rate = $this->exchange_rate ?: 1;
                 $item['exchange_rate'] = $rate;
 
@@ -113,11 +112,12 @@ class GenerateInvoice extends Component
                     $item['amount_cdf'] = $localAmount;
                 } else {
                     $item['amount_usd'] = round($localAmount / $rate, 2);
-                    $item['amount_cdf'] = round($localAmount, 2); // fallback
+                    $item['amount_cdf'] = round($localAmount, 2);
                 }
             }
         }
     }
+
     public function updatedExchangeRate($value): void
     {
         foreach ($this->items as $index => &$item) {
@@ -128,13 +128,12 @@ class GenerateInvoice extends Component
 
     public function addItem($category = 'import_tax'): void
     {
-        $defaultAmount = 0;
         $this->items[] = [
             'label' => '',
             'category' => $category,
             'currency_id' => $this->currency_id ?? 1,
             'exchange_rate' => $this->exchange_rate,
-            'amount_local' => $defaultAmount,
+            'amount_local' => 0,
             'amount_usd' => 0.00,
             'converted_amount' => 0,
             'tax_id' => null,
@@ -182,9 +181,6 @@ class GenerateInvoice extends Component
                 'items' => 'present|array|min:1',
                 'items.*.amount_local' => 'required|numeric|min:0',
                 'items.*.currency_id' => 'required|integer|exists:currencies,id',
-                'items.*.tax_id' => 'required_if:items.*.category,import_tax|integer|exists:taxes,id',
-                'items.*.agency_fee_id' => 'required_if:items.*.category,agency_fee|integer|exists:agency_fees,id',
-                'items.*.extra_fee_id' => 'required_if:items.*.category,extra_fee|integer|exists:extra_fees,id',
                 'folder_id' => [
                     'nullable',
                     'integer',
@@ -193,8 +189,19 @@ class GenerateInvoice extends Component
                 ],
             ]);
 
-            // 🔍 Pour voir toutes les données validées
-            dump($validated);
+            foreach ($this->items as $index => $item) {
+                if ($item['category'] === 'import_tax' && empty($item['tax_id'])) {
+                    $this->addError("items.{$index}.tax_id", "Le champ Taxe est requis.");
+                }
+
+                if ($item['category'] === 'agency_fee' && empty($item['agency_fee_id'])) {
+                    $this->addError("items.{$index}.agency_fee_id", "Le champ Frais agence est requis.");
+                }
+
+                if ($item['category'] === 'extra_fee' && empty($item['extra_fee_id'])) {
+                    $this->addError("items.{$index}.extra_fee_id", "Le champ Frais divers est requis.");
+                }
+            }
 
             $this->items = array_values(array_filter($this->items, function ($item) {
                 if ($item['category'] === 'import_tax' && empty($item['tax_id'])) return false;
@@ -238,7 +245,7 @@ class GenerateInvoice extends Component
                 $itemCurrency = Currency::find($itemCurrencyId);
 
                 $itemArray['currency_id'] = $itemCurrencyId;
-                $itemArray['exchange_rate'] = $this->exchange_rate; // 🔄 Utilise toujours le taux saisi dans le formulaire
+                $itemArray['exchange_rate'] = $this->exchange_rate;
 
                 if ($itemCurrency && strtoupper($itemCurrency->code) === 'USD') {
                     $itemArray['amount_usd'] = $localAmount;
@@ -263,7 +270,7 @@ class GenerateInvoice extends Component
                 'product' => $this->product,
                 'weight' => $this->weight,
                 'operation_code' => $this->operation_code,
-                'fob_amount' => $this->default_fob_amount, // corriger ici aussi
+                'fob_amount' => $this->default_fob_amount,
                 'insurance_amount' => $this->insurance_amount,
                 'freight_amount' => $this->freight_amount,
                 'cif_amount' => $this->cif_amount,
@@ -300,10 +307,9 @@ class GenerateInvoice extends Component
             session()->flash('success', 'Facture enregistrée avec succès: ' . $invoice->invoice_number);
             $this->resetForm();
         } catch (\Illuminate\Validation\ValidationException $e) {
-            dd($e->errors()); // ⛔ Affiche les erreurs précises
+            dd($e->errors());
         }
     }
-
 
     protected function resetForm(): void
     {
