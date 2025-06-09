@@ -65,19 +65,9 @@ class GenerateInvoice extends Component
         $calculated_freight = $this->cif_amount - $this->default_fob_amount - $this->insurance_amount;
         $this->freight_amount = $folder->freight_amount ?? max($calculated_freight, 0);
 
+        // Création d’une ligne vide que l’utilisateur devra remplir
         $this->items = [];
         $this->addItem('import_tax');
-
-        if (!empty($this->items) && isset($this->items[0])) {
-            $this->items[0]['label'] = $this->product;
-            $this->items[0]['amount_local'];
-
-            $usdCurrency = Currency::where('code', 'USD')->first();
-            if ($usdCurrency) {
-                $this->items[0]['currency_id'] = $usdCurrency->id;
-            }
-            $this->updatedItems($this->items[0]['amount_local'], "0.amount_local");
-        }
     }
 
     protected function resetFolderSelection(): void
@@ -188,6 +178,7 @@ class GenerateInvoice extends Component
                     \Illuminate\Validation\Rule::unique('invoices', 'folder_id')->whereNull('deleted_at')->ignore($this->invoice_id ?? null),
                 ],
             ]);
+            
 
             foreach ($this->items as $index => $item) {
                 if ($item['category'] === 'import_tax' && empty($item['tax_id'])) {
@@ -227,7 +218,8 @@ class GenerateInvoice extends Component
                             $itemRef['label'] = $agency?->label ?? 'Frais agence inconnu';
                             break;
                         case 'extra_fee':
-                            $itemRef['label'] = 'Frais divers';
+                            $extra = ExtraFee::find($itemRef['extra_fee_id']);
+                            $itemRef['label'] = $extra?->label ?? 'Frais divers inconnu';
                             break;
                         default:
                             $itemRef['label'] = 'Item inconnu';
