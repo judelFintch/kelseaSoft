@@ -4,7 +4,7 @@
         <div>
             <h2 class="text-xl font-semibold text-gray-800 dark:text-white">📁 Dossier : {{ $folder->folder_number }}
             </h2>
-            <p class="text-sm text-gray-500 dark:text-gray-400">📅 Arrivée : {{ $folder->arrival_border_date }}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">📅 Arrivée : {{ optional($folder->arrival_border_date)->format('Y-m-d') ?? '—' }}</p>
         </div>
         <div class="flex gap-3">
             {{-- Conditional Invoicing Button --}}
@@ -56,50 +56,50 @@
         <div x-show="tab === 'details'" x-cloak class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             @php
                 $fields = [
-                    ['label' => 'Truck Number', 'value' => $folder->truck_number],
-                    ['label' => 'Trailer Number', 'value' => $folder->trailer_number],
-                    ['label' => 'Invoice Number', 'value' => $folder->invoice_number],
-                    ['label' => 'Goods Type', 'value' => $folder->goods_type],
-                    ['label' => 'Agency', 'value' => $folder->agency],
-                    ['label' => 'Pre-alert Place', 'value' => $folder->pre_alert_place],
-                    ['label' => 'Transport Mode', 'value' => $folder->transport_mode],
-                    ['label' => 'Internal Reference', 'value' => $folder->internal_reference],
-                    ['label' => 'Order Number', 'value' => $folder->order_number],
-                    ['label' => 'Folder Date', 'value' => $folder->folder_date],
-                    ['label' => 'Transporter', 'value' => $folder->transporter?->name],
-                    ['label' => 'Driver Name', 'value' => $folder->driver_name],
-                    ['label' => 'Driver Phone', 'value' => $folder->driver_phone],
-                    ['label' => 'Nationality', 'value' => $folder->driver_nationality],
-                    ['label' => 'Origin', 'value' => $folder->origin?->name],
-                    ['label' => 'Destination', 'value' => $folder->destination?->name],
-                    ['label' => 'Client (texte)', 'value' => $folder->client],
-                    ['label' => 'Entreprise', 'value' => $folder->company?->name],
-                    ['label' => 'Supplier', 'value' => $folder->supplier?->name],
-                    ['label' => 'Customs Office', 'value' => $folder->customsOffice?->name],
-                    ['label' => 'Declaration Number', 'value' => $folder->declaration_number],
-                    ['label' => 'Declaration Type', 'value' => $folder->declarationType?->name],
-                    ['label' => 'Declarant', 'value' => $folder->declarant],
-                    ['label' => 'Customs Agent', 'value' => $folder->customs_agent],
-                    ['label' => 'Container', 'value' => $folder->container_number],
-                    ['label' => 'Weight', 'value' => $folder->weight],
-                    ['label' => 'Quantity', 'value' => $folder->quantity],
-                    ['label' => 'FOB Amount', 'value' => $folder->fob_amount],
-                    ['label' => 'Insurance Amount', 'value' => $folder->insurance_amount],
-                    ['label' => 'CIF Amount', 'value' => $folder->cif_amount],
-                    ['label' => 'Arrival Border Date', 'value' => $folder->arrival_border_date],
-                    ['label' => 'License Code', 'value' => $folder->license_code],
-                    ['label' => 'BIVAC Code', 'value' => $folder->bivac_code],
-                    ['label' => 'TR8 Number', 'value' => $folder->tr8_number],
-                    ['label' => 'TR8 Date', 'value' => $folder->tr8_date],
-                    ['label' => 'T1 Number', 'value' => $folder->t1_number],
-                    ['label' => 'T1 Date', 'value' => $folder->t1_date],
-                    ['label' => 'Formalities Office Ref', 'value' => $folder->formalities_office_reference],
-                    ['label' => 'IM4 Number', 'value' => $folder->im4_number],
-                    ['label' => 'IM4 Date', 'value' => $folder->im4_date],
-                    ['label' => 'Liquidation Number', 'value' => $folder->liquidation_number],
-                    ['label' => 'Liquidation Date', 'value' => $folder->liquidation_date],
-                    ['label' => 'Quitance Number', 'value' => $folder->quitance_number],
-                    ['label' => 'Quitance Date', 'value' => $folder->quitance_date],
+                    ['label' => 'Truck Number', 'value' => $folder->truck_number ?? '—'],
+                    ['label' => 'Trailer Number', 'value' => $folder->trailer_number ?? '—'],
+                    ['label' => 'Invoice Number', 'value' => $folder->invoice_number ?? '—'],
+                    ['label' => 'Goods Type', 'value' => $folder->goods_type ?? '—'],
+                    ['label' => 'Agency', 'value' => $folder->agency ?? '—'],
+                    ['label' => 'Pre-alert Place', 'value' => $folder->pre_alert_place ?? '—'],
+                    ['label' => 'Transport Mode', 'value' => $folder->transport_mode ?? '—'],
+                    ['label' => 'Internal Reference', 'value' => $folder->internal_reference ?? '—'],
+                    ['label' => 'Order Number', 'value' => $folder->order_number ?? '—'],
+                    ['label' => 'Folder Date', 'value' => $folder->folder_date ?? '—'],
+                    ['label' => 'Transporter', 'value' => optional($folder->transporter)->name ?? '—'],
+                    ['label' => 'Driver Name', 'value' => $folder->driver_name ?? '—'],
+                    ['label' => 'Driver Phone', 'value' => $folder->driver_phone ?? '—'],
+                    ['label' => 'Nationality', 'value' => $folder->driver_nationality ?? '—'],
+                    ['label' => 'Origin', 'value' => optional($folder->origin)->name ?? '—'],
+                    ['label' => 'Destination', 'value' => optional($folder->destination)->name ?? '—'],
+                    ['label' => 'Client (texte)', 'value' => $folder->client ?? '—'],
+                    ['label' => 'Entreprise', 'value' => optional($folder->company)->name ?? '—'],
+                    ['label' => 'Supplier', 'value' => optional($folder->supplier)->name ?? '—'],
+                    ['label' => 'Customs Office', 'value' => optional($folder->customsOffice)->name ?? '—'],
+                    ['label' => 'Declaration Number', 'value' => $folder->declaration_number ?? '—'],
+                    ['label' => 'Declaration Type', 'value' => optional($folder->declarationType)->name ?? '—'],
+                    ['label' => 'Declarant', 'value' => $folder->declarant ?? '—'],
+                    ['label' => 'Customs Agent', 'value' => $folder->customs_agent ?? '—'],
+                    ['label' => 'Container', 'value' => $folder->container_number ?? '—'],
+                    ['label' => 'Weight', 'value' => number_format($folder->weight ?? 0, 2)],
+                    ['label' => 'Quantity', 'value' => number_format($folder->quantity ?? 0, 2)],
+                    ['label' => 'FOB Amount', 'value' => number_format($folder->fob_amount ?? 0, 2)],
+                    ['label' => 'Insurance Amount', 'value' => number_format($folder->insurance_amount ?? 0, 2)],
+                    ['label' => 'CIF Amount', 'value' => number_format($folder->cif_amount ?? 0, 2)],
+                    ['label' => 'Arrival Border Date', 'value' => optional($folder->arrival_border_date)->format('Y-m-d') ?? '—'],
+                    ['label' => 'License Code', 'value' => $folder->license_code ?? '—'],
+                    ['label' => 'BIVAC Code', 'value' => $folder->bivac_code ?? '—'],
+                    ['label' => 'TR8 Number', 'value' => $folder->tr8_number ?? '—'],
+                    ['label' => 'TR8 Date', 'value' => $folder->tr8_date ?? '—'],
+                    ['label' => 'T1 Number', 'value' => $folder->t1_number ?? '—'],
+                    ['label' => 'T1 Date', 'value' => $folder->t1_date ?? '—'],
+                    ['label' => 'Formalities Office Ref', 'value' => $folder->formalities_office_reference ?? '—'],
+                    ['label' => 'IM4 Number', 'value' => $folder->im4_number ?? '—'],
+                    ['label' => 'IM4 Date', 'value' => $folder->im4_date ?? '—'],
+                    ['label' => 'Liquidation Number', 'value' => $folder->liquidation_number ?? '—'],
+                    ['label' => 'Liquidation Date', 'value' => $folder->liquidation_date ?? '—'],
+                    ['label' => 'Quitance Number', 'value' => $folder->quitance_number ?? '—'],
+                    ['label' => 'Quitance Date', 'value' => $folder->quitance_date ?? '—'],
                 ];
             @endphp
 
@@ -113,7 +113,7 @@
             <div class="sm:col-span-2 lg:col-span-3">
                 <div class="bg-yellow-50 dark:bg-yellow-900/10 p-4 rounded-lg border-l-4 border-yellow-400">
                     <p class="text-xs uppercase text-yellow-800 dark:text-yellow-200 mb-1 font-semibold">Description</p>
-                    <p class="text-sm text-gray-800 dark:text-gray-100">{{ $folder->description }}</p>
+                    <p class="text-sm text-gray-800 dark:text-gray-100">{{ $folder->description ?? '—' }}</p>
                 </div>
             </div>
 
