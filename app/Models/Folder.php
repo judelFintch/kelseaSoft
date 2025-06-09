@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Models\Currency;
 use Kyslik\ColumnSortable\Sortable;
 
 class Folder extends Model
@@ -38,7 +39,9 @@ class Folder extends Model
         'quantity',
         'fob_amount',
         'insurance_amount',
+        'freight_amount',
         'cif_amount',
+        'currency_id',
         'arrival_border_date',
         'description',
         'dossier_type',
@@ -55,6 +58,7 @@ class Folder extends Model
         'quantity' => 'float',
         'fob_amount' => 'float',
         'insurance_amount' => 'float',
+        'freight_amount' => 'float',
         'cif_amount' => 'float',
         'dossier_type' => DossierType::class,
     ];
@@ -103,6 +107,11 @@ class Folder extends Model
     public function files()
     {
         return $this->hasMany(\App\Models\FolderFile::class);
+    }
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
     }
 
     public function license()

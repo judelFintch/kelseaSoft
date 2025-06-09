@@ -34,6 +34,7 @@
                 <x-forms.input label="Numéro de Dossier" model="folder_number" required />
                 <x-forms.input label="Numéro de la facture" model="invoice_number" required />
                 <x-forms.input label="Date du Dossier" model="folder_date" type="date" required />
+                <x-forms.select label="Devise" model="currency_id" :options="$currencies" optionLabel="code" optionValue="id" required />
                 <x-forms.select label="Fournisseur" model="supplier_id" :options="$suppliers" optionLabel="name" optionValue="id" placeholder="Sélectionner un fournisseur" />
                 <x-forms.select label="Nature Marchandise" model="goods_type" :options="$merchandiseTypes" optionLabel="name" optionValue="name" required placeholder="Sélectionner un type de marchandise" />
                 <x-forms.textarea label="Description Générale" model="description" rows="3" />
@@ -61,6 +62,7 @@
                 <x-forms.input label="Quantité de Marchandise" model="quantity" type="number" step="0.01" />
                 <x-forms.input label="Montant FOB" model="fob_amount" type="number" step="0.01" />
                 <x-forms.input label="Montant Assurance" model="insurance_amount" type="number" step="0.01" />
+                <x-forms.input label="Fret" model="freight_amount" type="number" step="0.01" />
                 <x-forms.input label="Montant CIF" model="cif_amount" type="number" step="0.01" />
             </div>
         </div>

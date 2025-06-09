@@ -11,6 +11,7 @@ use App\Models\Supplier;
 use App\Models\CustomsOffice;
 use App\Models\DeclarationType;
 use App\Models\Licence;
+use App\Models\Currency;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class FolderFactory extends Factory
@@ -42,7 +43,9 @@ class FolderFactory extends Factory
             'quantity' => $this->faker->optional()->numberBetween(1, 100),
             'fob_amount' => $this->faker->optional()->randomFloat(2, 1000, 100000),
             'insurance_amount' => $this->faker->optional()->randomFloat(2, 100, 5000),
+            'freight_amount' => $this->faker->optional()->randomFloat(2, 100, 5000),
             'cif_amount' => $this->faker->optional()->randomFloat(2, 1100, 105000),
+            'currency_id' => Currency::factory(),
             'arrival_border_date' => $this->faker->optional()->date(),
             'description' => $this->faker->paragraph,
             'dossier_type' => $this->faker->randomElement(['sans', 'avec_licence']), // Example types

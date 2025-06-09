@@ -12,6 +12,7 @@ use App\Models\CustomsOffice;
 use App\Models\DeclarationType;
 use App\Models\MerchandiseType;
 use App\Models\Licence;
+use App\Models\Currency;
 use App\Enums\DossierType;
 use App\Services\Folder\FolderService;
 use Illuminate\Validation\Rule;
@@ -26,6 +27,7 @@ class FolderCreate extends Component
     public $folder_date;
     public $company_id;
     public $invoice_number;
+    public $currency_id = 1;
     public $supplier_id;
     public $goods_type;
     public $description;
@@ -47,6 +49,7 @@ class FolderCreate extends Component
     public $quantity;
     public $fob_amount;
     public $insurance_amount;
+    public $freight_amount;
     public $cif_amount;
 
     // Étape 3
@@ -65,6 +68,7 @@ class FolderCreate extends Component
     public $declarationTypes = [];
     public $transportModes = [];
     public $merchandiseTypes = [];
+    public $currencies = [];
 
     public function mount()
     {
@@ -87,6 +91,9 @@ class FolderCreate extends Component
             ['id' => 'Mer', 'name' => 'Mer'],
             ['id' => 'Multimodal', 'name' => 'Multimodal'],
         ];
+
+        $this->currencies = Currency::orderBy('code')->get(['id', 'code']);
+        $this->currency_id = $this->currencies->first()->id ?? $this->currency_id;
 
         $this->generateFolderNumber('GEN'); // par défaut
     }
@@ -138,6 +145,7 @@ class FolderCreate extends Component
                 'company_id' => 'required|exists:companies,id',
                 'folder_number' => ['required', 'string', Rule::unique('folders', 'folder_number')->withoutTrashed()],
                 'invoice_number' => 'required|string|max:255',
+                'currency_id' => 'required|exists:currencies,id',
                 'folder_date' => 'required|date',
                 'supplier_id' => 'nullable|exists:suppliers,id',
                 'goods_type' => 'required|string|max:255',
@@ -157,6 +165,7 @@ class FolderCreate extends Component
                 'quantity' => 'nullable|numeric|min:0',
                 'fob_amount' => 'nullable|numeric|min:0',
                 'insurance_amount' => 'nullable|numeric|min:0',
+                'freight_amount' => 'nullable|numeric|min:0',
                 'cif_amount' => 'nullable|numeric|min:0',
             ],
             3 => [
@@ -186,9 +195,11 @@ class FolderCreate extends Component
             'quantity' => $this->quantity,
             'fob_amount' => $this->fob_amount,
             'insurance_amount' => $this->insurance_amount,
+            'freight_amount' => $this->freight_amount,
             'cif_amount' => $this->cif_amount,
             'folder_date' => $this->folder_date,
             'company_id' => $this->company_id,
+            'currency_id' => $this->currency_id,
             'supplier_id' => $this->supplier_id,
             'goods_type' => $this->goods_type,
             'description' => $this->description,
@@ -215,11 +226,12 @@ class FolderCreate extends Component
 
         $this->resetExcept([
             'companies', 'suppliers', 'transporters', 'locations',
-            'customsOffices', 'declarationTypes', 'merchandiseTypes', 'transportModes', 'licenses', 'dossierTypeOptions', 'totalSteps'
+            'customsOffices', 'declarationTypes', 'merchandiseTypes', 'transportModes', 'licenses', 'dossierTypeOptions', 'currencies', 'totalSteps'
         ]);
 
         $this->currentStep = 1;
         $this->folder_date = now()->toDateString();
+        $this->currency_id = $this->currencies->first()->id ?? $this->currency_id;
     }
 
     public function render()

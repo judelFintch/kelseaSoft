@@ -49,7 +49,8 @@ class FolderService
         return DB::transaction(function () use ($data) {
             $fob = floatval($data['fob_amount'] ?? 0);
             $insurance = floatval($data['insurance_amount'] ?? 0);
-            $data['cif_amount'] = $fob + $insurance;
+            $freight = floatval($data['freight_amount'] ?? 0);
+            $data['cif_amount'] = $fob + $insurance + $freight;
 
             $folder = Folder::create($data);
 
@@ -90,7 +91,9 @@ class FolderService
             'weight' => $data['weight'] ?? 0,
             'fob_amount' => $data['fob_amount'] ?? 0,
             'insurance_amount' => $data['insurance_amount'] ?? 0,
-            'cif_amount' => $data['cif_amount'] ?? 0,
+            'freight_amount' => $data['freight_amount'] ?? 0,
+            'currency_id' => $data['currency_id'] ?? null,
+            'cif_amount' => ($data['fob_amount'] ?? 0) + ($data['insurance_amount'] ?? 0) + ($data['freight_amount'] ?? 0),
             'arrival_border_date' => $data['arrival_border_date'] ?? null,
             'description' => $data['description'] ?? null,
         ]);
