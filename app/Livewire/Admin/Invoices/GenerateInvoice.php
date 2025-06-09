@@ -165,141 +165,145 @@ class GenerateInvoice extends Component
 
     public function save(): void
     {
-        $this->validate([
-            'company_id' => 'required|integer|exists:companies,id',
-            'invoice_date' => 'required|date',
-            'product' => 'required|string|max:255',
-            'weight' => 'nullable|numeric',
-            'operation_code' => 'nullable|string|max:255',
-            'fob_amount' => 'required|numeric|min:0',
-            'insurance_amount' => 'nullable|numeric|min:0',
-            'freight_amount' => 'nullable|numeric|min:0',
-            'cif_amount' => 'nullable|numeric|min:0',
-            'payment_mode' => 'required|string',
-            'currency_id' => 'required|integer|exists:currencies,id',
-            'exchange_rate' => 'required|numeric|min:0',
-            'items' => 'present|array|min:1',
-            'items.*.amount_local' => 'required|numeric|min:0',
-            'items.*.currency_id' => 'required|integer|exists:currencies,id',
-            'items.*.tax_id' => 'required_if:items.*.category,import_tax|integer|exists:taxes,id',
-            'items.*.agency_fee_id' => 'required_if:items.*.category,agency_fee|integer|exists:agency_fees,id',
-            'items.*.extra_fee_id' => 'required_if:items.*.category,extra_fee|integer|exists:extra_fees,id',
-            'folder_id' => ['nullable', 'integer', 'exists:folders,id', \Illuminate\Validation\Rule::unique('invoices', 'folder_id')->whereNull('deleted_at')->ignore($this->invoice_id ?? null)],
-        ]);
+        try {
+            $validated = $this->validate([
+                'company_id' => 'required|integer|exists:companies,id',
+                'invoice_date' => 'required|date',
+                'product' => 'required|string|max:255',
+                'weight' => 'nullable|numeric',
+                'operation_code' => 'nullable|string|max:255',
+                'default_fob_amount' => 'required|numeric|min:0',
+                'insurance_amount' => 'nullable|numeric|min:0',
+                'freight_amount' => 'nullable|numeric|min:0',
+                'cif_amount' => 'nullable|numeric|min:0',
+                'payment_mode' => 'required|string',
+                'currency_id' => 'required|integer|exists:currencies,id',
+                'exchange_rate' => 'required|numeric|min:0',
+                'items' => 'present|array|min:1',
+                'items.*.amount_local' => 'required|numeric|min:0',
+                'items.*.currency_id' => 'required|integer|exists:currencies,id',
+                'items.*.tax_id' => 'required_if:items.*.category,import_tax|integer|exists:taxes,id',
+                'items.*.agency_fee_id' => 'required_if:items.*.category,agency_fee|integer|exists:agency_fees,id',
+                'items.*.extra_fee_id' => 'required_if:items.*.category,extra_fee|integer|exists:extra_fees,id',
+                'folder_id' => [
+                    'nullable',
+                    'integer',
+                    'exists:folders,id',
+                    \Illuminate\Validation\Rule::unique('invoices', 'folder_id')->whereNull('deleted_at')->ignore($this->invoice_id ?? null),
+                ],
+            ]);
 
-        $this->items = array_values(array_filter($this->items, function ($item) {
-            if ($item['category'] === 'import_tax' && empty($item['tax_id'])) return false;
-            if ($item['category'] === 'agency_fee' && empty($item['agency_fee_id'])) return false;
-            if ($item['category'] === 'extra_fee' && empty($item['extra_fee_id'])) return false;
-            return true;
-        }));
+            // 🔍 Pour voir toutes les données validées
+            dump($validated);
 
-        foreach ($this->items as $index => &$itemRef) {
-            if (empty($itemRef['currency_id'])) {
-                $this->addError("items.{$index}.currency_id", "La devise pour l'item est requise.");
-                return;
-            }
+            $this->items = array_values(array_filter($this->items, function ($item) {
+                if ($item['category'] === 'import_tax' && empty($item['tax_id'])) return false;
+                if ($item['category'] === 'agency_fee' && empty($item['agency_fee_id'])) return false;
+                if ($item['category'] === 'extra_fee' && empty($item['extra_fee_id'])) return false;
+                return true;
+            }));
 
-            if (empty($itemRef['label'])) {
-                switch ($itemRef['category']) {
-                    case 'import_tax':
-                        $tax = Tax::find($itemRef['tax_id']);
-                        $itemRef['label'] = $tax?->label ?? 'Taxe inconnue';
-                        break;
-                    case 'agency_fee':
-                        $agency = AgencyFee::find($itemRef['agency_fee_id']);
-                        $itemRef['label'] = $agency?->label ?? 'Frais agence inconnu';
-                        break;
-                    case 'extra_fee':
-                        $itemRef['label'] = 'Frais divers';
-                        break;
-                    default:
-                        $itemRef['label'] = 'Item inconnu';
+            foreach ($this->items as $index => &$itemRef) {
+                if (empty($itemRef['currency_id'])) {
+                    $this->addError("items.{$index}.currency_id", "La devise pour l'item est requise.");
+                    return;
+                }
+
+                if (empty($itemRef['label'])) {
+                    switch ($itemRef['category']) {
+                        case 'import_tax':
+                            $tax = Tax::find($itemRef['tax_id']);
+                            $itemRef['label'] = $tax?->label ?? 'Taxe inconnue';
+                            break;
+                        case 'agency_fee':
+                            $agency = AgencyFee::find($itemRef['agency_fee_id']);
+                            $itemRef['label'] = $agency?->label ?? 'Frais agence inconnu';
+                            break;
+                        case 'extra_fee':
+                            $itemRef['label'] = 'Frais divers';
+                            break;
+                        default:
+                            $itemRef['label'] = 'Item inconnu';
+                    }
                 }
             }
-        }
-        unset($itemRef);
+            unset($itemRef);
 
-        $processedItems = [];
-        $totalUsdFromItems = 0;
+            $processedItems = [];
+            $totalUsdFromItems = 0;
 
-        foreach ($this->items as $itemArray) {
-            $localAmount = (float)($itemArray['amount_local'] ?? 0);
-            $itemCurrencyId = (int)($itemArray['currency_id'] ?? $this->currency_id);
-            $itemCurrency = Currency::find($itemCurrencyId);
+            foreach ($this->items as $itemArray) {
+                $localAmount = (float)($itemArray['amount_local'] ?? 0);
+                $itemCurrencyId = (int)($itemArray['currency_id'] ?? $this->currency_id);
+                $itemCurrency = Currency::find($itemCurrencyId);
 
-            $itemArray['currency_id'] = $itemCurrencyId;
+                $itemArray['currency_id'] = $itemCurrencyId;
+                $itemArray['exchange_rate'] = $this->exchange_rate; // 🔄 Utilise toujours le taux saisi dans le formulaire
 
-            if ($itemCurrency) {
-                $itemExchangeRate = $itemCurrency->exchange_rate ?: 1.0;
-                $itemArray['exchange_rate'] = $itemExchangeRate;
-
-                if ($itemCurrency->code === 'USD') {
+                if ($itemCurrency && strtoupper($itemCurrency->code) === 'USD') {
                     $itemArray['amount_usd'] = $localAmount;
-                } elseif ($itemExchangeRate != 0) {
-                    $itemArray['amount_usd'] = round($localAmount / $itemExchangeRate, 2);
+                } elseif ($this->exchange_rate != 0) {
+                    $itemArray['amount_usd'] = round($localAmount / $this->exchange_rate, 2);
                 } else {
                     $itemArray['amount_usd'] = 0;
                 }
 
-                $usdToCdfRate = $this->exchange_rate;
-                $itemArray['amount_cdf'] = round($itemArray['amount_usd'] * $usdToCdfRate, 2);
-            } else {
-                $itemArray['amount_usd'] = 0;
-                $itemArray['amount_cdf'] = 0;
-                $itemArray['exchange_rate'] = 1.0;
+                $itemArray['amount_cdf'] = round($itemArray['amount_usd'] * $this->exchange_rate, 2);
+
+                $totalUsdFromItems += $itemArray['amount_usd'];
+                $processedItems[] = $itemArray;
             }
 
-            $totalUsdFromItems += $itemArray['amount_usd'];
-            $processedItems[] = $itemArray;
+            $this->items = $processedItems;
+            $this->total_usd = $totalUsdFromItems;
+
+            $invoiceData = [
+                'company_id' => $this->company_id,
+                'invoice_date' => Carbon::parse($this->invoice_date),
+                'product' => $this->product,
+                'weight' => $this->weight,
+                'operation_code' => $this->operation_code,
+                'fob_amount' => $this->default_fob_amount, // corriger ici aussi
+                'insurance_amount' => $this->insurance_amount,
+                'freight_amount' => $this->freight_amount,
+                'cif_amount' => $this->cif_amount,
+                'payment_mode' => $this->payment_mode,
+                'currency_id' => $this->currency_id,
+                'exchange_rate' => $this->exchange_rate,
+                'total_usd' => $this->total_usd,
+                'folder_id' => $this->folder_id,
+                'status' => 'pending',
+            ];
+
+            $invoice = DB::transaction(function () use ($invoiceData) {
+                $maxId = DB::table('invoices')->lockForUpdate()->max('id') ?? 0;
+                $invoiceData['invoice_number'] = 'MDBKCCGL' . str_pad($maxId + 1, 6, '0', STR_PAD_LEFT);
+                $invoice = Invoice::create($invoiceData);
+
+                foreach ($this->items as $itemData) {
+                    $invoice->items()->create([
+                        'label' => $itemData['label'],
+                        'category' => $itemData['category'],
+                        'amount_usd' => $itemData['amount_usd'],
+                        'amount_cdf' => $itemData['amount_cdf'],
+                        'currency_id' => $itemData['currency_id'],
+                        'exchange_rate' => $itemData['exchange_rate'],
+                        'tax_id' => $itemData['tax_id'] ?? null,
+                        'agency_fee_id' => $itemData['agency_fee_id'] ?? null,
+                        'extra_fee_id' => $itemData['extra_fee_id'] ?? null,
+                    ]);
+                }
+
+                return $invoice;
+            });
+
+            session()->flash('success', 'Facture enregistrée avec succès: ' . $invoice->invoice_number);
+            $this->resetForm();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e->errors()); // ⛔ Affiche les erreurs précises
         }
-
-        $this->items = $processedItems;
-        $this->total_usd = $totalUsdFromItems;
-
-        $invoiceData = [
-            'company_id' => $this->company_id,
-            'invoice_date' => Carbon::parse($this->invoice_date),
-            'product' => $this->product,
-            'weight' => $this->weight,
-            'operation_code' => $this->operation_code,
-            'fob_amount' => $this->fob_amount,
-            'insurance_amount' => $this->insurance_amount,
-            'freight_amount' => $this->freight_amount,
-            'cif_amount' => $this->cif_amount,
-            'payment_mode' => $this->payment_mode,
-            'currency_id' => $this->currency_id,
-            'exchange_rate' => $this->exchange_rate,
-            'total_usd' => $this->total_usd,
-            'folder_id' => $this->folder_id,
-            'status' => 'pending',
-        ];
-
-        $invoice = DB::transaction(function () use ($invoiceData) {
-            $maxId = DB::table('invoices')->lockForUpdate()->max('id') ?? 0;
-            $invoiceData['invoice_number'] = 'MDBKCCGL' . str_pad($maxId + 1, 6, '0', STR_PAD_LEFT);
-            $invoice = Invoice::create($invoiceData);
-
-            foreach ($this->items as $itemData) {
-                $invoice->items()->create([
-                    'label' => $itemData['label'],
-                    'category' => $itemData['category'],
-                    'amount_usd' => $itemData['amount_usd'],
-                    'amount_cdf' => $itemData['amount_cdf'],
-                    'currency_id' => $itemData['currency_id'],
-                    'exchange_rate' => $itemData['exchange_rate'],
-                    'tax_id' => $itemData['tax_id'] ?? null,
-                    'agency_fee_id' => $itemData['agency_fee_id'] ?? null,
-                    'extra_fee_id' => $itemData['extra_fee_id'] ?? null,
-                ]);
-            }
-
-            return $invoice;
-        });
-
-        session()->flash('success', 'Facture enregistrée avec succès: ' . $invoice->invoice_number);
-        $this->resetForm();
     }
+
 
     protected function resetForm(): void
     {
