@@ -178,7 +178,7 @@ class GenerateInvoice extends Component
                     \Illuminate\Validation\Rule::unique('invoices', 'folder_id')->whereNull('deleted_at')->ignore($this->invoice_id ?? null),
                 ],
             ]);
-            
+
 
             foreach ($this->items as $index => $item) {
                 if ($item['category'] === 'import_tax' && empty($item['tax_id'])) {
@@ -273,10 +273,9 @@ class GenerateInvoice extends Component
                 'folder_id' => $this->folder_id,
                 'status' => 'pending',
             ];
-
             $invoice = DB::transaction(function () use ($invoiceData) {
                 $maxId = DB::table('invoices')->lockForUpdate()->max('id') ?? 0;
-                $invoiceData['invoice_number'] = 'MDBKCCGL' . str_pad($maxId + 1, 6, '0', STR_PAD_LEFT);
+                $invoiceData['invoice_number'] = 'MDBK' . str_pad($maxId + 1, 6, '0', STR_PAD_LEFT);
                 $invoice = Invoice::create($invoiceData);
 
                 foreach ($this->items as $itemData) {
