@@ -30,7 +30,7 @@
         <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm animate-fadeIn">
             <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 border-b pb-2 mb-6 border-gray-300 dark:border-gray-600">Étape 1: Informations de Base</h3>
             <div class="space-y-4">
-                <x-forms.select label="Client (Société)" model="company_id" :options="$companies" optionLabel="name" optionValue="id" required placeholder="Sélectionner un client" />
+                <x-forms.select label="Entreprise" model="company_id" :options="$companies" optionLabel="name" optionValue="id" required placeholder="Sélectionner une entreprise" />
                 <x-forms.input label="Numéro de Dossier" model="folder_number" required />
                 <x-forms.input label="Numéro de la facture" model="invoice_number" required />
                 <x-forms.input label="Date du Dossier" model="folder_date" type="date" required />

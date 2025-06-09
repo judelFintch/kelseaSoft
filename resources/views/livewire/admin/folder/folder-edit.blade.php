@@ -20,7 +20,7 @@
     
                     <x-forms.select label="Destination" model="folder.destination_id" :options="$locations" option-label="name" option-value="id" />
                     <x-forms.select label="Supplier" model="folder.supplier_id" :options="$suppliers" option-label="name" option-value="id" />
-                    <x-forms.select label="Client" model="folder.client" :options="$clients" option-label="name" option-value="id" />
+                    <x-forms.select label="Client (texte)" model="folder.client" :options="$clients" option-label="name" option-value="id" />
                     <x-forms.select label="Customs Office" model="folder.customs_office_id" :options="$customsOffices" option-label="name" option-value="id" />
     
                     <x-forms.input label="Declaration Number" model="folder.declaration_number" />

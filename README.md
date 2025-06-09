@@ -20,8 +20,8 @@ KelseaSoft is a powerful and intuitive **customs agency management software** de
 - Track payment status (**Paid, Pending, Partially Paid**).
 
 ### 🏢 Client Management
-- Pre-register clients with relevant details (name, address, contact, company type).
-- Assign dossiers to registered clients.
+- Pre-register **client companies** with relevant details (name, address, contact, company type).
+- Assign dossiers to registered companies or enter a custom client name (stored in the `client` field).
 - Access client dossier history.
 
 ### 📜 Document Handling
