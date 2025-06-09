@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\Currency;
+use App\Models\DocumentType;
 use Kyslik\ColumnSortable\Sortable;
 
 class Folder extends Model
@@ -117,6 +118,32 @@ class Folder extends Model
     public function license()
     {
         return $this->belongsTo(Licence::class);
+    }
+
+    /**
+     * Calculate overall progress percentage for the folder.
+     */
+    public function progressPercentage(): Attribute
+    {
+        return Attribute::get(function (): int {
+            $totalTasks = DocumentType::count() + 1; // include invoice as a task
+
+            if ($totalTasks === 0) {
+                return 0;
+            }
+
+            // count how many distinct document types have files uploaded
+            $completedDocs = $this->files()
+                ->distinct('document_type_id')
+                ->count('document_type_id');
+
+            // invoice considered completed when present
+            $invoiceCompleted = $this->invoice ? 1 : 0;
+
+            $completed = $completedDocs + $invoiceCompleted;
+
+            return (int) round(($completed / $totalTasks) * 100);
+        });
     }
 
     public function licenseLogs()

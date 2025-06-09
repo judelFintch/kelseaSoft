@@ -145,10 +145,10 @@
             <h4 class="text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">📊 Suivi de progression</h4>
             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 overflow-hidden">
                 <div class="bg-green-500 h-full transition-all duration-500"
-                    style="width: {{ $folder->progress_percentage ?? 60 }}%"></div>
+                    style="width: {{ $folder->progress_percentage }}%"></div>
             </div>
             <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">
-                {{ $folder->progress_percentage ?? 60 }}% terminé
+                {{ $folder->progress_percentage }}% terminé
             </p>
         </div>
     </div>
