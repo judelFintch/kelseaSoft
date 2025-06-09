@@ -188,11 +188,25 @@ class GenerateInvoice extends Component
             
             'items.*.amount_local' => 'required|numeric|min:0',
             'items.*.currency_id' => 'required|integer|exists:currencies,id', // Devise de l'item
-            'items.*.tax_id' => 'nullable|integer|exists:taxes,id',
-            'items.*.agency_fee_id' => 'nullable|integer|exists:agency_fees,id',
-            'items.*.extra_fee_id' => 'nullable|integer|exists:extra_fees,id',
+            'items.*.tax_id' => 'required_if:items.*.category,import_tax|integer|exists:taxes,id',
+            'items.*.agency_fee_id' => 'required_if:items.*.category,agency_fee|integer|exists:agency_fees,id',
+            'items.*.extra_fee_id' => 'required_if:items.*.category,extra_fee|integer|exists:extra_fees,id',
             'folder_id' => ['nullable', 'integer', 'exists:folders,id', \Illuminate\Validation\Rule::unique('invoices', 'folder_id')->whereNull('deleted_at')->ignore($this->invoice_id ?? null)],
         ]);
+
+        // Remove any items missing required reference IDs based on their category
+        $this->items = array_values(array_filter($this->items, function ($item) {
+            if ($item['category'] === 'import_tax' && empty($item['tax_id'])) {
+                return false;
+            }
+            if ($item['category'] === 'agency_fee' && empty($item['agency_fee_id'])) {
+                return false;
+            }
+            if ($item['category'] === 'extra_fee' && empty($item['extra_fee_id'])) {
+                return false;
+            }
+            return true;
+        }));
 
        
         // Prépare et valide les labels des items

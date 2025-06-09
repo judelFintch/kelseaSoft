@@ -208,4 +208,36 @@ class InvoiceFolderLinkTest extends TestCase
         $responseInvoiceShow->assertSee($folder->folder_number);
         $responseInvoiceShow->assertSee(route('folder.show', $folder->id));
     }
+
+    /** @test */
+    public function test_validation_error_when_reference_id_missing_for_category(): void
+    {
+        $currencyUSD = Currency::where('code', 'USD')->first();
+
+        Livewire::actingAs($this->user)
+            ->test(GenerateInvoiceComponent::class)
+            ->set('company_id', $this->company->id)
+            ->set('invoice_date', now()->toDateString())
+            ->set('product', 'Test Product')
+            ->set('fob_amount', 100)
+            ->set('payment_mode', 'provision')
+            ->set('currency_id', $currencyUSD->id)
+            ->set('exchange_rate', Currency::where('code', 'CDF')->first()->exchange_rate)
+            ->set('items', [
+                [
+                    'label' => 'Missing Tax',
+                    'category' => 'import_tax',
+                    'amount_local' => 50,
+                    'currency_id' => $currencyUSD->id,
+                    'tax_id' => null,
+                    'agency_fee_id' => null,
+                    'extra_fee_id' => null,
+                    'exchange_rate' => 1.0,
+                    'amount_usd' => 50,
+                    'amount_cdf' => 50 * 2800,
+                ],
+            ])
+            ->call('save')
+            ->assertHasErrors(['items.0.tax_id' => 'required_if']);
+    }
 }
