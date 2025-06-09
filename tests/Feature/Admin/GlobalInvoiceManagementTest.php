@@ -271,4 +271,22 @@ class GlobalInvoiceManagementTest extends TestCase
         $this->assertNull($originalInvoice->global_invoice_id);
         $this->assertEquals('pending', $originalInvoice->status);
     }
+
+    /** @test */
+    public function test_can_delete_global_invoice(): void
+    {
+        $globalInvoice = GlobalInvoice::factory()->for($this->company)->create();
+        $invoice = Invoice::factory()->for($this->company)->create([
+            'global_invoice_id' => $globalInvoice->id,
+            'status' => 'grouped_in_global_invoice',
+        ]);
+
+        Livewire::test(GlobalInvoiceIndexComponent::class)
+            ->call('deleteGlobalInvoice', $globalInvoice->id);
+
+        $this->assertDatabaseMissing('global_invoices', ['id' => $globalInvoice->id]);
+        $invoice->refresh();
+        $this->assertNull($invoice->global_invoice_id);
+        $this->assertEquals('pending', $invoice->status);
+    }
 }
