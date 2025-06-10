@@ -1,3 +1,4 @@
+<div>
 <div class="w-full max-w-6xl mx-auto p-6 bg-white rounded-xl shadow space-y-6">
     <div class="flex justify-between items-center">
         <h2 class="text-xl font-bold">📋 Factures Générées</h2>
@@ -145,3 +146,4 @@
         </div>
     </form>
 </x-modal>
+</div>
