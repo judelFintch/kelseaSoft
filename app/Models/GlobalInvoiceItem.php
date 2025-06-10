@@ -12,6 +12,7 @@ class GlobalInvoiceItem extends Model
 
     protected $fillable = [
         'global_invoice_id',
+        'category',
         'description',
         'quantity',
         'unit_price',
@@ -21,6 +22,7 @@ class GlobalInvoiceItem extends Model
 
     protected $casts = [
         'original_item_ids' => 'array',
+        'category' => 'string',
     ];
 
     /**

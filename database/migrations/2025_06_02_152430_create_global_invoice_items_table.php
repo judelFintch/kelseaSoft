@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('global_invoice_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('global_invoice_id')->constrained()->onDelete('cascade')->index();
+            $table->enum('category', ['import_tax', 'agency_fee', 'extra_fee']);
             $table->string('description');
             $table->decimal('quantity', 10, 2);
             $table->decimal('unit_price', 15, 2);
