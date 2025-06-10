@@ -5,6 +5,7 @@ use App\Livewire\Admin\Company\CompanyCreate;
 use App\Livewire\Admin\Company\CompanyIndex;
 use App\Livewire\Admin\Company\CompanyList;
 use App\Livewire\Admin\Company\CompanyShow;
+use App\Livewire\Admin\Company\CompanyEdit;
 use App\Livewire\Admin\Dashboard\Dashboard;
 use App\Livewire\Admin\FilesTpesName\FileTypeNameCreate;
 use App\Livewire\Admin\Folder\FolderCreate;
@@ -65,7 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('company')->name('company.')->group(function () {
         Route::get('/Dashaboard', CompanyIndex::class)->name('index')->middleware(['permission:view company']);
         Route::get('/create', CompanyCreate::class)->name('create')->middleware(['permission:create company']);
-        Route::get('/edit/{id}', CompanyCreate::class)->name('edit')->middleware(['permission:edit company']);
+        Route::get('/edit/{company}', CompanyEdit::class)->name('edit')->middleware(['permission:edit company']);
         Route::get('/list', CompanyList::class)->name('list')->middleware(['permission:view company']);
         Route::get('/show/{id}', CompanyShow::class)->name('show')->middleware(['permission:view company']);
         Route::get('/delete/{id}', CompanyCreate::class)->name('delete')->middleware(['permission:delete company']);
