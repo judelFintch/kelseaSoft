@@ -58,9 +58,9 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/dashboard', Dashboard::class)->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -177,7 +177,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // Admin Routes for User, Role, Permission Management
-    Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    Route::prefix('admin')->name('admin.')->group(function () {
         // User Management
         Route::prefix('users')->name('user.')->middleware(['permission:manage users'])->group(function () {
             Route::get('/', UserIndex::class)->name('index');
@@ -200,6 +200,6 @@ Route::middleware('auth')->group(function () {
             // Route::get('/{permission}/edit', PermissionEdit::class)->name('edit');
         });
     });
-});
+
 
 require __DIR__ . '/auth.php';

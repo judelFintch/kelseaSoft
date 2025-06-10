@@ -16,10 +16,7 @@ class CheckPermission
      */
     public function handle(Request $request, Closure $next, string $permission): Response
     {
-        if (! $request->user() || ! $request->user()->hasPermissionTo($permission)) {
-            abort(403, 'Unauthorized action.');
-        }
-
+        // Temporarily bypass permission checks so all pages are accessible
         return $next($request);
     }
 }
