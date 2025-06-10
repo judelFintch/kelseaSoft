@@ -94,8 +94,7 @@
                             ✏️ Modifier
                         </a>
 
-                        <button wire:click="deleteInvoice({{ $invoice->id }})"
-                            onclick="return confirm('Confirmer la suppression de cette facture ?')"
+                        <button wire:click="confirmDeleteInvoice({{ $invoice->id }})"
                             class="text-red-600 hover:underline text-sm cursor-pointer">
                             🗑 Supprimer
                         </button>
@@ -118,3 +117,31 @@
         {{ $invoices->links() }}
     </div>
 </div>
+
+<x-modal name="confirm-invoice-deletion" focusable>
+    <form wire:submit.prevent="deleteInvoice" class="p-6">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+            Confirmer la suppression de la facture
+            {{ $this->invoiceToDelete?->invoice_number }}
+        </h2>
+
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            Tapez \"SUPPRIMER\" pour confirmer la suppression.
+        </p>
+
+        <div class="mt-6">
+            <x-text-input id="confirm-delete" type="text" wire:model.defer="deleteConfirmText" class="mt-1 block w-3/4" placeholder="SUPPRIMER" />
+            <x-input-error :messages="$errors->get('deleteConfirmText')" class="mt-2" />
+        </div>
+
+        <div class="mt-6 flex justify-end">
+            <x-secondary-button x-on:click="$dispatch('close')">
+                {{ __('Cancel') }}
+            </x-secondary-button>
+
+            <x-danger-button class="ms-3">
+                {{ __('Delete') }}
+            </x-danger-button>
+        </div>
+    </form>
+</x-modal>

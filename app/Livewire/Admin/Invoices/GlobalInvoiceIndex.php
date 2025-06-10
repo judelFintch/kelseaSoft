@@ -15,13 +15,36 @@ class GlobalInvoiceIndex extends Component
     public bool $showTrashed = false;
     protected $paginationTheme = 'bootstrap'; // Ou le thème de votre choix si configuré
 
+    public function getGlobalInvoiceToDeleteProperty()
+    {
+        return $this->deleteGlobalInvoiceId ? GlobalInvoice::with('company')->find($this->deleteGlobalInvoiceId) : null;
+    }
+
+    public ?int $deleteGlobalInvoiceId = null;
+    public string $deleteConfirmText = '';
+
     public function updatingSearch(): void
     {
         $this->resetPage();
     }
 
-    public function deleteGlobalInvoice(int $id): void
+    public function confirmDeleteGlobalInvoice(int $id): void
     {
+        $this->deleteGlobalInvoiceId = $id;
+        $this->deleteConfirmText = '';
+        $this->dispatch('open-modal', 'confirm-global-invoice-deletion');
+    }
+
+    public function deleteGlobalInvoice(): void
+    {
+        if ($this->deleteConfirmText !== 'SUPPRIMER') {
+            $this->addError('deleteConfirmText', 'Veuillez taper \"SUPPRIMER\" pour confirmer.');
+            $this->dispatch('open-modal', 'confirm-global-invoice-deletion');
+            return;
+        }
+
+        $id = $this->deleteGlobalInvoiceId;
+
         DB::transaction(function () use ($id) {
             $globalInvoice = GlobalInvoice::with('invoices')->findOrFail($id);
 
@@ -35,6 +58,8 @@ class GlobalInvoiceIndex extends Component
         });
 
         session()->flash('success', 'Facture globale supprimée avec succès.');
+
+        $this->reset(['deleteGlobalInvoiceId', 'deleteConfirmText']);
     }
 
     public function render()
