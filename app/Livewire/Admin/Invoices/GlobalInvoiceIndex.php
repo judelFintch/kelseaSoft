@@ -12,6 +12,7 @@ class GlobalInvoiceIndex extends Component
     use WithPagination;
 
     public string $search = '';
+    public bool $showTrashed = false;
     protected $paginationTheme = 'bootstrap'; // Ou le thème de votre choix si configuré
 
     public function updatingSearch(): void
@@ -45,6 +46,7 @@ class GlobalInvoiceIndex extends Component
                         $companyQuery->where('name', 'like', '%' . $this->search . '%');
                     });
             })
+            ->when($this->showTrashed, fn($q) => $q->onlyTrashed())
             ->latest() // Ou orderBy('issue_date', 'desc')
             ->paginate(15);
 

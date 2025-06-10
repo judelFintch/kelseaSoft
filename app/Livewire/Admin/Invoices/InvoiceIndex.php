@@ -17,6 +17,7 @@ class InvoiceIndex extends Component
     use WithPagination;
 
     public $search = '';
+    public bool $showTrashed = false;
     public array $selectedInvoices = [];
     public ?int $companyIdForGlobalInvoice = null;
 
@@ -131,6 +132,7 @@ class InvoiceIndex extends Component
                 $query->where('invoice_number', 'like', "%{$this->search}%")
                     ->orWhereHas('company', fn($q) => $q->where('name', 'like', "%{$this->search}%"));
             })
+            ->when($this->showTrashed, fn($q) => $q->onlyTrashed())
             ->latest()
             ->paginate(10);
 
