@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AccountSettingsController;
 use App\Livewire\Admin\Company\CompanyCreate;
 use App\Livewire\Admin\Company\CompanyIndex;
 use App\Livewire\Admin\Company\CompanyList;
@@ -63,7 +64,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::view('/account/settings', 'account.settings')->name('account.settings');
+    Route::get('/account/settings', [AccountSettingsController::class, 'edit'])->name('account.settings');
+    Route::patch('/account/settings', [AccountSettingsController::class, 'update'])->name('account.settings.update');
 
     Route::prefix('company')->name('company.')->group(function () {
         Route::get('/Dashaboard', CompanyIndex::class)->name('index')->middleware(['permission:view company']);
