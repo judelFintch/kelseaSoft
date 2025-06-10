@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Facture Proforma</title>
@@ -10,37 +11,72 @@
             font-family: DejaVu Sans, sans-serif;
             font-size: 11px;
         }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #000; padding: 4px; text-align: left; }
-        .no-border td, .no-border th { border: none; }
-        .center { text-align: center; }
-        .right { text-align: right; }
-        .header-table td { vertical-align: top; }
-        .header-company { text-align: center; }
-        .header-company h2 { margin: 0; font-size: 18px; }
-        .header-company p { margin: 0; }
-        .client-info td { vertical-align: top; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 4px;
+            text-align: left;
+        }
+
+        .no-border td,
+        .no-border th {
+            border: none;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .header-table td {
+            vertical-align: top;
+        }
+
+        .header-company {
+            text-align: center;
+        }
+
+        .header-company h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .header-company p {
+            margin: 0;
+        }
+
+        .client-info td {
+            vertical-align: top;
+        }
     </style>
 </head>
 
 <body>
     {{-- En-tête avec logo et infos entreprise --}}
-    <table class="no-border header-table" style="margin-bottom: 10px;">
+    <table class="no-border" style="margin-bottom: 10px; width: 100%;">
         <tr>
-            <td style="width: 40%;">
-                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 90px;">
-            </td>
-            <td class="header-company">
-                <h2>LA MANNE DES BRAVES S.A.R.L</h2>
-                <p>TRANSITAIRE EN DOUANE OFFICIEL</p>
-                <p>VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
-                <p>N° Impôt : A1000859K RCCM : CDL/SHR/RCM15-B3463</p>
-                <p>ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
+            <td style="text-align: center;">
+                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 90px;"><br><br>
+                <h2 style="margin: 0; font-size: 18px;">LA MANNE DES BRAVES S.A.R.L</h2>
+                <p style="margin: 0;">TRANSITAIRE EN DOUANE OFFICIEL</p>
+                <p style="margin: 0;">VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
+                <p style="margin: 0;">N° Impôt : A1000859K RCCM : CDL/SHR/RCM15-B3463</p>
+                <p style="margin: 0;">ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
             </td>
         </tr>
     </table>
 
-    <h3 class="center" style="border: 1px solid black; padding: 5px; margin-bottom: 10px;">FACTURE N° {{ $invoice->invoice_number }}</h3>
+    <h3 class="center" style="border: 1px solid black; padding: 5px; margin-bottom: 10px;">FACTURE N°
+        {{ $invoice->invoice_number }}</h3>
 
     {{-- Informations client --}}
     <table class="no-border client-info" style="margin-bottom: 10px;">
@@ -49,7 +85,7 @@
                 <strong>Client :</strong><br>
                 {{ $invoice->company->name }}<br>
                 {{ $invoice->company->address ?? 'Avenue Kasa-Vubu, Immeuble M. de la Paix' }}<br>
-    
+
                 RCCM : {{ $invoice->company->rccm ?? 'CD/KZ/KCM/14-B-020' }}<br>
                 TAX N° : {{ $invoice->company->tax_number ?? 'A07040104' }}<br>
                 VAT N° : {{ $invoice->company->vat_number ?? '0479/DGI/DGE/DIG/MB/TVA/2011' }}<br>
@@ -221,4 +257,5 @@
         Représentations : Kinshasa - Matadi - Kasumbalesa - Kolwezi
     </p>
 </body>
+
 </html>
