@@ -62,7 +62,7 @@
                 {{ $globalInvoice->company->physical_address ?? 'N/A' }}<br>
                 NIF : {{ $globalInvoice->company->tax_id ?? 'N/A' }}
             </td>
-            <td class="right" style="border: 1px solid black;">
+            <td class="right" >
                 Lubumbashi le {{ Carbon::parse($globalInvoice->issue_date)->format('d/m/Y') }}<br><br>
                 <strong>NOTRE COMPTE</strong> 1081911
             </td>
