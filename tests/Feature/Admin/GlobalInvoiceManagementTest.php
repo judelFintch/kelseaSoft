@@ -11,6 +11,7 @@ use App\Models\GlobalInvoiceItem;
 use App\Livewire\Admin\Invoices\InvoiceIndex;
 use App\Livewire\Admin\Invoices\GlobalInvoiceIndex as GlobalInvoiceIndexComponent; // Alias pour éviter conflit de nom
 use App\Livewire\Admin\Invoices\GlobalInvoiceShow as GlobalInvoiceShowComponent;  // Alias pour éviter conflit de nom
+use App\Livewire\Admin\Invoices\InvoiceTrash;
 use App\Services\Invoice\GlobalInvoiceService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -286,9 +287,25 @@ class GlobalInvoiceManagementTest extends TestCase
         Livewire::test(GlobalInvoiceIndexComponent::class)
             ->call('deleteGlobalInvoice', $globalInvoice->id);
 
-        $this->assertDatabaseMissing('global_invoices', ['id' => $globalInvoice->id]);
+        $this->assertSoftDeleted('global_invoices', ['id' => $globalInvoice->id]);
         $invoice->refresh();
         $this->assertNull($invoice->global_invoice_id);
         $this->assertEquals('pending', $invoice->status);
+    }
+
+    /** @test */
+    public function test_can_restore_soft_deleted_global_invoice(): void
+    {
+        $globalInvoice = GlobalInvoice::factory()->for($this->company)->create();
+
+        $globalInvoice->delete();
+
+        Livewire::test(InvoiceTrash::class)
+            ->call('restoreGlobalInvoice', $globalInvoice->id);
+
+        $this->assertDatabaseHas('global_invoices', [
+            'id' => $globalInvoice->id,
+            'deleted_at' => null,
+        ]);
     }
 }

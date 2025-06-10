@@ -30,6 +30,7 @@ use App\Livewire\Admin\Invoices\ShowInvoice;
 use App\Livewire\Admin\Invoices\GenerateInvoice;
 use App\Livewire\Admin\Invoices\InvoiceIndex;
 use App\Livewire\Admin\Invoices\UpdateInvoice;
+use App\Livewire\Admin\Invoices\InvoiceTrash;
 use App\Livewire\Admin\Invoices\GlobalInvoiceIndex; // Ajout pour GlobalInvoiceIndex
 use App\Livewire\Admin\Invoices\GlobalInvoiceShow;  // Ajout pour GlobalInvoiceShow
 
@@ -142,7 +143,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/download/{invoice}', [ShowInvoice::class, 'downloadPdf'])->name('download');
         Route::get('/index', InvoiceIndex::class)->name('index');
         Route::get('/invoices/{invoice}/edit', UpdateInvoice::class)->name('invoices.edit');
-        
+        Route::get('/trash', InvoiceTrash::class)->name('trash');
+
     });
 
     Route::prefix('currency')->name('currency.')->group(function () {
