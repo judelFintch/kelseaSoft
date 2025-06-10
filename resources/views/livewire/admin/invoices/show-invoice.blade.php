@@ -15,8 +15,8 @@
             <p class="font-semibold text-gray-800">{{ $invoice->company->name }}</p>
             <p class="text-xs text-gray-500">{{ $invoice->company->email }}</p>
             <p class="text-xs text-gray-500">{{ $invoice->company->phone_number }}</p>
-            <p class="text-xs text-gray-500">RCCM : {{ $invoice->company->rccm }}</p>
-            <p class="text-xs text-gray-500">N° Impôt : {{ $invoice->company->tax_number }}</p>
+            <p class="text-xs text-gray-500">RCCM : {{ $invoice->company->commercial_register }}</p>
+            <p class="text-xs text-gray-500">N° Impôt : {{ $invoice->company->tax_id }}</p>
         </div>
     </div>
 
