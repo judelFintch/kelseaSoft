@@ -2,104 +2,78 @@
 
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <title>Facture Proforma</title>
     <style>
         body {
             font-family: DejaVu Sans, sans-serif;
-            font-size: 11px;
+            font-size: 10px;
+            margin: 10px;
         }
-
+        h2, h3, h4, p {
+            margin: 2px 0;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 6px;
         }
-
-        th,
-        td {
+        th, td {
             border: 1px solid #000;
-            padding: 4px;
+            padding: 3px;
             text-align: left;
         }
-
-        .no-border td,
-        .no-border th {
+        .no-border td, .no-border th {
             border: none;
         }
-
         .center {
             text-align: center;
         }
-
         .right {
             text-align: right;
-        }
-
-        .header-table td {
-            vertical-align: top;
-        }
-
-        .header-company {
-            text-align: center;
-        }
-
-        .header-company h2 {
-            margin: 0;
-            font-size: 18px;
-        }
-
-        .header-company p {
-            margin: 0;
-        }
-
-        .client-info td {
-            vertical-align: top;
         }
     </style>
 </head>
 
 <body>
-    {{-- En-tête avec logo et infos entreprise --}}
-    <table class="no-border" style="margin-bottom: 10px; width: 100%;">
+    {{-- En-tête centré avec logo --}}
+    <table class="no-border">
         <tr>
-            <td style="text-align: center;">
-                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 90px;"><br><br>
-                <h2 style="margin: 0; font-size: 18px;">LA MANNE DES BRAVES S.A.R.L</h2>
-                <p style="margin: 0;">TRANSITAIRE EN DOUANE OFFICIEL</p>
-                <p style="margin: 0;">VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
-                <p style="margin: 0;">N° Impôt : A1000859K RCCM : CDL/SHR/RCM15-B3463</p>
-                <p style="margin: 0;">ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
+            <td class="center">
+                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 60px;"><br>
+                <h2>LA MANNE DES BRAVES S.A.R.L</h2>
+                <p>TRANSITAIRE EN DOUANE OFFICIEL</p>
+                <p>VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
+                <p>N° Impôt : A1000859K RCCM : CDL/SHR/RCM15-B3463</p>
+                <p>ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
             </td>
         </tr>
     </table>
 
-    <h3 class="center" style="border: 1px solid black; padding: 5px; margin-bottom: 10px;">FACTURE N°
-        {{ $invoice->invoice_number }}</h3>
+    <h3 class="center" style="border: 1px solid black; padding: 4px;">FACTURE N° {{ $invoice->invoice_number }}</h3>
 
-    {{-- Informations client --}}
-    <table class="no-border client-info" style="margin-bottom: 10px;">
+    {{-- Infos client --}}
+    <table class="no-border">
         <tr>
             <td>
                 <strong>Client :</strong><br>
                 {{ $invoice->company->name }}<br>
                 {{ $invoice->company->address ?? 'Avenue Kasa-Vubu, Immeuble M. de la Paix' }}<br>
-
                 RCCM : {{ $invoice->company->rccm ?? 'CD/KZ/KCM/14-B-020' }}<br>
                 TAX N° : {{ $invoice->company->tax_number ?? 'A07040104' }}<br>
                 VAT N° : {{ $invoice->company->vat_number ?? '0479/DGI/DGE/DIG/MB/TVA/2011' }}<br>
                 ID NAT : {{ $invoice->company->id_nat ?? '14-B0500-N455970' }}
             </td>
-            <td class="right" style="border: 1px solid black; padding-left: 10px;">
+            <td class="right" style="border: 1px solid black;">
                 Lubumbashi le {{ Carbon::parse($invoice->invoice_date)->format('d/m/Y') }}<br><br>
                 <strong>NOTRE COMPTE</strong> 1081911
             </td>
         </tr>
     </table>
 
-    {{-- Bloc dossier, fob, assurance, etc --}}
-    <table style="margin-top: 10px;">
+    {{-- Bloc résumé dossier --}}
+    <table>
         <tr>
             <td><strong>NUMERO DOSSIER</strong></td>
             <td>{{ $invoice->folder?->folder_number ?? '24/MDB/KCC003' }}</td>
@@ -139,7 +113,7 @@
     </table>
 
     {{-- Section A --}}
-    <h4 style="margin-top: 10px;">A. IMPORT DUTY & TAXES</h4>
+    <h4>A. IMPORT DUTY & TAXES</h4>
     <table>
         <thead>
             <tr>
@@ -165,7 +139,7 @@
     </table>
 
     {{-- Section B --}}
-    <h4 style="margin-top: 10px;">B. AGENCY FEES</h4>
+    <h4>B. AGENCY FEES</h4>
     <table>
         <thead>
             <tr>
@@ -209,7 +183,7 @@
     </table>
 
     {{-- Section C --}}
-    <h4 style="margin-top: 10px;">C. AUTRES FRAIS</h4>
+    <h4>C. AUTRES FRAIS</h4>
     <table>
         <thead>
             <tr>
@@ -235,7 +209,7 @@
     </table>
 
     {{-- Totaux --}}
-    <table style="margin-top: 10px;">
+    <table>
         <tr>
             <td class="right"><strong>TOTAL (A, B et C) / USD :</strong></td>
             <td class="right"><strong>{{ number_format($invoice->total_usd ?? 4020.4, 2) }}</strong></td>
@@ -243,13 +217,13 @@
     </table>
 
     {{-- Footer --}}
-    <p style="margin-top: 30px;">Nous disons, Dollars Américains, Quatre Mille Vingt, quatre centimes</p>
+    <p style="margin-top: 6px;">Nous disons, Dollars Américains, Quatre Mille Vingt, quatre centimes</p>
     <p>Numéro compte : TMB 00017-25000-00232100001-85 USD</p>
     <p>Mode de paiement : Provision</p>
 
-    <p class="right" style="margin-top: 40px;">CHRISTELLE NTANGA<br><strong>RESP FACTURATION</strong></p>
+    <p class="right" style="margin-top: 10px;">CHRISTELLE NTANGA<br><strong>RESP FACTURATION</strong></p>
 
-    <p style="margin-top: 40px; font-size: 10px;" class="center">
+    <p class="center" style="margin-top: 6px; font-size: 9px;">
         960, Av. Chaussée Laurent Désiré Kabila, Immeuble Méthodiste, 2ème étage<br>
         Quartier Makatano, Commune de Lubumbashi<br>
         Tél : (+243)998180745, (+243)815056461, (+243)0977960987<br>
@@ -257,5 +231,4 @@
         Représentations : Kinshasa - Matadi - Kasumbalesa - Kolwezi
     </p>
 </body>
-
 </html>
