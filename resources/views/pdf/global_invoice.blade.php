@@ -50,30 +50,47 @@
 
 
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th class="text-right" style="width:15%;">Quantité</th>
-                    <th class="text-right" style="width:20%;">Prix Unitaire</th>
-                    <th class="text-right" style="width:20%;">Prix Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($globalInvoice->globalInvoiceItems as $item)
-                    <tr>
-                        <td>{{ $item->description }}</td>
-                        <td class="text-right">{{ number_format($item->quantity, 2, ',', ' ') }}</td>
-                        <td class="text-right">{{ number_format($item->unit_price, 2, ',', ' ') }} {{-- Devise --}}</td>
-                        <td class="text-right">{{ number_format($item->total_price, 2, ',', ' ') }} {{-- Devise --}}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="4" class="text-center">Aucun article pour cette facture globale.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+        @php
+            $categories = [
+                'import_tax' => 'A. IMPORT DUTY & TAXES',
+                'agency_fee' => 'B. AGENCY FEES',
+                'extra_fee' => 'C. AUTRES FRAIS',
+            ];
+        @endphp
+
+        @foreach($categories as $cat => $label)
+            @php
+                $items = $globalInvoice->globalInvoiceItems->where('category', $cat);
+                $subtotal = $items->sum('total_price');
+            @endphp
+            @if($items->count())
+                <h4 style="margin-top: 10px;">{{ $label }}</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th class="text-right" style="width:15%;">Quantité</th>
+                            <th class="text-right" style="width:20%;">Prix Unitaire</th>
+                            <th class="text-right" style="width:20%;">Prix Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($items as $item)
+                            <tr>
+                                <td>{{ $item->description }}</td>
+                                <td class="text-right">{{ number_format($item->quantity, 2, ',', ' ') }}</td>
+                                <td class="text-right">{{ number_format($item->unit_price, 2, ',', ' ') }}</td>
+                                <td class="text-right">{{ number_format($item->total_price, 2, ',', ' ') }}</td>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <td colspan="3" class="text-right"><strong>Sous-total</strong></td>
+                            <td class="text-right"><strong>{{ number_format($subtotal, 2, ',', ' ') }}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            @endif
+        @endforeach
 
         <div class="clearfix">
             <div class="totals">

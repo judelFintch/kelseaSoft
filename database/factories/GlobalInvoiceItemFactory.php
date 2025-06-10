@@ -14,6 +14,7 @@ class GlobalInvoiceItemFactory extends Factory
     {
         return [
             'global_invoice_id' => GlobalInvoice::factory(),
+            'category' => $this->faker->randomElement(['import_tax', 'agency_fee', 'extra_fee']),
             'description' => $this->faker->sentence,
             'quantity' => $this->faker->numberBetween(1, 5),
             'unit_price' => $this->faker->randomFloat(2, 10, 500),

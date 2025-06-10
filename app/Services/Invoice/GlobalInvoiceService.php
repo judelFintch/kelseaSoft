@@ -72,10 +72,11 @@ class GlobalInvoiceService
                         ]);
                     }
 
-                    $key = $item->label;
+                    $key = $item->label . '|' . $item->category;
 
                     if (!isset($aggregated[$key])) {
                         $aggregated[$key] = [
+                            'category' => $item->category,
                             'description' => $item->label,
                             'quantity' => 0,
                             'unit_price' => $item->amount_usd,
