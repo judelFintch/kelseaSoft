@@ -14,10 +14,13 @@
                 @php
                     $infoItems = [
                         ['icon' => '🏢', 'label' => 'Nom', 'value' => $company->name ?? '—'],
+                        ['icon' => '🔠', 'label' => 'Acronyme', 'value' => $company->acronym ?? '—'],
                         ['icon' => '📂', 'label' => 'Catégorie', 'value' => $company->business_category ?? '—'],
                         ['icon' => '📞', 'label' => 'Téléphone', 'value' => $company->phone_number ?? '—'],
                         ['icon' => '✉️', 'label' => 'Email', 'value' => $company->email ?? '—'],
+                        ['icon' => '🌐', 'label' => 'Site Web', 'value' => $company->website ?? '—'],
                         ['icon' => '📍', 'label' => 'Adresse', 'value' => $company->physical_address ?? '—'],
+                        ['icon' => '🏳️', 'label' => 'Pays', 'value' => $company->country ?? '—'],
                         ['icon' => '🆔', 'label' => 'Code', 'value' => $company->code ?? '—'],
                         ['icon' => '🟢', 'label' => 'Statut', 'value' => ucfirst($company->status), 'status' => true],
                     ];
