@@ -21,6 +21,14 @@ class InvoiceIndex extends Component
     public array $selectedInvoices = [];
     public ?int $companyIdForGlobalInvoice = null;
 
+    public ?int $deleteInvoiceId = null;
+    public string $deleteConfirmText = '';
+
+    public function getInvoiceToDeleteProperty()
+    {
+        return $this->deleteInvoiceId ? Invoice::with('company')->find($this->deleteInvoiceId) : null;
+    }
+
     /**
      * Hook exécuté lorsque la propriété $selectedInvoices est mise à jour.
      *
@@ -38,6 +46,13 @@ class InvoiceIndex extends Component
         } else {
             $this->companyIdForGlobalInvoice = null;
         }
+    }
+
+    public function confirmDeleteInvoice(int $id): void
+    {
+        $this->deleteInvoiceId = $id;
+        $this->deleteConfirmText = '';
+        $this->dispatch('open-modal', 'confirm-invoice-deletion');
     }
 
     /**
@@ -93,9 +108,15 @@ class InvoiceIndex extends Component
         }
     }
 
-    public function deleteInvoice($invoiceId): void
+    public function deleteInvoice(): void
     {
-        $invoice = Invoice::findOrFail($invoiceId);
+        if ($this->deleteConfirmText !== 'SUPPRIMER') {
+            $this->addError('deleteConfirmText', 'Veuillez taper \"SUPPRIMER\" pour confirmer.');
+            $this->dispatch('open-modal', 'confirm-invoice-deletion');
+            return;
+        }
+
+        $invoice = Invoice::findOrFail($this->deleteInvoiceId);
 
         try {
             $invoice->delete();
@@ -103,6 +124,8 @@ class InvoiceIndex extends Component
         } catch (\Exception $e) {
             session()->flash('error', "Erreur lors de la suppression : " . $e->getMessage());
         }
+
+        $this->reset(['deleteInvoiceId', 'deleteConfirmText']);
     }
 
 
