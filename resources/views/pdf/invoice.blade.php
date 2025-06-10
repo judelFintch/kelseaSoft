@@ -1,35 +1,49 @@
-@php use Carbon\Carbon; @endphp
+@php
+    use Carbon\Carbon;
+
+    function amountToWords($amount)
+    {
+        return 'Montant en lettres à générer dynamiquement ici';
+    }
+@endphp
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Facture Proforma</title>
     <style>
         body {
             font-family: DejaVu Sans, sans-serif;
-            font-size: 10px;
-            margin: 10px;
+            font-size: 9px;
+            margin: 5px;
         }
+
         h2, h3, h4, p {
-            margin: 2px 0;
+            margin: 1px 0;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
+
         th, td {
             border: 1px solid #000;
-            padding: 3px;
+            padding: 2px;
             text-align: left;
         }
+
         .no-border td, .no-border th {
             border: none;
         }
+
         .center {
             text-align: center;
         }
+
         .right {
             text-align: right;
         }
@@ -37,23 +51,20 @@
 </head>
 
 <body>
-    {{-- En-tête centré avec logo --}}
     <table class="no-border">
         <tr>
             <td class="center">
-                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 60px;"><br>
+                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 50px;"><br>
                 <h2>LA MANNE DES BRAVES S.A.R.L</h2>
-                <p>TRANSITAIRE EN DOUANE OFFICIEL</p>
-                <p>VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
+                <p>TRANSITAIRE EN DOUANE OFFICIEL – VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
                 <p>N° Impôt : A1000859K RCCM : CDL/SHR/RCM15-B3463</p>
                 <p>ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
             </td>
         </tr>
     </table>
 
-    <h3 class="center" style="border: 1px solid black; padding: 4px;">FACTURE N° {{ $invoice->invoice_number }}</h3>
+    <h3 class="center" style="border: 1px solid black; padding: 2px;">FACTURE N° {{ $invoice->invoice_number }}</h3>
 
-    {{-- Infos client --}}
     <table class="no-border">
         <tr>
             <td>
@@ -65,59 +76,57 @@
                 VAT N° : {{ $invoice->company->vat_number ?? '0479/DGI/DGE/DIG/MB/TVA/2011' }}<br>
                 ID NAT : {{ $invoice->company->id_nat ?? '14-B0500-N455970' }}
             </td>
-            <td class="right" style="border: 1px solid black;">
+            <td class="right">
                 Lubumbashi le {{ Carbon::parse($invoice->invoice_date)->format('d/m/Y') }}<br><br>
                 <strong>NOTRE COMPTE</strong> 1081911
             </td>
         </tr>
     </table>
 
-    {{-- Bloc résumé dossier --}}
     <table>
         <tr>
             <td><strong>NUMERO DOSSIER</strong></td>
-            <td>{{ $invoice->folder?->folder_number ?? '24/MDB/KCC003' }}</td>
+            <td>{{ $invoice->folder?->folder_number ?? 'Non spécifié' }}</td>
             <td><strong>DESCRIPTION</strong></td>
             <td>{{ $invoice->product ?? 'MGO' }}</td>
         </tr>
         <tr>
             <td><strong>P.O</strong></td>
-            <td>{{ $invoice->operation_code ?? '4500499681' }}</td>
+            <td>{{ $invoice->operation_code ?? 'Non spécifié' }}</td>
             <td><strong>POSITION TARIFAIRE</strong></td>
-            <td>25.19.90.00</td>
+            <td>{{ $invoice->tariff_position ?? 'Non spécifiée' }}</td>
         </tr>
         <tr>
             <td><strong>POIDS</strong></td>
-            <td>{{ $invoice->weight ?? '38T' }}</td>
+            <td>{{ $invoice->weight ?? 'Non spécifié' }}</td>
             <td><strong>TAUX DE CHANGE</strong></td>
-            <td>{{ number_format($invoice->exchange_rate ?? 2840.4735, 4) }} CDF/USD</td>
+            <td>{{ number_format($invoice->exchange_rate ?? 0, 2) }} CDF/USD</td>
         </tr>
         <tr>
             <td><strong>FOB/USD</strong></td>
-            <td>{{ number_format($invoice->fob_amount ?? 24881.26, 2) }}</td>
+            <td>{{ number_format($invoice->fob_amount ?? 0, 2) }}</td>
             <td><strong>FRET/USD</strong></td>
-            <td>{{ number_format($invoice->freight_amount ?? 5230, 2) }}</td>
+            <td>{{ number_format($invoice->freight_amount ?? 0, 2) }}</td>
         </tr>
         <tr>
             <td><strong>AUTRES CHARGES</strong></td>
             <td>ASSURANCE</td>
             <td></td>
-            <td>{{ number_format($invoice->insurance_amount ?? 107.48, 2) }}</td>
+            <td>{{ number_format($invoice->insurance_amount ?? 0, 2) }}</td>
         </tr>
         <tr>
             <td><strong>CIF/USD</strong></td>
-            <td>{{ number_format($invoice->cif_amount ?? 30808.72, 2) }}</td>
+            <td>{{ number_format($invoice->cif_amount ?? 0, 2) }}</td>
             <td><strong>CIF/CDF</strong></td>
-            <td>{{ number_format($invoice->converted_total ?? 8691125, 0) }}</td>
+            <td>{{ number_format($invoice->converted_total ?? 0, 0) }}</td>
         </tr>
     </table>
 
-    {{-- Section A --}}
     <h4>A. IMPORT DUTY & TAXES</h4>
     <table>
         <thead>
             <tr>
-                <th>CODE</th>
+                <th>RÉF.</th>
                 <th>LIBELLÉ</th>
                 <th class="right">MONTANT CDF</th>
             </tr>
@@ -138,12 +147,11 @@
         </tbody>
     </table>
 
-    {{-- Section B --}}
     <h4>B. AGENCY FEES</h4>
     <table>
         <thead>
             <tr>
-                <th>CODE</th>
+                <th>RÉF.</th>
                 <th>LIBELLÉ</th>
                 <th class="right">MONTANT (USD)</th>
                 <th class="right">TVA (%)</th>
@@ -182,12 +190,11 @@
         </tbody>
     </table>
 
-    {{-- Section C --}}
     <h4>C. AUTRES FRAIS</h4>
     <table>
         <thead>
             <tr>
-                <th>CODE</th>
+                <th>RÉF.</th>
                 <th>LIBELLÉ</th>
                 <th class="right">MONTANT (USD)</th>
             </tr>
@@ -208,27 +215,24 @@
         </tbody>
     </table>
 
-    {{-- Totaux --}}
     <table>
         <tr>
-            <td class="right"><strong>TOTAL (A, B et C) / USD :</strong></td>
-            <td class="right"><strong>{{ number_format($invoice->total_usd ?? 4020.4, 2) }}</strong></td>
+            <td colspan="5" class="right"><strong>TOTAL (A, B et C) / USD :</strong>
+                {{ number_format($invoice->total_usd ?? 0, 2) }}</td>
         </tr>
     </table>
 
-    {{-- Footer --}}
-    <p style="margin-top: 6px;">Nous disons, Dollars Américains, Quatre Mille Vingt, quatre centimes</p>
+    <p style="margin-top: 4px;"><strong>Montant en lettres :</strong> {{ amountToWords($invoice->total_usd ?? 0) }}</p>
     <p>Numéro compte : TMB 00017-25000-00232100001-85 USD</p>
     <p>Mode de paiement : Provision</p>
 
-    <p class="right" style="margin-top: 10px;">CHRISTELLE NTANGA<br><strong>RESP FACTURATION</strong></p>
+    <p class="right" style="margin-top: 6px;">CHRISTELLE NTANGA<br><strong>RESP FACTURATION</strong></p>
 
-    <p class="center" style="margin-top: 6px; font-size: 9px;">
-        960, Av. Chaussée Laurent Désiré Kabila, Immeuble Méthodiste, 2ème étage<br>
-        Quartier Makatano, Commune de Lubumbashi<br>
-        Tél : (+243)998180745, (+243)815056461, (+243)0977960987<br>
-        E-mail : mannedesbraves@yahoo.fr, infos@mannedesbraves.com<br>
+    <p class="center" style="font-size: 8px; margin-top: 4px;">
+        960, Av. Chaussée Laurent Désiré Kabila, Immeuble Méthodiste, 2ème étage – Quartier Makatano, Commune de Lubumbashi<br>
+        Tél : (+243)998180745, (+243)815056461, (+243)0977960987 – E-mail : mannedesbraves@yahoo.fr<br>
         Représentations : Kinshasa - Matadi - Kasumbalesa - Kolwezi
     </p>
 </body>
+
 </html>
