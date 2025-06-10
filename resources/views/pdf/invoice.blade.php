@@ -113,6 +113,7 @@
             </tr>
         </thead>
         <tbody>
+            @php $importTaxSubtotal = $invoice->items->where('category', 'import_tax')->sum('amount_cdf'); @endphp
             @foreach ($invoice->items->where('category', 'import_tax') as $item)
                 <tr>
                     <td>{{ \Str::substr($item->label, 0, 3) }}</td>
@@ -120,6 +121,10 @@
                     <td class="right">{{ number_format($item->amount_cdf, 0) }}</td>
                 </tr>
             @endforeach
+            <tr>
+                <td colspan="2" class="right"><strong>Sous-total</strong></td>
+                <td class="right"><strong>{{ number_format($importTaxSubtotal, 0) }}</strong></td>
+            </tr>
         </tbody>
     </table>
 
@@ -137,7 +142,13 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($invoice->items->where('category', 'agency_fee') as $item)
+            @php
+                $agencyItems = $invoice->items->where('category', 'agency_fee');
+                $agencySubtotal = $agencyItems->sum('amount_usd');
+                $agencySubtotalHt = round($agencySubtotal / 1.16, 2);
+                $agencySubtotalTva = $agencySubtotal - $agencySubtotalHt;
+            @endphp
+            @foreach ($agencyItems as $item)
                 @php
                     $ht = round($item->amount_usd / 1.16, 2);
                     $tva = $item->amount_usd - $ht;
@@ -151,6 +162,13 @@
                     <td class="right">{{ number_format($item->amount_usd, 2) }}</td>
                 </tr>
             @endforeach
+            <tr>
+                <td colspan="2" class="right"><strong>Sous-total</strong></td>
+                <td class="right"><strong>{{ number_format($agencySubtotalHt, 2) }}</strong></td>
+                <td class="right">16</td>
+                <td class="right"><strong>{{ number_format($agencySubtotalTva, 2) }}</strong></td>
+                <td class="right"><strong>{{ number_format($agencySubtotal, 2) }}</strong></td>
+            </tr>
         </tbody>
     </table>
 
@@ -165,6 +183,7 @@
             </tr>
         </thead>
         <tbody>
+            @php $extraFeeSubtotal = $invoice->items->where('category', 'extra_fee')->sum('amount_usd'); @endphp
             @foreach ($invoice->items->where('category', 'extra_fee') as $item)
                 <tr>
                     <td>{{ \Str::limit($item->label, 6, '') }}</td>
@@ -172,6 +191,10 @@
                     <td class="right">{{ number_format($item->amount_usd, 2) }}</td>
                 </tr>
             @endforeach
+            <tr>
+                <td colspan="2" class="right"><strong>Sous-total</strong></td>
+                <td class="right"><strong>{{ number_format($extraFeeSubtotal, 2) }}</strong></td>
+            </tr>
         </tbody>
     </table>
 
