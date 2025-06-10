@@ -20,7 +20,10 @@
             margin: 5px;
         }
 
-        h2, h3, h4, p {
+        h2,
+        h3,
+        h4,
+        p {
             margin: 1px 0;
         }
 
@@ -30,13 +33,15 @@
             margin-bottom: 4px;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #000;
             padding: 2px;
             text-align: left;
         }
 
-        .no-border td, .no-border th {
+        .no-border td,
+        .no-border th {
             border: none;
         }
 
@@ -227,9 +232,10 @@
     <p>Mode de paiement : Provision</p>
 
     <p class="right" style="margin-top: 6px;">CHRISTELLE NTANGA<br><strong>RESP FACTURATION</strong></p>
-
+    <hr style="border: none; border-top: 1px solid #333; margin: 8px 0;">
     <p class="center" style="font-size: 8px; margin-top: 4px;">
-        960, Av. Chaussée Laurent Désiré Kabila, Immeuble Méthodiste, 2ème étage – Quartier Makatano, Commune de Lubumbashi<br>
+        960, Av. Chaussée Laurent Désiré Kabila, Immeuble Méthodiste, 2ème étage – Quartier Makatano, Commune de
+        Lubumbashi<br>
         Tél : (+243)998180745, (+243)815056461, (+243)0977960987 – E-mail : mannedesbraves@yahoo.fr<br>
         Représentations : Kinshasa - Matadi - Kasumbalesa - Kolwezi
     </p>
