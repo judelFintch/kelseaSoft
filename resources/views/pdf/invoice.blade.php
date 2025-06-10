@@ -75,11 +75,10 @@
             <td>
                 <strong>Client :</strong><br>
                 {{ $invoice->company->name }}<br>
-                {{ $invoice->company->address ?? 'Avenue Kasa-Vubu, Immeuble M. de la Paix' }}<br>
-                RCCM : {{ $invoice->company->rccm ?? 'CD/KZ/KCM/14-B-020' }}<br>
-                TAX N° : {{ $invoice->company->tax_number ?? 'A07040104' }}<br>
-                VAT N° : {{ $invoice->company->vat_number ?? '0479/DGI/DGE/DIG/MB/TVA/2011' }}<br>
-                ID NAT : {{ $invoice->company->id_nat ?? '14-B0500-N455970' }}
+                {{ $invoice->company->physical_address ?? 'Avenue Kasa-Vubu, Immeuble M. de la Paix' }}<br>
+                RCCM : {{ $invoice->company->commercial_register ?? 'CD/KZ/KCM/14-B-020' }}<br>
+                TAX N° : {{ $invoice->company->tax_id ?? 'A07040104' }}<br>
+                ID NAT : {{ $invoice->company->national_identification ?? '14-B0500-N455970' }}
             </td>
             <td class="right">
                 Lubumbashi le {{ Carbon::parse($invoice->invoice_date)->format('d/m/Y') }}<br><br>
