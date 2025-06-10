@@ -74,7 +74,6 @@
             @endif
         </div>
     </div>
-</div>
 
 <x-modal name="confirm-global-invoice-deletion" focusable>
     <form wire:submit.prevent="deleteGlobalInvoice" class="p-6">
@@ -103,3 +102,4 @@
         </div>
     </form>
 </x-modal>
+</div>
