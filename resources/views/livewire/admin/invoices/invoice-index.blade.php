@@ -51,8 +51,6 @@
         </thead>
         <tbody>
             @forelse ($invoices as $invoice)
-                <tr>
-                    
                 <tr class="{{ $invoice->global_invoice_id ? 'bg-green-50' : '' }} {{ in_array($invoice->id, $selectedInvoices) ? 'bg-yellow-50' : '' }}">
                     <td class="border px-2 py-1 text-center">
                         <input type="checkbox" wire:model.live="selectedInvoices" value="{{ $invoice->id }}"
