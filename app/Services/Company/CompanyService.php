@@ -68,8 +68,8 @@ class CompanyService
     public static function restoreCompany($id)
     {
         return DB::transaction(function () use ($id) {
-            $company = Company::where('deleted', true)->findOrFail($id);
-            $company->update(['deleted' => false]);
+            $company = Company::where('is_deleted', true)->findOrFail($id);
+            $company->update(['is_deleted' => false]);
 
             return $company;
         });
@@ -128,7 +128,7 @@ class CompanyService
     public static function getAllCompaniesWithTrashed()
     {
         return DB::transaction(function () {
-            return Company::all(); // Inclut toutes les entreprises, quelle que soit la valeur de 'deleted'
+            return Company::all(); // Inclut toutes les entreprises, quelle que soit la valeur de 'is_deleted'
         });
     }
 
