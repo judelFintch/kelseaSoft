@@ -98,5 +98,6 @@ class ManageAgencyFee extends Component
     public function resetForm()
     {
         $this->reset(['agency_fee_id', 'code', 'label', 'description', 'isEditMode']);
+        $this->resetValidation();
     }
 }
