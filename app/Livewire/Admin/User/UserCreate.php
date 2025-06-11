@@ -7,14 +7,18 @@ use App\Models\User;
 use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
+use Livewire\WithFileUploads;
 
 class UserCreate extends Component
 {
+    use WithFileUploads;
     public $name;
     public $email;
     public $password;
     public $password_confirmation;
     public $selectedRoles = [];
+
+    public $avatar;
 
     public $roles;
 
@@ -32,6 +36,7 @@ class UserCreate extends Component
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'avatar' => 'nullable|image|max:2048',
             'selectedRoles' => 'nullable|array',
             'selectedRoles.*' => 'exists:roles,id',
         ];
@@ -41,10 +46,13 @@ class UserCreate extends Component
     {
         $this->validate();
 
+        $avatarPath = $this->avatar ? $this->avatar->store('avatars', 'public') : null;
+
         $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($this->password),
+            'avatar' => $avatarPath,
         ]);
 
         $user->roles()->sync($this->selectedRoles);
