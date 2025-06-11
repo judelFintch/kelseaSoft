@@ -15,6 +15,7 @@
     <!-- Styles -->
     @livewireStyles
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
 
 
@@ -59,5 +60,14 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
         <!-- ===== Page Wrapper End ===== -->
     </div>
     @livewireScripts
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            flatpickr("input[type=date]");
+        });
+        document.addEventListener('livewire:navigated', () => {
+            flatpickr("input[type=date]");
+        });
+    </script>
 </body>
 </html>

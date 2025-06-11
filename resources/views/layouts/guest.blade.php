@@ -14,6 +14,7 @@
 
     <!-- Scripts -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
 </head>
 
 <body x-data="{ page: 'authentification', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }" x-init="darkMode = JSON.parse(localStorage.getItem('darkMode'));
@@ -21,6 +22,15 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
 
     {{ $slot }}
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            flatpickr("input[type=date]");
+        });
+        document.addEventListener('livewire:navigated', () => {
+            flatpickr("input[type=date]");
+        });
+    </script>
 </body>
 
 </html>
