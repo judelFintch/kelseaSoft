@@ -30,9 +30,5 @@ class AppServiceProvider extends ServiceProvider
         Gate::before(fn () => true);
 
         Paginator::useTailwind();
-        Folder::observe(AuditObserver::class);
-        DocumentType::observe(AuditObserver::class);
-        FolderFile::observe(AuditObserver::class);
-        Company::observe(AuditObserver::class);
     }
 }
