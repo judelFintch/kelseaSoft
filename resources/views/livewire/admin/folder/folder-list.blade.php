@@ -90,5 +90,22 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="mt-4 flex items-center justify-between">
+            <div class="text-sm text-gray-600 dark:text-gray-400">
+                <label>
+                    Per page:
+                    <select wire:model="perPage" class="ml-2 form-select text-sm">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                </label>
+            </div>
+
+            <div>
+                {{ $folders->links('vendor.pagination.tailwind') }}
+            </div>
+        </div>
     </div>
 </div>
