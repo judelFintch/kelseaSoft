@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
         UserSeeder::class,
         DocumentTypeSeeder::class,
-        SupplierSeeder::class,
+       // SupplierSeeder::class,
         DeclarationTypeSeeder::class,
         CustomsOfficeSeeder::class,
         LocationSeeder::class,
@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
         ExtraFeeSeeder::class,
 
         // Entreprises et licences liées aux dossiers
-        CompanySeeder::class,
+       // CompanySeeder::class,
        // LicenceSeeder::class,
 
         // Dossiers créés après les entités de référence
