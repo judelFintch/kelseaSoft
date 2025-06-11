@@ -69,7 +69,8 @@ KelseaSoft is a powerful and intuitive **customs agency management software** de
    ```
 
 ## Usage
-- **Login/Register**: Access the system using your credentials.
+- **Login**: Access the system using your credentials. User registration is
+  restricted to authenticated accounts.
 - **Dossier Management**: Create and manage dossiers efficiently.
 - **Attach Documents**: Upload supporting files for each dossier.
 - **Generate Invoices**: Process invoices and export them as PDFs.
