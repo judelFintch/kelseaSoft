@@ -13,6 +13,20 @@
             </div>
         </div>
 
+        <div class="flex items-center justify-between mb-2">
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Liste des dossiers ({{ $totalFolders }})</h2>
+            <div class="text-sm text-gray-600 dark:text-gray-400">
+                <label>
+                    Per page:
+                    <select wire:model="perPage" class="ml-2 form-select text-sm">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+
         <div class="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
                 <thead class="bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-white sticky top-0 z-10">
@@ -28,7 +42,7 @@
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                     @forelse($folders as $folder)
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-900">
-                            <td class="px-4 py-3">{{ $loop->iteration }}</td> {{-- Static first cell --}}
+                            <td class="px-4 py-3">{{ $folders->firstItem() + $loop->index }}</td> {{-- Static first cell --}}
                             @foreach($allColumns as $key => $label)
                                 @if(in_array($key, $visibleColumns))
                                     <td class="px-4 py-3 whitespace-nowrap">
@@ -91,21 +105,8 @@
             </table>
         </div>
 
-        <div class="mt-4 flex items-center justify-between">
-            <div class="text-sm text-gray-600 dark:text-gray-400">
-                <label>
-                    Per page:
-                    <select wire:model="perPage" class="ml-2 form-select text-sm">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                    </select>
-                </label>
-            </div>
-
-            <div>
-                {{ $folders->links('vendor.pagination.tailwind') }}
-            </div>
+        <div class="mt-4 flex items-center justify-end">
+            {{ $folders->links('vendor.pagination.tailwind') }}
         </div>
     </div>
 </div>

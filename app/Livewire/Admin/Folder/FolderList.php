@@ -129,6 +129,7 @@ class FolderList extends Component
 
         return view('livewire.admin.folder.folder-list', [
             'folders' => $folders,
+            'totalFolders' => $folders->total(),
         ]);
     }
 }
