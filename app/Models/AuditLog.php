@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class AuditLog extends Model
 {
@@ -14,4 +15,9 @@ class AuditLog extends Model
         'previous_data' => 'array',
         'new_data' => 'array',
     ];
+
+    public function user()
+    {
+        return \$this->belongsTo(User::class);
+    }
 }
