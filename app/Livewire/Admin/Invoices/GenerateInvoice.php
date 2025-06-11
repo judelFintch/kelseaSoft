@@ -336,7 +336,7 @@ class GenerateInvoice extends Component
     public function render()
     {
         return view('livewire.admin.invoices.generate-invoice', [
-            'companies' => Company::all(),
+            'companies' => Company::notDeleted()->get(),
         ]);
     }
 

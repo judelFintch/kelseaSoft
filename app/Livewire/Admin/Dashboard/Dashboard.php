@@ -28,7 +28,7 @@ class Dashboard extends Component
 
         // Statistiques globales
         $totalGlobalInvoices = GlobalInvoice::count();
-        $totalCompanies = Company::count();
+        $totalCompanies = Company::notDeleted()->count();
 
         // Fichiers
         $totalUploadedFiles = FolderFile::count();
@@ -39,7 +39,7 @@ class Dashboard extends Component
         $latestFolders = Folder::with('company')->latest()->take(5)->get();
         $latestInvoices = Invoice::with('company')->latest()->take(5)->get();
         $latestGlobalInvoices = GlobalInvoice::with('company')->latest()->take(5)->get();
-        $latestCompanies = Company::latest()->take(5)->get();
+        $latestCompanies = Company::notDeleted()->latest()->take(5)->get();
 
         return view('livewire.admin.dashboard.dashboard', [
             'totalFolders' => $totalFolders,
