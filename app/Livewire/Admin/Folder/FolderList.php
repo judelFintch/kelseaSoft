@@ -99,6 +99,11 @@ class FolderList extends Component
         $this->resetPage();
     }
 
+    public function updatedPerPage()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
         $folders = Folder::with([
