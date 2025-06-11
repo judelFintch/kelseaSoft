@@ -3,7 +3,10 @@
 
     function amountToWords($amount)
     {
-        return 'Montant en lettres à générer dynamiquement ici';
+        $formatter = new \NumberFormatter('fr', \NumberFormatter::SPELLOUT);
+        $amountInt = intval($amount);
+        $words = ucfirst($formatter->format($amountInt));
+        return $words . ' dollars américains';
     }
 @endphp
 
@@ -56,6 +59,8 @@
 </head>
 
 <body>
+
+    {{-- En-tête société --}}
     <table class="no-border">
         <tr>
             <td class="center">
@@ -68,17 +73,47 @@
         </tr>
     </table>
 
+    {{-- Numéro de facture --}}
     <h3 class="center" style="border: 1px solid black; padding: 2px;">FACTURE N° {{ $invoice->invoice_number }}</h3>
 
+    {{-- Informations client --}}
+    {{-- Informations client enrichies --}}
     <table class="no-border">
         <tr>
             <td>
                 <strong>Client :</strong><br>
-                {{ $invoice->company->name }}<br>
-                {{ $invoice->company->physical_address ?? 'Avenue Kasa-Vubu, Immeuble M. de la Paix' }}<br>
-                RCCM : {{ $invoice->company->commercial_register ?? 'CD/KZ/KCM/14-B-020' }}<br>
-                TAX N° : {{ $invoice->company->tax_id ?? 'A07040104' }}<br>
-                ID NAT : {{ $invoice->company->national_identification ?? '14-B0500-N455970' }}
+                <strong>Raison Sociale :</strong> {{ $invoice->company->name }}<br>
+                @if ($invoice->company->acronym)
+                    <strong>Acronyme :</strong> {{ $invoice->company->acronym }}<br>
+                @endif
+                
+                <strong>Adresse :</strong> {{ $invoice->company->physical_address ?? 'Aucune adresse renseignée' }}<br>
+                @if ($invoice->company->country)
+                    <strong>Pays :</strong> {{ $invoice->company->country }}<br>
+                @endif
+               
+                @if ($invoice->company->email)
+                    <strong>Email :</strong> {{ $invoice->company->email }}<br>
+                @endif
+                
+                @if ($invoice->company->code)
+                    <strong>Code :</strong> {{ $invoice->company->code }}<br>
+                @endif
+                @if ($invoice->company->import_export_number)
+                    <strong>Import/Export :</strong> {{ $invoice->company->import_export_number }}<br>
+                @endif
+                @if ($invoice->company->nbc_number)
+                    <strong>Numéro NBC :</strong> {{ $invoice->company->nbc_number }}<br>
+                @endif
+                @if ($invoice->company->commercial_register)
+                    <strong>RCCM :</strong> {{ $invoice->company->commercial_register }}<br>
+                @endif
+                @if ($invoice->company->tax_id)
+                    <strong>Numéro Impôt :</strong> {{ $invoice->company->tax_id }}<br>
+                @endif
+                @if ($invoice->company->national_identification)
+                    <strong>ID National :</strong> {{ $invoice->company->national_identification }}<br>
+                @endif
             </td>
             <td class="right">
                 Lubumbashi le {{ Carbon::parse($invoice->invoice_date)->format('d/m/Y') }}<br><br>
@@ -87,6 +122,8 @@
         </tr>
     </table>
 
+
+    {{-- Informations dossier --}}
     <table>
         <tr>
             <td><strong>NUMERO DOSSIER</strong></td>
@@ -126,6 +163,7 @@
         </tr>
     </table>
 
+    {{-- A. Taxes d'importation --}}
     <h4>A. IMPORT DUTY & TAXES</h4>
     <table>
         <thead>
@@ -151,6 +189,7 @@
         </tbody>
     </table>
 
+    {{-- B. Frais agence --}}
     <h4>B. AGENCY FEES</h4>
     <table>
         <thead>
@@ -194,6 +233,7 @@
         </tbody>
     </table>
 
+    {{-- C. Autres frais --}}
     <h4>C. AUTRES FRAIS</h4>
     <table>
         <thead>
@@ -219,6 +259,7 @@
         </tbody>
     </table>
 
+    {{-- Total général --}}
     <table>
         <tr>
             <td colspan="5" class="right"><strong>TOTAL (A, B et C) / USD :</strong>
@@ -226,10 +267,12 @@
         </tr>
     </table>
 
+    {{-- Montant en lettres --}}
     <p style="margin-top: 4px;"><strong>Montant en lettres :</strong> {{ amountToWords($invoice->total_usd ?? 0) }}</p>
     <p>Numéro compte : TMB 00017-25000-00232100001-85 USD</p>
     <p>Mode de paiement : Provision</p>
 
+    {{-- Signature --}}
     <p class="right" style="margin-top: 6px;">CHRISTELLE NTANGA<br><strong>RESP FACTURATION</strong></p>
     <hr style="border: none; border-top: 1px solid #333; margin: 8px 0;">
     <p class="center" style="font-size: 8px; margin-top: 4px;">
@@ -238,6 +281,7 @@
         Tél : (+243)998180745, (+243)815056461, (+243)0977960987 – E-mail : mannedesbraves@yahoo.fr<br>
         Représentations : Kinshasa - Matadi - Kasumbalesa - Kolwezi
     </p>
+
 </body>
 
 </html>
