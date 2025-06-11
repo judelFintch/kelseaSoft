@@ -39,7 +39,7 @@ class ManageAgencyFee extends Component
 
         return view('livewire.admin.manage-agency-fees.manage-agency-fee', [
             'fees' => $fees,
-        ]);
+        ])->layout('layouts.app');
     }
 
     public function showForm()
