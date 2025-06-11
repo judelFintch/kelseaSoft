@@ -99,9 +99,7 @@
                 @if ($invoice->company->code)
                     <strong>Code :</strong> {{ $invoice->company->code }}<br>
                 @endif
-                @if ($invoice->company->import_export_number)
-                    <strong>Import/Export :</strong> {{ $invoice->company->import_export_number }}<br>
-                @endif
+               
                 @if ($invoice->company->nbc_number)
                     <strong>Numéro NBC :</strong> {{ $invoice->company->nbc_number }}<br>
                 @endif
