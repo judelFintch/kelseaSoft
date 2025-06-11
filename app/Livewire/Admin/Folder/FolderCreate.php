@@ -26,7 +26,6 @@ class FolderCreate extends Component
     public $folder_number;
     public $folder_date;
     public $company_id;
-    public $invoice_number;
     public $currency_id = 1;
     public $supplier_id;
     public $goods_type;
@@ -156,7 +155,6 @@ class FolderCreate extends Component
             1 => [
                 'company_id' => 'required|exists:companies,id',
                 'folder_number' => ['required', 'string', Rule::unique('folders', 'folder_number')->withoutTrashed()],
-                'invoice_number' => 'required|string|max:255',
                 'currency_id' => 'required|exists:currencies,id',
                 'folder_date' => 'required|date',
                 'supplier_id' => 'nullable|exists:suppliers,id',
@@ -203,7 +201,6 @@ class FolderCreate extends Component
         try {
             FolderService::storeFolder([
             'folder_number' => $this->folder_number,
-            'invoice_number' => $this->invoice_number,
             'quantity' => $this->quantity,
             'fob_amount' => $this->fob_amount,
             'insurance_amount' => $this->insurance_amount,

@@ -32,7 +32,6 @@
             <div class="space-y-4">
                 <x-forms.select label="Entreprise" model="company_id" :options="$companies" optionLabel="name" optionValue="id" required placeholder="Sélectionner une entreprise" />
                 <x-forms.input label="Numéro de Dossier" model="folder_number" required />
-                <x-forms.input label="Numéro de la facture" model="invoice_number" required />
                 <x-forms.input label="Date du Dossier" model="folder_date" type="date" required />
                 <x-forms.select label="Devise" model="currency_id" :options="$currencies" optionLabel="code" optionValue="id" required />
                 <x-forms.select label="Fournisseur" model="supplier_id" :options="$suppliers" optionLabel="name" optionValue="id" placeholder="Sélectionner un fournisseur" />
