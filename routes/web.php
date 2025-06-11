@@ -40,6 +40,7 @@ use App\Livewire\Admin\Currency\CurrencyUpdate;
 use App\Livewire\Admin\Taxes\Taxe;
 use App\Livewire\Admin\ManageExtraFees\ExtraFee;
 use App\Livewire\Admin\ManageAgencyFees\ManageAgencyFee;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 // User, Role, Permission Management Livewire Components
@@ -59,6 +60,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', Dashboard::class)->name('dashboard');
+Route::get('/notifications/latest', [NotificationController::class, 'latest'])->name('notifications.latest');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
