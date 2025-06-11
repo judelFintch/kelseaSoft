@@ -510,6 +510,12 @@
                                         </a>
                                     </li>
                                     <li>
+                                        <a href="{{ route('audit-logs.index') }}" class="menu-dropdown-item group"
+                                            :class="request()->routeIs('audit-logs.*') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                                            Audit Logs
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="/villes" class="menu-dropdown-item group"
                                             :class="page === 'Villes' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">

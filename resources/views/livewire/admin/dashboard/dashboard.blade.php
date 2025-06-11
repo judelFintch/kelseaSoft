@@ -40,6 +40,7 @@
                 ['label' => 'Utilisateurs', 'route' => route('admin.user.index'), 'icon' => '👥'],
                 ['label' => 'Rôles', 'route' => route('admin.role.index'), 'icon' => '🛡️'],
                 ['label' => 'Permissions', 'route' => route('admin.permission.index'), 'icon' => '🔑'],
+                ['label' => 'Audit Logs', 'route' => route('audit-logs.index'), 'icon' => '📜'],
             ];
         @endphp
         @foreach ($quickLinks as $link)
