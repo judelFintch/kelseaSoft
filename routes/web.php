@@ -176,6 +176,11 @@ Route::get('/dashboard', Dashboard::class)->name('dashboard');
         Route::get('/index', ManageAgencyFee::class)->name('index');
     });
 
+    // Audit Logs
+    Route::prefix('audit-logs')->name('audit-logs.')->group(function () {
+        Route::get('/', \App\Livewire\Admin\Audit\AuditLogIndex::class)->name('index');
+    });
+
     // Admin Routes for User, Role, Permission Management
     Route::prefix('admin')->name('admin.')->group(function () {
         // User Management

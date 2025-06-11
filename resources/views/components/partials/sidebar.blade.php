@@ -516,6 +516,13 @@
                                             Villes
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="{{ route('audit-logs.index') }}" class="menu-dropdown-item group"
+                                            :class="page === 'AuditLogs' ? 'menu-dropdown-item-active' :
+                                                'menu-dropdown-item-inactive'">
+                                            Historiques
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                             <!-- Dropdown Menu End -->
