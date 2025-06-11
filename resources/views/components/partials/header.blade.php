@@ -138,36 +138,7 @@
                                 </button>
                             </div>
 
-                            <ul class="custom-scrollbar flex h-auto flex-col overflow-y-auto">
-                                <li>
-                                    <a class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                                        href="#">
-                                        <span class="relative z-1 block h-10 w-full max-w-10 rounded-full">
-                                            <img src="{{ asset('src/images/user/user-02.jpg') }}" alt="User"
-                                                class="overflow-hidden rounded-full" />
-                                            <span
-                                                class="bg-success-500 absolute right-0 bottom-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
-                                        </span>
-
-                                        <span class="block">
-                                            <span class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400">
-                                                <span class="font-medium text-gray-800 dark:text-white/90">Terry
-                                                    Franci</span>
-                                                requests permission to change
-                                                <span class="font-medium text-gray-800 dark:text-white/90">Project
-                                                    - Nganter App</span>
-                                            </span>
-
-                                            <span
-                                                class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                                                <span>Project</span>
-                                                <span class="h-1 w-1 rounded-full bg-gray-400"></span>
-                                                <span>5 min ago</span>
-                                            </span>
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
+                            <ul id="notification-list" class="custom-scrollbar flex h-auto flex-col overflow-y-auto"></ul>
 
                             <a href="#"
                                 class="text-theme-sm shadow-theme-xs mt-3 flex justify-center rounded-lg border border-gray-300 bg-white p-3 font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
@@ -262,3 +233,36 @@
     </header>
     <!-- ===== Header End ===== -->
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch("{{ route('notifications.latest') }}")
+            .then(response => response.json())
+            .then(data => {
+                const list = document.getElementById('notification-list');
+                if (!list) return;
+                list.innerHTML = '';
+                data.forEach(item => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <a class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5" href="#">
+                            <span class="relative z-1 block h-10 w-full max-w-10 rounded-full">
+                                <img src="${item.avatar_url}" alt="${item.user_name}" class="overflow-hidden rounded-full" />
+                            </span>
+                            <span class="block">
+                                <span class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400">
+                                    <span class="font-medium text-gray-800 dark:text-white/90">${item.user_name}</span>
+                                    ${item.type === 'Folder' ? 'a cr\u00e9\u00e9 le dossier' : 'a g\u00e9n\u00e9r\u00e9 la facture'}
+                                    <span class="font-medium text-gray-800 dark:text-white/90">${item.details}</span>
+                                </span>
+                                <span class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                                    <span>${item.type}</span>
+                                    <span class="h-1 w-1 rounded-full bg-gray-400"></span>
+                                    <span>${item.time}</span>
+                                </span>
+                            </span>
+                        </a>`;
+                    list.appendChild(li);
+                });
+            });
+    });
+</script>
