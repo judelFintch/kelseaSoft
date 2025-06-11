@@ -9,11 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\Currency;
 use App\Models\DocumentType;
+use App\Traits\Auditable;
 use Kyslik\ColumnSortable\Sortable;
 
 class Folder extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Auditable;
     use Sortable;
     
 

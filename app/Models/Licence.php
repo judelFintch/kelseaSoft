@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\Auditable;
 
 /**
  * App\Models\Licence
@@ -41,7 +42,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Licence extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Auditable;
 
     protected $fillable = [
         'license_number',

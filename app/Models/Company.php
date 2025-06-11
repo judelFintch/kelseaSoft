@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Auditable;
 
 class Company extends Model
 {
     //
-    use HasFactory;
+    use HasFactory, Auditable;
 
     protected $fillable = [
         'name',
