@@ -42,7 +42,8 @@ class ManageAgencyFee extends Component
         ])->layout('layouts.app');
     }
 
-    public function showForm()
+    // ✅ méthode renommée pour éviter le conflit
+    public function openForm()
     {
         $this->resetForm();
         $this->showForm = true;
