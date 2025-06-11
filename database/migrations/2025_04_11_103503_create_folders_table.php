@@ -6,15 +6,14 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('folders', function (Blueprint $table) {
             $table->id();
             $table->string('folder_number')->unique();
-            $table->string('truck_number');
+
+            // Étape 2 Transport
+            $table->string('truck_number')->nullable();
             $table->string('trailer_number')->nullable();
             $table->string('invoice_number')->nullable();
             $table->foreignId('transporter_id')->nullable()->constrained()->nullOnDelete();
@@ -22,11 +21,13 @@ return new class extends Migration
             $table->string('driver_phone')->nullable();
             $table->string('driver_nationality')->nullable();
 
+            // Étape 1 Origine et Fournisseur
             $table->foreignId('origin_id')->nullable()->constrained('locations')->nullOnDelete();
             $table->foreignId('destination_id')->nullable()->constrained('locations')->nullOnDelete();
             $table->foreignId('supplier_id')->nullable()->constrained()->nullOnDelete();
             $table->string('client')->nullable();
 
+            // Étape 3 Douane
             $table->foreignId('customs_office_id')->nullable()->constrained()->nullOnDelete();
             $table->string('declaration_number')->nullable();
             $table->foreignId('declaration_type_id')->nullable()->constrained()->nullOnDelete();
@@ -34,6 +35,7 @@ return new class extends Migration
             $table->string('customs_agent')->nullable();
             $table->string('container_number')->nullable();
 
+            // Valeurs financières
             $table->decimal('weight', 10, 2)->nullable();
             $table->decimal('quantity', 10, 2)->nullable();
             $table->decimal('fob_amount', 15, 2)->nullable();
@@ -42,12 +44,11 @@ return new class extends Migration
             $table->date('arrival_border_date')->nullable();
             $table->text('description')->nullable();
 
+            // Dossier
             $table->string('dossier_type')->default('sans');
             $table->string('license_code')->nullable();
             $table->string('bivac_code')->nullable();
             $table->foreignId('license_id')->nullable()->constrained('licences')->nullOnDelete();
-
-            // ✅ Ajouts demandés
             $table->string('goods_type')->nullable();
             $table->string('agency')->nullable();
             $table->string('pre_alert_place')->nullable();
@@ -55,6 +56,8 @@ return new class extends Migration
             $table->string('internal_reference')->nullable();
             $table->string('order_number')->nullable();
             $table->date('folder_date')->nullable();
+
+            // Données complémentaires
             $table->string('tr8_number')->nullable();
             $table->date('tr8_date')->nullable();
             $table->string('t1_number')->nullable();
@@ -72,9 +75,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('folders');

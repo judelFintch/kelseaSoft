@@ -32,10 +32,9 @@
             <div class="space-y-4">
                 <x-forms.select label="Entreprise" model="company_id" :options="$companies" optionLabel="name" optionValue="id" required placeholder="Sélectionner une entreprise" />
                 <x-forms.input label="Numéro de Dossier" model="folder_number" required />
-                <x-forms.input label="Numéro de la facture" model="invoice_number" required />
+                
                 <x-forms.input label="Date du Dossier" model="folder_date" type="date" required />
                 <x-forms.select label="Devise" model="currency_id" :options="$currencies" optionLabel="code" optionValue="id" required />
-                <x-forms.select label="Fournisseur" model="supplier_id" :options="$suppliers" optionLabel="name" optionValue="id" placeholder="Sélectionner un fournisseur" />
                 <x-forms.select label="Nature Marchandise" model="goods_type" :options="$merchandiseTypes" optionLabel="name" optionValue="name" required placeholder="Sélectionner un type de marchandise" />
                 <x-forms.textarea label="Description Générale" model="description" rows="3" />
                 <x-forms.select label="Type de Dossier" model="dossier_type" :options="$dossierTypeOptions" optionLabel="label" optionValue="value" required />
@@ -51,12 +50,8 @@
         <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm animate-fadeIn">
             <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 border-b pb-2 mb-6 border-gray-300 dark:border-gray-600">Étape 2: Transport & Logistique</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <x-forms.select label="Transporteur" model="transporter_id" :options="$transporters" optionLabel="name" optionValue="id" required placeholder="Sélectionner un transporteur" />
                 <x-forms.input label="Numéro Camion" model="truck_number" />
                 <x-forms.input label="Numéro Remorque" model="trailer_number" />
-                <x-forms.select label="Mode de Transport" model="transport_mode" :options="$transportModes" optionLabel="name" optionValue="id" required />
-                <x-forms.select label="Lieu d'Origine" model="origin_id" :options="$locations" optionLabel="name" optionValue="id" placeholder="Sélectionner origine" />
-                <x-forms.select label="Lieu de Destination" model="destination_id" :options="$locations" optionLabel="name" optionValue="id" placeholder="Sélectionner destination" />
                 <x-forms.input label="Date d'Arrivée Frontière" model="arrival_border_date" type="date" />
                 <x-forms.input label="Poids (kg)" model="weight" type="number" step="0.01" />
                 <x-forms.input label="Quantité de Marchandise" model="quantity" type="number" step="0.01" />
