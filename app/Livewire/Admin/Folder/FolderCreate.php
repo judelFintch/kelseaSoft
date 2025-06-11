@@ -63,7 +63,9 @@ class FolderCreate extends Component
     {
        // $this->folder_date = now()->toDateString();
 
-        $this->companies = Company::orderBy('name')->get(['id', 'name', 'acronym']);
+        $this->companies = Company::notDeleted()
+            ->orderBy('name')
+            ->get(['id', 'name', 'acronym']);
         $this->locations = Location::orderBy('name')->get(['id', 'name']);
         $this->customsOffices = CustomsOffice::orderBy('name')->get(['id', 'name']);
         $this->declarationTypes = DeclarationType::orderBy('name')->get(['id', 'name']);
@@ -78,7 +80,7 @@ class FolderCreate extends Component
 
     public function updatedCompanyId($value)
     {
-        if ($company = Company::find($value)) {
+        if ($company = Company::notDeleted()->find($value)) {
             $this->generateFolderNumber($company->acronym ?? 'GEN');
         }
     }

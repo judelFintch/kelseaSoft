@@ -71,7 +71,7 @@ class DashboardTest extends TestCase
         // Ces assertions peuvent être fragiles si le formatage exact du nombre change (ex: espaces pour milliers)
         // Il est souvent préférable de vérifier la présence du label et de la donnée séparément si le formatage est complexe.
         $response->assertSeeText('Total Clients');
-        $response->assertSeeTextInOrder(['Total Clients', (string)Company::count()]);
+        $response->assertSeeTextInOrder(['Total Clients', (string)Company::notDeleted()->count()]);
 
         $response->assertSeeText('Total Dossiers');
         $response->assertSeeTextInOrder(['Total Dossiers', (string)Folder::count()]);

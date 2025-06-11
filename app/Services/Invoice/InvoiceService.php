@@ -16,7 +16,7 @@ class InvoiceService
      */
     public static function generateInvoiceNumber(int $companyId, bool $global = false): string
     {
-        $company = Company::findOrFail($companyId);
+        $company = Company::notDeleted()->findOrFail($companyId);
         $acronym = strtoupper($company->acronym);
         $prefix = 'MDB' . $acronym . ($global ? 'GLO-' : '');
 

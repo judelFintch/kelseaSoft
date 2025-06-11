@@ -30,7 +30,7 @@
             @if ($companyIdForGlobalInvoice)
                 <span class="ml-2 text-sm text-gray-500">
                     Pour la compagnie ID: {{ $companyIdForGlobalInvoice }}
-                    ({{ \App\Models\Company::find($companyIdForGlobalInvoice)?->name ?? 'N/A' }})
+                    ({{ \App\Models\Company::notDeleted()->find($companyIdForGlobalInvoice)?->name ?? 'N/A' }})
                 </span>
             @endif
         </div>
