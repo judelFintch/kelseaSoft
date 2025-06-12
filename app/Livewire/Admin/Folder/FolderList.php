@@ -106,6 +106,13 @@ class FolderList extends Component
         $this->resetPage();
     }
 
+    public function archiveFolder(int $id): void
+    {
+        $folder = Folder::findOrFail($id);
+        $folder->delete();
+        session()->flash('success', 'Dossier archivé avec succès.');
+    }
+
     public function render()
     {
         $folders = Folder::with([

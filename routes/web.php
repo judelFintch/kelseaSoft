@@ -34,6 +34,7 @@ use App\Livewire\Admin\Invoices\UpdateInvoice;
 use App\Livewire\Admin\Invoices\InvoiceTrash;
 use App\Livewire\Admin\Invoices\GlobalInvoiceIndex; // Ajout pour GlobalInvoiceIndex
 use App\Livewire\Admin\Invoices\GlobalInvoiceShow;  // Ajout pour GlobalInvoiceShow
+use App\Livewire\Admin\Archive\ArchiveIndex;
 
 use App\Livewire\Admin\Currency\CurrencyIndex;
 use App\Livewire\Admin\Currency\CurrencyUpdate;
@@ -182,6 +183,8 @@ Route::get('/notifications/latest', [NotificationController::class, 'latest'])->
     Route::prefix('audit-logs')->name('audit-logs.')->group(function () {
         Route::get('/', \App\Livewire\Admin\Audit\AuditLogIndex::class)->name('index');
     });
+
+    Route::get('/archives', ArchiveIndex::class)->name('archives.index');
 
     // Admin Routes for User, Role, Permission Management
     Route::prefix('admin')->name('admin.')->group(function () {

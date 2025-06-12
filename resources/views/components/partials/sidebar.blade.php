@@ -522,6 +522,11 @@
                                             Historiques
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="{{ route('archives.index') }}" class="menu-dropdown-item group">
+                                            Archivages
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                             <!-- Dropdown Menu End -->

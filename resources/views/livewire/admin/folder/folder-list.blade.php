@@ -27,6 +27,12 @@
             </div>
         </div>
 
+        @if (session()->has('success'))
+            <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
                 <thead class="bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-white sticky top-0 z-10">
@@ -37,6 +43,7 @@
                                 <th class="px-4 py-3 text-left">{{ $label }}</th>
                             @endif
                         @endforeach
+                        <th class="px-4 py-3 text-left">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
@@ -91,17 +98,20 @@
                                             @case('description')
                                                 {{ Str::limit($folder->description, 25) }}
                                                 @break
-                                            @default
-                                                {{ $folder->$key }}
+                                        @default
+                                            {{ $folder->$key }}
                                         @endswitch
                                     </td>
                                 @endif
                             @endforeach
+                            <td class="px-4 py-3">
+                                <button wire:click="archiveFolder({{ $folder->id }})" class="text-red-600 hover:underline">Archiver</button>
+                            </td>
                         </tr>
                     @empty
                         <tr>
                             {{-- Adjust colspan: 1 for # column + count of visible columns --}}
-                            <td colspan="{{ 1 + count($visibleColumns) }}" class="px-4 py-6 text-center text-gray-500 dark:text-gray-400">No folders found.</td>
+                            <td colspan="{{ 2 + count($visibleColumns) }}" class="px-4 py-6 text-center text-gray-500 dark:text-gray-400">No folders found.</td>
                         </tr>
                     @endforelse
                 </tbody>
