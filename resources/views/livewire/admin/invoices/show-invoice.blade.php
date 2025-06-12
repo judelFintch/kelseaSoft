@@ -94,5 +94,13 @@
             class="mt-4 px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
             📥 Télécharger PDF
         </button>
+
+        {{-- Barre de progression lors de la génération du PDF --}}
+        <div wire:loading wire:target="downloadPdf" class="mt-2">
+            <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                <div class="bg-indigo-600 h-2.5 rounded-full animate-pulse w-full"></div>
+            </div>
+            <p class="text-xs text-gray-600 mt-1">Génération du PDF...</p>
+        </div>
     </div>
 </div>
