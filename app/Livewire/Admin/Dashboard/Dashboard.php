@@ -41,6 +41,11 @@ class Dashboard extends Component
         $latestGlobalInvoices = GlobalInvoice::with('company')->latest()->take(5)->get();
         $latestCompanies = Company::notDeleted()->latest()->take(5)->get();
 
+        // Éléments archivés récents
+        $archivedFolders = Folder::onlyTrashed()->latest()->take(5)->get();
+        $archivedInvoices = Invoice::onlyTrashed()->latest()->take(5)->get();
+        $archivedGlobalInvoices = GlobalInvoice::onlyTrashed()->latest()->take(5)->get();
+
         return view('livewire.admin.dashboard.dashboard', [
             'totalFolders' => $totalFolders,
             'foldersThisMonth' => $foldersThisMonth,
@@ -57,6 +62,9 @@ class Dashboard extends Component
             'latestGlobalInvoices' => $latestGlobalInvoices,
             'latestCompanies' => $latestCompanies,
             'latestFiles' => $latestFiles,
+            'archivedFolders' => $archivedFolders,
+            'archivedInvoices' => $archivedInvoices,
+            'archivedGlobalInvoices' => $archivedGlobalInvoices,
         ]);
     }
 }
