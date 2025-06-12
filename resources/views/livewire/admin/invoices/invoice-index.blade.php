@@ -85,25 +85,25 @@
                             </span>
                         @endif
                     </td>
-                    <td class="border px-2 py-1 space-x-2 text-center">
-                        <a href="{{ route('invoices.show', $invoice->id) }}"
-                            class="text-blue-600 hover:underline text-sm cursor-pointer">
-                            👁 Voir
-                        </a>
-                        <a href=""
-                            class="text-yellow-600 hover:underline text-sm cursor-pointer">
-                            ✏️ Modifier
-                        </a>
+                    <td class="border px-2 py-1 text-center">
+                        <x-dropdown align="right" width="48">
+                            <x-slot name="trigger">
+                                <button class="text-gray-500 hover:text-gray-700">•••</button>
+                            </x-slot>
 
-                        <button wire:click="confirmDeleteInvoice({{ $invoice->id }})"
-                            class="text-red-600 hover:underline text-sm cursor-pointer">
-                            🗄 Archiver
-                        </button>
-
-                        <button wire:click="exportPdf({{ $invoice->id }})"
-                            class="text-green-600 hover:underline text-sm cursor-pointer">
-                            📥 PDF
-                        </button>
+                            <x-slot name="content">
+                                <x-dropdown-link :href="route('invoices.show', $invoice->id)">Voir</x-dropdown-link>
+                                <x-dropdown-link :href="route('invoices.invoices.edit', $invoice->id)">Modifier</x-dropdown-link>
+                                <button wire:click="confirmDeleteInvoice({{ $invoice->id }})"
+                                    class="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                    Archiver
+                                </button>
+                                <button wire:click="exportPdf({{ $invoice->id }})"
+                                    class="w-full text-left block px-4 py-2 text-sm text-green-600 hover:bg-gray-100">
+                                    PDF
+                                </button>
+                            </x-slot>
+                        </x-dropdown>
                     </td>
                 </tr>
             @empty
