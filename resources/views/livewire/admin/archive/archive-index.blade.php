@@ -7,7 +7,7 @@
         </div>
     @endif
 
-    <h3 class="font-semibold mt-4">Dossiers Archivés</h3>
+    <h3 class="font-semibold mt-4">Dossiers Archivés ({{ $trashedFoldersCount }})</h3>
     <table class="w-full border mt-2 text-sm">
         <thead class="bg-gray-100">
             <tr>
@@ -32,7 +32,7 @@
     </table>
     {{ $trashedFolders->links() }}
 
-    <h3 class="font-semibold mt-8">Factures Archivées</h3>
+    <h3 class="font-semibold mt-8">Factures Archivées ({{ $trashedInvoicesCount }})</h3>
     <table class="w-full border mt-2 text-sm">
         <thead class="bg-gray-100">
             <tr>
@@ -59,7 +59,7 @@
     </table>
     {{ $trashedInvoices->links() }}
 
-    <h3 class="font-semibold mt-8">Factures Globales Archivées</h3>
+    <h3 class="font-semibold mt-8">Factures Globales Archivées ({{ $trashedGlobalInvoicesCount }})</h3>
     <table class="w-full border mt-2 text-sm">
         <thead class="bg-gray-100">
             <tr>

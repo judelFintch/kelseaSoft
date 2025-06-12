@@ -46,6 +46,10 @@ class Dashboard extends Component
         $archivedInvoices = Invoice::onlyTrashed()->latest()->take(5)->get();
         $archivedGlobalInvoices = GlobalInvoice::onlyTrashed()->latest()->take(5)->get();
 
+        $archivedFoldersCount = Folder::onlyTrashed()->count();
+        $archivedInvoicesCount = Invoice::onlyTrashed()->count();
+        $archivedGlobalInvoicesCount = GlobalInvoice::onlyTrashed()->count();
+
         return view('livewire.admin.dashboard.dashboard', [
             'totalFolders' => $totalFolders,
             'foldersThisMonth' => $foldersThisMonth,
@@ -65,6 +69,9 @@ class Dashboard extends Component
             'archivedFolders' => $archivedFolders,
             'archivedInvoices' => $archivedInvoices,
             'archivedGlobalInvoices' => $archivedGlobalInvoices,
+            'archivedFoldersCount' => $archivedFoldersCount,
+            'archivedInvoicesCount' => $archivedInvoicesCount,
+            'archivedGlobalInvoicesCount' => $archivedGlobalInvoicesCount,
         ]);
     }
 }
