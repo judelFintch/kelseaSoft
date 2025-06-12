@@ -65,6 +65,7 @@ class FolderList extends Component
         'bivac_code' => 'Bivac',
         'license_number' => 'License', // Assuming 'license->license_number'
         'description' => 'Desc.',
+        'created_at' => 'Created',
     ];
 
     public $visibleColumns = [
@@ -84,7 +85,8 @@ class FolderList extends Component
         if (empty($this->visibleColumns)) {
             $this->visibleColumns = [
                 'folder_number', 'truck_number', 'company_name',
-                'arrival_border_date', 'goods_type', 'transporter_name', 'declaration_number'
+                'arrival_border_date', 'goods_type', 'transporter_name', 'declaration_number',
+                'created_at'
             ];
         }
     }
@@ -124,7 +126,7 @@ class FolderList extends Component
             ->when($this->filterTransporter, fn($q) => $q->where('transporter_id', $this->filterTransporter))
             ->when($this->filterDateFrom, fn($q) => $q->whereDate('arrival_border_date', '>=', $this->filterDateFrom))
             ->when($this->filterDateTo, fn($q) => $q->whereDate('arrival_border_date', '<=', $this->filterDateTo))
-            ->latest()
+            ->orderBy('created_at')
             ->paginate($this->perPage);
 
         return view('livewire.admin.folder.folder-list', [

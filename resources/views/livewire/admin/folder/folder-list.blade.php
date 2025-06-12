@@ -76,6 +76,9 @@
                                             @case('license_number')
                                                 {{ $folder->license?->license_number }}
                                                 @break
+                                            @case('created_at')
+                                                {{ $folder->created_at->format('Y-m-d') }}
+                                                @break
                                             @case('folder_date')
                                             @case('arrival_border_date')
                                             @case('tr8_date')
