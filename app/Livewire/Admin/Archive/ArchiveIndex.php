@@ -39,6 +39,9 @@ class ArchiveIndex extends Component
             'trashedFolders' => Folder::onlyTrashed()->paginate(10),
             'trashedInvoices' => Invoice::onlyTrashed()->with('company')->paginate(10),
             'trashedGlobalInvoices' => GlobalInvoice::onlyTrashed()->with('company')->paginate(10),
+            'trashedFoldersCount' => Folder::onlyTrashed()->count(),
+            'trashedInvoicesCount' => Invoice::onlyTrashed()->count(),
+            'trashedGlobalInvoicesCount' => GlobalInvoice::onlyTrashed()->count(),
         ]);
     }
 }
