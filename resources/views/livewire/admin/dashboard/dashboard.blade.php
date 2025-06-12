@@ -114,4 +114,37 @@
             @endforelse
         </div>
     </div>
+
+    <!-- Archives Section -->
+    <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow mt-6">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Fichiers Archivés</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <h4 class="font-medium mb-2">Dossiers</h4>
+                @forelse($archivedFolders as $folder)
+                    <p class="text-sm mb-1">N° {{ $folder->folder_number }}</p>
+                @empty
+                    <p class="text-gray-500 text-sm">Aucun dossier archivé.</p>
+                @endforelse
+            </div>
+            <div>
+                <h4 class="font-medium mb-2">Factures</h4>
+                @forelse($archivedInvoices as $invoice)
+                    <p class="text-sm mb-1">{{ $invoice->invoice_number }}</p>
+                @empty
+                    <p class="text-gray-500 text-sm">Aucune facture archivée.</p>
+                @endforelse
+            </div>
+            <div>
+                <h4 class="font-medium mb-2">Factures Globales</h4>
+                @forelse($archivedGlobalInvoices as $global)
+                    <p class="text-sm mb-1">{{ $global->global_invoice_number }}</p>
+                @empty
+                    <p class="text-gray-500 text-sm">Aucune facture globale archivée.</p>
+                @endforelse
+            </div>
+        </div>
+        <a href="{{ route('archives.index') }}" class="text-blue-600 hover:underline block mt-4">Voir toutes les archives</a>
+    </div>
+</div>
 </div>
