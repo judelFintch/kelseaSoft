@@ -21,8 +21,26 @@ class InvoiceIndex extends Component
     public array $selectedInvoices = [];
     public ?int $companyIdForGlobalInvoice = null;
 
+    public ?string $filterDate = null;
+    public string $filterCode = '';
+
     public ?int $deleteInvoiceId = null;
     public string $deleteConfirmText = '';
+
+    public function updatingSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingFilterDate(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingFilterCode(): void
+    {
+        $this->resetPage();
+    }
 
     public function getInvoiceToDeleteProperty()
     {
@@ -155,6 +173,8 @@ class InvoiceIndex extends Component
                 $query->where('invoice_number', 'like', "%{$this->search}%")
                     ->orWhereHas('company', fn($q) => $q->where('name', 'like', "%{$this->search}%"));
             })
+            ->when($this->filterDate, fn($q) => $q->whereDate('invoice_date', $this->filterDate))
+            ->when($this->filterCode, fn($q) => $q->where('operation_code', 'like', "%{$this->filterCode}%"))
             ->when($this->showTrashed, fn($q) => $q->onlyTrashed())
             ->latest()
             ->paginate(10);
