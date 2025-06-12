@@ -2,8 +2,13 @@
 <div class="w-full max-w-6xl mx-auto p-6 bg-white rounded-xl shadow space-y-6">
     <div class="flex justify-between items-center">
         <h2 class="text-xl font-bold">📋 Factures Générées</h2>
-        <input type="text" wire:model.live.debounce.500ms="search" placeholder="🔍 Rechercher..."
-            class="border rounded px-3 py-1 text-sm w-1/3" />
+        <div class="flex space-x-2">
+            <input type="text" wire:model.live.debounce.500ms="search" placeholder="🔍 Rechercher..."
+                class="border rounded px-3 py-1 text-sm" />
+            <input type="text" wire:model.live.debounce.500ms="filterCode" placeholder="Code"
+                class="border rounded px-3 py-1 text-sm" />
+            <input type="date" wire:model.live="filterDate" class="border rounded px-3 py-1 text-sm" />
+        </div>
     </div>
 
     {{-- Notifications Flash --}}
