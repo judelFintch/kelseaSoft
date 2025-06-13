@@ -13,15 +13,18 @@ class DocumentTypeSeeder extends Seeder
     public function run(): void
     {
         $types = [
-            'Facture',
-            'Bill of Lading (B/L)',
-            'Quittance',
-            'Fiche d\'identification',
-            'Autre',
+            ['name' => 'Facture', 'folder_field' => 'invoice_number'],
+            ['name' => 'Bill of Lading (B/L)', 'folder_field' => null],
+            ['name' => 'Quittance', 'folder_field' => 'quitance_number'],
+            ['name' => "Fiche d'identification", 'folder_field' => null],
+            ['name' => 'Autre', 'folder_field' => null],
         ];
 
         foreach ($types as $type) {
-            DocumentType::firstOrCreate(['name' => $type]);
+            DocumentType::updateOrCreate(
+                ['name' => $type['name']],
+                ['folder_field' => $type['folder_field']]
+            );
         }
     }
 }

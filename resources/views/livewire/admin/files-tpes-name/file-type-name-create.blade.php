@@ -23,6 +23,17 @@
                     @enderror
                 </div>
 
+                <div>
+                    <x-forms.input
+                        label="Champ associé au dossier"
+                        wire:model="folder_field"
+                        placeholder="Ex: invoice_number"
+                    />
+                    @error('folder_field')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <div class="flex items-center gap-3">
                     <!-- ✅ Bouton principal -->
                     <button type="submit"
@@ -61,6 +72,7 @@
                     <thead class="bg-gray-100 dark:bg-gray-700">
                         <tr>
                             <th class="px-4 py-2 text-left text-gray-700 dark:text-gray-200">Nom</th>
+                            <th class="px-4 py-2 text-left text-gray-700 dark:text-gray-200">Champ dossier</th>
                             <th class="px-4 py-2 text-left text-gray-700 dark:text-gray-200">Actions</th>
                         </tr>
                     </thead>
@@ -68,6 +80,7 @@
                         @forelse($types as $type)
                             <tr>
                                 <td class="px-4 py-2 text-gray-900 dark:text-white">{{ $type->name }}</td>
+                                <td class="px-4 py-2 text-gray-900 dark:text-white">{{ $type->folder_field ?? '-' }}</td>
                                 <td class="px-4 py-2 flex gap-3">
                                     <button wire:click="edit({{ $type->id }})"
                                             class="text-indigo-600 text-xs font-medium hover:underline">
@@ -81,7 +94,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="2" class="px-4 py-4 text-gray-500 text-center">
+                                <td colspan="3" class="px-4 py-4 text-gray-500 text-center">
                                     Aucun type de document trouvé.
                                 </td>
                             </tr>

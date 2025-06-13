@@ -44,6 +44,16 @@ class UploadFiles extends Component
     public function uploadFile()
     {
         $this->validate();
+
+        $docType = DocumentType::find($this->documentType);
+        if ($docType && $docType->folder_field) {
+            $field = $docType->folder_field;
+            if (empty($this->folder->{$field})) {
+                $this->addError('documentType', 'Le champ "'.$field.'" doit être renseigné dans le dossier.');
+                return;
+            }
+        }
+
         $storedPath = $this->file->store('folder_files', 'public');
         $this->folder->files()->create([
             'name' => $this->documentType,
