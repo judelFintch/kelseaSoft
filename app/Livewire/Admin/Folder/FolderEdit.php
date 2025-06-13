@@ -45,10 +45,10 @@ class FolderEdit extends Component
 
     public $dossierTypeOptions;
 
-    public function mount(Folder $folder)
+    public function mount($id)
     {
-        $this->folderModel = $folder;
-        $this->folder = $folder->toArray();
+        $this->folderModel = FolderService::getFolder($id);
+        $this->folder = $this->folderModel->toArray();
 
         $this->clients = CompanyService::getAllCompanies();
         $this->transporters = Transporter::all();
