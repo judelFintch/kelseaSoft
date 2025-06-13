@@ -61,17 +61,27 @@
 <body>
 
     {{-- En-tête société --}}
-    <table class="no-border">
+    <table class="no-border" style="width: 100%; margin-bottom: 10px; border-collapse: collapse;">
         <tr>
-            <td class="center">
-                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 50px;"><br>
-                <h2>LA MANNE DES BRAVES S.A.R.L</h2>
-                <p>TRANSITAIRE EN DOUANE OFFICIEL – VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
-                <p>N° Impôt : A1000859K RCCM : CDL/SHR/RCM15-B3463</p>
-                <p>ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
+            <td style="width: 22%; vertical-align: middle; text-align: left;">
+                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 90px;">
+            </td>
+            <td style="width: 78%; vertical-align: middle; text-align: center; padding-left: 10px;">
+                <h2 style="margin: 0; font-size: 16px;">LA MANNE DES BRAVES S.A.R.L</h2>
+                <p style="margin: 2px 0; font-size: 11px; font-weight: bold;">
+                    TRANSITAIRE EN DOUANE OFFICIEL – VOTRE SATISFACTION, C'EST NOTRE AFFAIRE
+                </p>
+                <p style="margin: 2px 0; font-size: 10px;">
+                    N° Impôt : A1000859K &nbsp;&nbsp;&nbsp; RCCM : CDL/SHR/RCM15-B3463
+                </p>
+                <p style="margin: 2px 0; font-size: 10px;">
+                    ID. NAT : 05-H1901-N57656K &nbsp;&nbsp;&nbsp; NUMÉRO AGREMENT : 000188
+                </p>
             </td>
         </tr>
     </table>
+
+
 
     {{-- Numéro de facture --}}
     <h3 class="center" style="border: 1px solid black; padding: 2px;">FACTURE N° {{ $invoice->invoice_number }}</h3>
@@ -86,20 +96,20 @@
                 @if ($invoice->company->acronym)
                     <strong>Acronyme :</strong> {{ $invoice->company->acronym }}<br>
                 @endif
-                
+
                 <strong>Adresse :</strong> {{ $invoice->company->physical_address ?? 'Aucune adresse renseignée' }}<br>
                 @if ($invoice->company->country)
                     <strong>Pays :</strong> {{ $invoice->company->country }}<br>
                 @endif
-               
+
                 @if ($invoice->company->email)
                     <strong>Email :</strong> {{ $invoice->company->email }}<br>
                 @endif
-                
+
                 @if ($invoice->company->code)
                     <strong>Code :</strong> {{ $invoice->company->code }}<br>
                 @endif
-               
+
                 @if ($invoice->company->nbc_number)
                     <strong>Numéro NBC :</strong> {{ $invoice->company->nbc_number }}<br>
                 @endif
