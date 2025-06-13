@@ -4,49 +4,45 @@ namespace App\Services\Invoice;
 
 use App\Models\Company;
 use App\Models\Invoice;
-use App\Models\GlobalInvoice;
+use App\Models\InvoiceSequence;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class InvoiceService
 {
     /**
-     * Generate a unique invoice number.
-     * New format: MDB{ACRONYM}[GL]{NN}{mmyy}
+     * Génère un numéro de facture unique basé sur la séquence par entreprise.
      */
     public static function generateInvoiceNumber(int $companyId, bool $global = false): string
     {
+
         $company = Company::notDeleted()->findOrFail($companyId);
         $acronym = strtoupper($company->acronym);
         $prefix = 'MDB' . $acronym . ($global ? 'GL' : '');
+        $type = $global ? 'global' : 'normal';
 
-        $column = $global ? 'global_invoice_number' : 'invoice_number';
-        $table = $global ? (new GlobalInvoice)->getTable() : (new Invoice)->getTable();
+        return DB::transaction(function () use ($companyId, $type, $prefix, $global) {
 
-        $like = $prefix . '%';
-        $lastNumber = DB::table($table)
-            ->whereNull('deleted_at')
-            ->where($column, 'like', $like)
-            ->orderBy($column, 'desc')
-            ->value($column);
+            // Ici tu définis ton démarrage de base
+            $startNumber = $global ? 57 : 336;
 
-        $start = $global
-            ? config('invoice.global_start_number', 337)
-            : config('invoice.start_number', 336);
-        $next = $start;
-        if ($lastNumber) {
-            $numPart = substr($lastNumber, strlen($prefix), -4);
-            if (is_numeric($numPart)) {
-                $next = (int)$numPart + 1;
-            }
-        }
-        $padLength = max(3, strlen((string) $start));
-        $sequential = str_pad($next, $padLength, '0', STR_PAD_LEFT);
-        // Include month in the suffix only for global invoices
-        $suffix = $global
-            ? Carbon::now()->format('my')
-            : Carbon::now()->format('y');
+            // Création de la séquence s'il n'existe pas encore
+            $sequence = InvoiceSequence::firstOrCreate(
+                ['company_id' => $companyId, 'type' => $type],
+                ['current_number' => $startNumber - 1] // On démarre juste avant
+            );
 
-        return $prefix . $sequential . $suffix;
+            // Incrémentation normale
+            $sequence->increment('current_number');
+            $sequence->refresh();
+
+            $next = $sequence->current_number;
+
+            $padLength = 3;
+            $sequential = str_pad($next, $padLength, '0', STR_PAD_LEFT);
+            $suffix = $global ? Carbon::now()->format('my') : Carbon::now()->format('y');
+
+            return $prefix . $sequential . $suffix;
+        });
     }
 }

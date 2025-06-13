@@ -59,7 +59,10 @@ class GenerateInvoice extends Component
         $this->folder_id = $folder->id;
         $this->selectedFolder = $folder;
         $this->company_id = $folder->company_id;
-        $this->previewInvoiceNumber = InvoiceService::generateInvoiceNumber($folder->company_id);
+
+        // Correction : on n'appelle plus la génération ici
+        $this->previewInvoiceNumber = 'Numéro généré lors de l’enregistrement';
+
         $this->default_fob_amount = $folder->fob_amount ?? 0;
         $this->insurance_amount = $folder->insurance_amount ?? 0;
         $this->cif_amount = $folder->cif_amount ?? 0;
@@ -69,7 +72,6 @@ class GenerateInvoice extends Component
         $calculated_freight = $this->cif_amount - $this->default_fob_amount - $this->insurance_amount;
         $this->freight_amount = $folder->freight_amount ?? max($calculated_freight, 0);
 
-        // Création d’une ligne vide que l’utilisateur devra remplir
         $this->items = [];
         $this->addItem('import_tax');
     }
@@ -182,16 +184,13 @@ class GenerateInvoice extends Component
                 ],
             ]);
 
-
             foreach ($this->items as $index => $item) {
                 if ($item['category'] === 'import_tax' && empty($item['tax_id'])) {
                     $this->addError("items.{$index}.tax_id", "Le champ Taxe est requis.");
                 }
-
                 if ($item['category'] === 'agency_fee' && empty($item['agency_fee_id'])) {
                     $this->addError("items.{$index}.agency_fee_id", "Le champ Frais agence est requis.");
                 }
-
                 if ($item['category'] === 'extra_fee' && empty($item['extra_fee_id'])) {
                     $this->addError("items.{$index}.extra_fee_id", "Le champ Frais divers est requis.");
                 }
@@ -209,7 +208,6 @@ class GenerateInvoice extends Component
                     $this->addError("items.{$index}.currency_id", "La devise pour l'item est requise.");
                     return;
                 }
-
                 if (empty($itemRef['label'])) {
                     switch ($itemRef['category']) {
                         case 'import_tax':
@@ -276,7 +274,9 @@ class GenerateInvoice extends Component
                 'folder_id' => $this->folder_id,
                 'status' => 'pending',
             ];
+
             $invoice = DB::transaction(function () use ($invoiceData) {
+                // ✅ Génération du numéro ici uniquement
                 $invoiceData['invoice_number'] = InvoiceService::generateInvoiceNumber($this->company_id);
                 $invoice = Invoice::create($invoiceData);
 
@@ -300,42 +300,10 @@ class GenerateInvoice extends Component
             $this->generatedInvoiceLabel = $invoice->invoice_number;
             session()->flash('success', 'Facture enregistrée avec succès: ' . $this->generatedInvoiceLabel);
             $this->resetForm();
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             dd($e->errors());
         }
-    }
-
-    protected function resetForm(): void
-    {
-        $defaultValues = [
-            'step' => 1,
-            'invoice_date' => now()->toDateString(),
-            'product' => 'SOUFFRE',
-            'weight' => '9000',
-            'operation_code' => 'MBDKCCGL',
-            'payment_mode' => 'provision',
-            'currency_id' => Currency::where('code', 'USD')->first()?->id ?? 1,
-            'exchange_rate' => Currency::where('code', 'CDF')->first()?->exchange_rate ?? $this->exchange_rate ?? 2800,
-            'items' => [],
-            'company_id' => null,
-            'fob_amount' => 0,
-            'insurance_amount' => 0,
-            'freight_amount' => 0,
-            'cif_amount' => 0,
-            'total_usd' => 0,
-            'generatedInvoiceLabel' => null,
-            'previewInvoiceNumber' => null,
-        ];
-
-        foreach ($defaultValues as $key => $value) {
-            if (property_exists($this, $key)) {
-                $this->$key = $value;
-            }
-        }
-
-        $this->resetFolderSelection();
-        $this->addItem();
-        $this->clearValidation();
     }
 
     public function render()
@@ -344,24 +312,27 @@ class GenerateInvoice extends Component
             'companies' => Company::notDeleted()->get(),
         ]);
     }
+    protected function resetForm(): void
+{
+    $this->step = 1;
+    $this->invoice_date = now()->toDateString();
+    $this->product = '';
+    $this->weight = null;
+    $this->operation_code = null;
+    $this->default_fob_amount = 0;
+    $this->insurance_amount = 0;
+    $this->freight_amount = 0;
+    $this->cif_amount = 0;
+    $this->payment_mode = 'provision';
+    $this->currency_id = 1;
+    $this->exchange_rate = 500;
+    $this->items = [];
+    $this->generatedInvoiceLabel = null;
+    $this->previewInvoiceNumber = 'Numéro généré lors de l’enregistrement';
+    $this->folder_id = null;
+    $this->company_id = null;
+    $this->selectedFolder = null;
+    $this->clearValidation();
+}
 
-    public function clearSelectedFolder(): void
-    {
-        $this->resetFolderSelection();
-        $this->resetInvoiceFieldsFromFolder();
-    }
-
-    protected function resetInvoiceFieldsFromFolder(): void
-    {
-        $this->company_id = null;
-        $this->previewInvoiceNumber = null;
-        $this->default_fob_amount = 0;
-        $this->insurance_amount = 0;
-        $this->cif_amount = 0;
-        $this->weight = '9000';
-        $this->product = 'SOUFFRE';
-        $this->freight_amount = 0;
-        $this->items = [];
-        $this->addItem();
-    }
 }
