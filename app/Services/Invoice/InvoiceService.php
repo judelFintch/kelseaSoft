@@ -29,7 +29,9 @@ class InvoiceService
             ->orderBy($column, 'desc')
             ->value($column);
 
-        $start = $global ? 57 : 33;
+        $start = $global
+            ? config('invoice.global_start_number', 57)
+            : config('invoice.start_number', 33);
         $next = $start;
         if ($lastNumber) {
             $numPart = substr($lastNumber, strlen($prefix), -4);

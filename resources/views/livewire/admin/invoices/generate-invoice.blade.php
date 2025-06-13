@@ -1,6 +1,9 @@
 <div class="w-full max-w-5xl mx-auto bg-white p-6 rounded-xl shadow space-y-6">
 
     <h2 class="text-2xl font-bold">🧾 Nouvelle Facture</h2>
+    @if ($previewInvoiceNumber)
+        <p class="text-sm text-gray-600">Code facture prévisionnel : <strong>{{ $previewInvoiceNumber }}</strong></p>
+    @endif
 
     @if (session()->has('success'))
         <div class="bg-green-100 text-green-700 px-4 py-2 rounded">{{ session('success') }}</div>
