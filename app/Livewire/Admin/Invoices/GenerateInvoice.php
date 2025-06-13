@@ -179,7 +179,6 @@ class GenerateInvoice extends Component
                     'nullable',
                     'integer',
                     'exists:folders,id',
-                    \Illuminate\Validation\Rule::unique('invoices', 'folder_id')->whereNull('deleted_at')->ignore($this->invoice_id ?? null),
                 ],
             ]);
 
