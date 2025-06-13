@@ -11,6 +11,7 @@ use App\Models\Tax;
 use App\Models\Folder;
 use Illuminate\Support\Carbon;
 use App\Services\Folder\FolderService;
+use App\Services\Invoice\InvoiceNumberService;
 use Livewire\Component;
 
 class GenerateInvoice extends Component
@@ -21,6 +22,7 @@ class GenerateInvoice extends Component
     public $folder_id;
     public $company_id;
     public $invoice_date;
+    public $invoice_number;
     public $product;
     public $weight;
     public $operation_code;
@@ -39,6 +41,9 @@ class GenerateInvoice extends Component
     {
         // Chargement du dossier avec toutes ses relations
         $folder = FolderService::getFolder($folder->id);
+
+        // Génération du numéro de facture dès la première étape
+        $this->invoice_number = InvoiceNumberService::generateInvoiceNumber();
 
         // Vérifie s'il existe déjà une facture liée à ce dossier
         if ($folder->invoice()->exists()) {
@@ -172,6 +177,7 @@ class GenerateInvoice extends Component
         $this->validate([
             'company_id' => 'required|integer|exists:companies,id',
             'invoice_date' => 'required|date',
+            'invoice_number' => 'required|string|unique:invoices,invoice_number',
             'product' => 'required|string|max:255',
             'weight' => 'nullable|numeric',
             'operation_code' => 'nullable|string|max:255',
@@ -261,7 +267,7 @@ class GenerateInvoice extends Component
         $this->items = $processedItems; // Mettre à jour les items avec les montants recalculés
         $this->total_usd = $totalUsdFromItems;
         $invoiceData = [
-            'invoice_number' => 'MDBKCCGL' . str_pad((Invoice::max('id') ?? 0) + 1, 6, '0', STR_PAD_LEFT),
+            'invoice_number' => $this->invoice_number ?? InvoiceNumberService::generateInvoiceNumber(),
             'company_id' => $this->company_id,
             'invoice_date' => Carbon::parse($this->invoice_date),
             'product' => $this->product,
@@ -305,6 +311,7 @@ class GenerateInvoice extends Component
         $defaultValues = [
             'step' => 1,
             'invoice_date' => now()->toDateString(),
+            'invoice_number' => InvoiceNumberService::generateInvoiceNumber(),
             'product' => 'SOUFFRE',
             'weight' => '9000',
             'operation_code' => 'MBDKCCGL',
@@ -354,5 +361,6 @@ class GenerateInvoice extends Component
         $this->freight_amount = 0;
         $this->items = [];
         $this->addItem();
+        $this->invoice_number = InvoiceNumberService::generateInvoiceNumber();
     }
 }
