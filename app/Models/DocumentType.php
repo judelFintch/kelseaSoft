@@ -10,7 +10,7 @@ class DocumentType extends Model
     use Auditable;
 
     //
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'folder_field'];
 
     public function files()
     {
