@@ -21,7 +21,7 @@
             @endif
 
             <a href="{{ route('folder.edit', $folder) }}"
-                class="inline-flex items-center px-3 py-1.5 text-sm bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 dark:bg-indigo-700 dark:text-indigo-100 dark:hover:bg-indigo-600">✏️
+                class="inline-flex items-center px-3 py-1.5 text-sm text-white bg-brand-500 rounded hover:bg-brand-600">✏️
                 Modifier</a>
             <button wire:click="confirmDelete"
                 class="inline-flex items-center px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 dark:bg-red-700 dark:text-red-100 dark:hover:bg-red-600">🗑

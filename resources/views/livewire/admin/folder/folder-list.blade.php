@@ -112,7 +112,7 @@
 
                                     <x-slot name="content">
                                         <x-dropdown-link :href="route('folder.show', $folder->id)">Afficher</x-dropdown-link>
-                                        <x-dropdown-link :href="route('folder.edit', $folder->id)">Modifier</x-dropdown-link>
+                                        <x-dropdown-link :href="route('folder.edit', $folder->id)" class="text-indigo-600 hover:text-indigo-800">Modifier</x-dropdown-link>
                                         <button wire:click="archiveFolder({{ $folder->id }})"
                                             onclick="return confirm('Archiver ce dossier ?');"
                                             class="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
