@@ -18,7 +18,7 @@
                     <x-forms.input label="Pre-alert Place" model="folder.pre_alert_place" />
                     <x-forms.input label="Transport Mode" model="folder.transport_mode" />
                     <x-forms.select label="Dossier Type" model="folder.dossier_type" :options="$dossierTypeOptions" option-label="label" option-value="value" />
-                    @if($folder['dossier_type'] === 'avec')
+                    @if(($folder['dossier_type'] ?? null) === 'avec')
                         <x-forms.select label="License" model="folder.license_id" :options="$licenses" option-label="license_number" option-value="id" />
                     @endif
                     <x-forms.input label="License Code" model="folder.license_code" />
