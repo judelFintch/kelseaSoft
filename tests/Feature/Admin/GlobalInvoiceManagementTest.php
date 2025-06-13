@@ -84,8 +84,8 @@ class GlobalInvoiceManagementTest extends TestCase
         $this->assertEquals($this->company->id, $globalInvoice->company_id);
         $this->assertEquals($expectedTotalAmount, $globalInvoice->total_amount);
         $this->assertNotNull($globalInvoice->global_invoice_number);
-        $expectedPrefix = 'MDB' . strtoupper($this->company->acronym) . 'GLO-';
-        $this->assertMatchesRegularExpression('/^' . $expectedPrefix . '\\d{3}-' . date('my') . '$/', $globalInvoice->global_invoice_number);
+        $expectedPrefix = 'MDB' . strtoupper($this->company->acronym) . 'GL';
+        $this->assertMatchesRegularExpression('/^' . $expectedPrefix . '\\d{2,}' . date('my') . '$/', $globalInvoice->global_invoice_number);
 
         // Vérification des items copiés sans agrégation
         $this->assertEquals(4, $globalInvoice->globalInvoiceItems()->count());

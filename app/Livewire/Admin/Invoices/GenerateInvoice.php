@@ -36,6 +36,7 @@ class GenerateInvoice extends Component
     public $taxes = [], $agencyFees = [], $extraFees = [], $currencies = [];
     public array $categorySteps = [];
     public $selectedFolder = null;
+    public $generatedInvoiceLabel = null;
 
     public function mount(Folder $folder)
     {
@@ -295,7 +296,8 @@ class GenerateInvoice extends Component
                 return $invoice;
             });
 
-            session()->flash('success', 'Facture enregistrée avec succès: ' . $invoice->invoice_number);
+            $this->generatedInvoiceLabel = $invoice->invoice_number;
+            session()->flash('success', 'Facture enregistrée avec succès: ' . $this->generatedInvoiceLabel);
             $this->resetForm();
         } catch (\Illuminate\Validation\ValidationException $e) {
             dd($e->errors());
@@ -320,6 +322,7 @@ class GenerateInvoice extends Component
             'freight_amount' => 0,
             'cif_amount' => 0,
             'total_usd' => 0,
+            'generatedInvoiceLabel' => null,
         ];
 
         foreach ($defaultValues as $key => $value) {

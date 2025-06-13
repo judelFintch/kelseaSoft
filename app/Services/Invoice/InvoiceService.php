@@ -12,13 +12,13 @@ class InvoiceService
 {
     /**
      * Generate a unique invoice number.
-     * Format: MDB{ACRONYM}[GLO-]{NNN}-{mmyy}
+     * New format: MDB{ACRONYM}[GL]{NN}{mmyy}
      */
     public static function generateInvoiceNumber(int $companyId, bool $global = false): string
     {
         $company = Company::notDeleted()->findOrFail($companyId);
         $acronym = strtoupper($company->acronym);
-        $prefix = 'MDB' . $acronym . ($global ? 'GLO-' : '');
+        $prefix = 'MDB' . $acronym . ($global ? 'GL' : '');
 
         $column = $global ? 'global_invoice_number' : 'invoice_number';
         $table = $global ? (new GlobalInvoice)->getTable() : (new Invoice)->getTable();
@@ -29,16 +29,17 @@ class InvoiceService
             ->orderBy($column, 'desc')
             ->value($column);
 
-        $next = 1;
+        $start = $global ? 57 : 33;
+        $next = $start;
         if ($lastNumber) {
-            $numPart = substr($lastNumber, strlen($prefix), 3);
+            $numPart = substr($lastNumber, strlen($prefix), -4);
             if (is_numeric($numPart)) {
                 $next = (int)$numPart + 1;
             }
         }
 
-        $sequential = str_pad($next, 3, '0', STR_PAD_LEFT);
+        $sequential = str_pad($next, 2, '0', STR_PAD_LEFT);
         $suffix = Carbon::now()->format('my');
-        return $prefix . $sequential . '-' . $suffix;
+        return $prefix . $sequential . $suffix;
     }
 }
