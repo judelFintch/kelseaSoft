@@ -22,6 +22,7 @@ KelseaSoft is a powerful and intuitive **customs agency management software** de
   - For **global invoices**: `MDB<ACRONYM>GLNNmmyy` (includes month and year).
 - Sequential numbering begins at **335** for invoices and **057** for global invoices.
 - Track payment status (**Paid, Pending, Partially Paid**).
+- Edit existing invoices directly from the generated list for quick adjustments.
 
 ### 🏢 Client Management
 - Pre-register **client companies** with relevant details (name, address, contact, company type).
