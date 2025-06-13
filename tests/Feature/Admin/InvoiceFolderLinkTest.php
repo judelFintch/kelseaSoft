@@ -152,7 +152,7 @@ class InvoiceFolderLinkTest extends TestCase
     }
 
     /** @test */
-    public function test_cannot_create_invoice_if_folder_is_already_linked_on_save(): void
+    public function test_can_create_multiple_invoices_for_same_folder(): void
     {
         // Arrange: Crée un dossier déjà lié à une facture
         $currencyUSD = Currency::where('code', 'USD')->first();
@@ -182,9 +182,9 @@ class InvoiceFolderLinkTest extends TestCase
             ])
             ->set('folder_id', $linkedFolder->id)
             ->call('save')
-            ->assertHasErrors(['folder_id' => 'unique']);
+            ->assertHasNoErrors();
 
-        $this->assertEquals(1, Invoice::where('folder_id', $linkedFolder->id)->count());
+        $this->assertEquals(2, Invoice::where('folder_id', $linkedFolder->id)->count());
     }
 
     /** @test */
