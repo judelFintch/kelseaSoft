@@ -17,7 +17,9 @@ KelseaSoft is a powerful and intuitive **customs agency management software** de
 ### 🧾 Invoicing System
 - Link invoices to dossiers with the ability to **input liquidation elements, fees, and expenses**.
 - Generate invoices in **PDF format** with the header of each company.
-- Invoice numbers use the format `MDB<ACRONYM>[GL]NNmmyy` where the company acronym, month, and year are included.
+- Invoice numbers use two different formats:
+  - For **regular invoices**: `MDB<ACRONYM>NNyy` (year only).
+  - For **global invoices**: `MDB<ACRONYM>GLNNmmyy` (includes month and year).
 - Sequential numbering begins at **335** for invoices and **057** for global invoices.
 - Track payment status (**Paid, Pending, Partially Paid**).
 

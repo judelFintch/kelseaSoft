@@ -41,7 +41,11 @@ class InvoiceService
         }
         $padLength = max(3, strlen((string) $start));
         $sequential = str_pad($next, $padLength, '0', STR_PAD_LEFT);
-        $suffix = Carbon::now()->format('my');
+        // Include month in the suffix only for global invoices
+        $suffix = $global
+            ? Carbon::now()->format('my')
+            : Carbon::now()->format('y');
+
         return $prefix . $sequential . $suffix;
     }
 }
