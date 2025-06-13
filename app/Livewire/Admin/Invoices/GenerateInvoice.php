@@ -37,6 +37,7 @@ class GenerateInvoice extends Component
     public array $categorySteps = [];
     public $selectedFolder = null;
     public $generatedInvoiceLabel = null;
+    public $previewInvoiceNumber = null;
 
     public function mount(Folder $folder)
     {
@@ -58,6 +59,7 @@ class GenerateInvoice extends Component
         $this->folder_id = $folder->id;
         $this->selectedFolder = $folder;
         $this->company_id = $folder->company_id;
+        $this->previewInvoiceNumber = InvoiceService::generateInvoiceNumber($folder->company_id);
         $this->default_fob_amount = $folder->fob_amount ?? 0;
         $this->insurance_amount = $folder->insurance_amount ?? 0;
         $this->cif_amount = $folder->cif_amount ?? 0;
@@ -323,6 +325,7 @@ class GenerateInvoice extends Component
             'cif_amount' => 0,
             'total_usd' => 0,
             'generatedInvoiceLabel' => null,
+            'previewInvoiceNumber' => null,
         ];
 
         foreach ($defaultValues as $key => $value) {
@@ -352,6 +355,7 @@ class GenerateInvoice extends Component
     protected function resetInvoiceFieldsFromFolder(): void
     {
         $this->company_id = null;
+        $this->previewInvoiceNumber = null;
         $this->default_fob_amount = 0;
         $this->insurance_amount = 0;
         $this->cif_amount = 0;
