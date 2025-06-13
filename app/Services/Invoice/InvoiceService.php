@@ -31,7 +31,7 @@ class InvoiceService
 
         $start = $global
             ? config('invoice.global_start_number', 57)
-            : config('invoice.start_number', 33);
+            : config('invoice.start_number', 335);
         $next = $start;
         if ($lastNumber) {
             $numPart = substr($lastNumber, strlen($prefix), -4);
@@ -39,8 +39,8 @@ class InvoiceService
                 $next = (int)$numPart + 1;
             }
         }
-
-        $sequential = str_pad($next, 2, '0', STR_PAD_LEFT);
+        $padLength = max(3, strlen((string) $start));
+        $sequential = str_pad($next, $padLength, '0', STR_PAD_LEFT);
         $suffix = Carbon::now()->format('my');
         return $prefix . $sequential . $suffix;
     }
