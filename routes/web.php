@@ -11,6 +11,7 @@ use App\Livewire\Admin\Dashboard\Dashboard;
 use App\Livewire\Admin\FilesTpesName\FileTypeNameCreate;
 use App\Livewire\Admin\Folder\FolderCreate;
 use App\Livewire\Admin\Folder\FolderDashboard;
+use App\Livewire\Admin\Folder\FolderEdit;
 use App\Livewire\Admin\Folder\FolderList;
 use App\Livewire\Admin\Folder\FolderShow;
 use App\Livewire\Admin\ManageCustomsRegimes\CustomsRegimesCreate;
@@ -83,7 +84,7 @@ Route::get('/notifications/latest', [NotificationController::class, 'latest'])->
     Route::prefix('folder')->name('folder.')->group(function () {
         Route::get('/Dashaboard', FolderDashboard::class)->name('index');
         Route::get('/create', FolderCreate::class)->name('create');
-        Route::get('/edit/{id}', FolderCreate::class)->name('edit');
+        Route::get('/edit/{id}', FolderEdit::class)->name('edit');
         Route::get('/list', FolderList::class)->name('list');
         Route::get('/show/{id}', FolderShow::class)->name('show');
         Route::get('/delete/{id}', FolderCreate::class)->name('delete');
