@@ -65,6 +65,10 @@
                 <x-forms.input label="Date de Facture" model="invoice_date" type="date" />
             </div>
 
+            <div class="grid grid-cols-1 gap-4 mt-4">
+                <x-forms.input label="Numéro de Facture" model="invoice_number" disabled />
+            </div>
+
             <div class="grid grid-cols-3 gap-4">
                 <x-forms.input label="Produit" model="product" />
                 <x-forms.input label="Poids (kg)" model="weight" type="number" step="0.01" />
