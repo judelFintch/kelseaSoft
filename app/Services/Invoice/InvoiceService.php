@@ -25,13 +25,14 @@ class InvoiceService
 
         $like = $prefix . '%';
         $lastNumber = DB::table($table)
+            ->whereNull('deleted_at')
             ->where($column, 'like', $like)
             ->orderBy($column, 'desc')
             ->value($column);
 
         $start = $global
-            ? config('invoice.global_start_number', 57)
-            : config('invoice.start_number', 335);
+            ? config('invoice.global_start_number', 337)
+            : config('invoice.start_number', 336);
         $next = $start;
         if ($lastNumber) {
             $numPart = substr($lastNumber, strlen($prefix), -4);
