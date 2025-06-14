@@ -11,6 +11,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log; // Pour le débogage potentiel
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Validation\ValidationException; // Pour les erreurs de validation du service
+use App\Services\Enterprise\EnterpriseService;
 
 class InvoiceIndex extends Component
 {
@@ -157,7 +158,11 @@ class InvoiceIndex extends Component
             'items.extraFee',
         ])->findOrFail($invoiceId);
 
-        $pdf = Pdf::loadView('pdf.invoice', compact('invoice'));
+        $enterprise = EnterpriseService::getEnterprise();
+        $pdf = Pdf::loadView('pdf.invoice', [
+            'invoice' => $invoice,
+            'enterprise' => $enterprise,
+        ]);
 
         return response()->streamDownload(
             fn() => print($pdf->output()),
