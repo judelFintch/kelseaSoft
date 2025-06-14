@@ -63,23 +63,29 @@
     {{-- En-tête société --}}
     <table class="no-border" style="width: 100%; margin-bottom: 10px; border-collapse: collapse;">
         <tr>
-            <td style="width: 22%; vertical-align: middle; text-align: left;">
+            <td style="width: 15%; vertical-align: middle; text-align: left;">
                 <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 90px;">
             </td>
-            <td style="width: 78%; vertical-align: middle; text-align: center; padding-left: 10px;">
+            <td style="width: 90%; vertical-align: middle; text-align: center; padding-left: -20px;">
                 <h2 style="margin: 0; font-size: 16px;">LA MANNE DES BRAVES S.A.R.L</h2>
+
                 <p style="margin: 2px 0; font-size: 11px; font-weight: bold;">
-                    TRANSITAIRE EN DOUANE OFFICIEL – VOTRE SATISFACTION, C'EST NOTRE AFFAIRE
+                    TRANSITAIRE EN DOUANE OFFICIEL
+                    <br>
+                    VOTRE SATISFACTION, C'EST NOTRE AFFAIRE
                 </p>
+
                 <p style="margin: 2px 0; font-size: 10px;">
                     N° Impôt : A1000859K &nbsp;&nbsp;&nbsp; RCCM : CDL/SHR/RCM15-B3463
                 </p>
+
                 <p style="margin: 2px 0; font-size: 10px;">
                     ID. NAT : 05-H1901-N57656K &nbsp;&nbsp;&nbsp; NUMÉRO AGREMENT : 000188
                 </p>
             </td>
         </tr>
     </table>
+
 
 
 

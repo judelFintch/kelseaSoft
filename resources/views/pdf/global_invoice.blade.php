@@ -59,6 +59,7 @@
                 <h2 style="margin: 0; font-size: 16px;">LA MANNE DES BRAVES S.A.R.L</h2>
                 <p style="margin: 2px 0; font-size: 11px; font-weight: bold;">
                     TRANSITAIRE EN DOUANE OFFICIEL – VOTRE SATISFACTION, C'EST NOTRE AFFAIRE
+                </br>
                 </p>
                 <p style="margin: 2px 0; font-size: 10px;">
                     N° Impôt : A1000859K &nbsp;&nbsp;&nbsp; RCCM : CDL/SHR/RCM15-B3463
