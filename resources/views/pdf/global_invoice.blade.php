@@ -56,10 +56,12 @@
                 <img src="{{ $enterprise->logo ? public_path($enterprise->logo) : public_path('images/logo.png') }}" alt="Logo" style="max-height: 90px;">
             </td>
             <td style="width: 78%; vertical-align: middle; text-align: center; padding-left: 10px;">
+
                 <h2 style="margin: 0; font-size: 16px;">{{ $enterprise->name }}</h2>
                 @if ($enterprise->tagline)
                     <p style="margin: 2px 0; font-size: 11px; font-weight: bold;">{{ $enterprise->tagline }}</p>
                 @endif
+
                 <p style="margin: 2px 0; font-size: 10px;">
                     N° Impôt : {{ $enterprise->tax_id }}
                     &nbsp;&nbsp;&nbsp; RCCM : {{ $enterprise->commercial_register }}

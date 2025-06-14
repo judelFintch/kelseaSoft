@@ -63,6 +63,7 @@
     {{-- En-tête société --}}
     <table class="no-border" style="width: 100%; margin-bottom: 10px; border-collapse: collapse;">
         <tr>
+
             <td style="width: 22%; vertical-align: middle; text-align: left;">
                 <img src="{{ $enterprise->logo ? public_path($enterprise->logo) : public_path('images/logo.png') }}" alt="Logo" style="max-height: 90px;">
             </td>
@@ -71,10 +72,12 @@
                 @if ($enterprise->tagline)
                     <p style="margin: 2px 0; font-size: 11px; font-weight: bold;">{{ $enterprise->tagline }}</p>
                 @endif
+
                 <p style="margin: 2px 0; font-size: 10px;">
                     N° Impôt : {{ $enterprise->tax_id }}
                     &nbsp;&nbsp;&nbsp; RCCM : {{ $enterprise->commercial_register }}
                 </p>
+
                 <p style="margin: 2px 0; font-size: 10px;">
                     ID. NAT : {{ $enterprise->national_identification }}
                     &nbsp;&nbsp;&nbsp; NUMÉRO AGREMENT : {{ $enterprise->agreement_number }}
@@ -82,6 +85,7 @@
             </td>
         </tr>
     </table>
+
 
 
 
