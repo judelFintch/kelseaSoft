@@ -71,6 +71,8 @@ Route::get('/notifications/latest', [NotificationController::class, 'latest'])->
     Route::get('/account/settings', [AccountSettingsController::class, 'edit'])->name('account.settings');
     Route::patch('/account/settings', [AccountSettingsController::class, 'update'])->name('account.settings.update');
 
+    Route::get('/enterprise', \App\Livewire\Admin\Enterprise\EnterpriseEdit::class)->name('enterprise.edit');
+
     Route::prefix('company')->name('company.')->group(function () {
         Route::get('/Dashaboard', CompanyIndex::class)->name('index')->middleware(['permission:view company']);
         Route::get('/create', CompanyCreate::class)->name('create')->middleware(['permission:create company']);
