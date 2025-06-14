@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use App\Services\Enterprise\EnterpriseService;
 
 class ShowInvoice extends Component
 {
@@ -29,7 +30,11 @@ class ShowInvoice extends Component
     {
         $filename = 'Facture_' . $this->invoice->invoice_number . '.pdf';
 
-        $pdf = Pdf::loadView('pdf.invoice', ['invoice' => $this->invoice]);
+        $enterprise = EnterpriseService::getEnterprise();
+        $pdf = Pdf::loadView('pdf.invoice', [
+            'invoice' => $this->invoice,
+            'enterprise' => $enterprise,
+        ]);
 
         return response()->streamDownload(
             fn () => print($pdf->output()),
@@ -43,6 +48,8 @@ class ShowInvoice extends Component
      */
     public function render()
     {
-        return view('livewire.admin.invoices.show-invoice');
+        return view('livewire.admin.invoices.show-invoice', [
+            'enterprise' => EnterpriseService::getEnterprise(),
+        ]);
     }
 }

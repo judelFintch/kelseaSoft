@@ -6,6 +6,7 @@ use App\Models\GlobalInvoice;
 use Livewire\Component;
 use Barryvdh\DomPDF\Facade\Pdf; // Assurez-vous que Barryvdh DomPDF est installé et configuré
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use App\Services\Enterprise\EnterpriseService;
 
 class GlobalInvoiceShow extends Component
 {
@@ -25,7 +26,11 @@ class GlobalInvoiceShow extends Component
     {
         $filename = 'Facture_Globale_' . $this->globalInvoice->global_invoice_number . '.pdf';
 
-        $pdf = Pdf::loadView('pdf.global_invoice', ['globalInvoice' => $this->globalInvoice]);
+        $enterprise = EnterpriseService::getEnterprise();
+        $pdf = Pdf::loadView('pdf.global_invoice', [
+            'globalInvoice' => $this->globalInvoice,
+            'enterprise' => $enterprise,
+        ]);
         // La vue 'pdf.global_invoice' doit être créée.
         // Elle recevra la variable $globalInvoice contenant l'objet GlobalInvoice avec ses relations chargées.
 
@@ -37,6 +42,8 @@ class GlobalInvoiceShow extends Component
 
     public function render()
     {
-        return view('livewire.admin.invoices.global-invoice-show'); // Supposant une layout admin existante
+        return view('livewire.admin.invoices.global-invoice-show', [
+            'enterprise' => EnterpriseService::getEnterprise(),
+        ]); // Supposant une layout admin existante
     }
 }
