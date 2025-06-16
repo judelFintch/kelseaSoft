@@ -7,6 +7,7 @@ use App\Models\DocumentType;
 use App\Models\Folder;
 use App\Models\FolderFile;
 use App\Observers\AuditObserver;
+use App\Observers\DocumentTypeObserver;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -30,5 +31,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::before(fn () => true);
 
         Paginator::useTailwind();
+
+        DocumentType::observe(DocumentTypeObserver::class);
     }
 }
