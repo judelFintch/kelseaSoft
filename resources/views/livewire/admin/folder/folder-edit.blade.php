@@ -73,9 +73,10 @@
 
                 <x-forms.textarea label="Description" model="folder.description" rows="4" />
 
-                <div class="flex justify-end">
+                <div class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
                     <x-forms.button type="submit">Update Folder</x-forms.button>
                 </div>
+
             </div>
         </form>
     </div>

@@ -114,6 +114,18 @@
                 @if ($invoice->company->email)
                     <p><strong>Email :</strong> {{ $invoice->company->email }}</p>
                 @endif
+                @if ($invoice->company->nbc_number)
+                    <p><strong>VAT :</strong> {{ $invoice->company->nbc_number }}</p>
+                @endif
+                @if ($invoice->company->commercial_register)
+                    <p><strong>RCCM :</strong> {{ $invoice->company->commercial_register }}</p>
+                @endif
+                @if ($invoice->company->tax_id)
+                    <p><strong>Numéro Impôt :</strong> {{ $invoice->company->tax_id }}</p>
+                @endif
+                @if ($invoice->company->national_identification)
+                    <p><strong>ID National :</strong> {{ $invoice->company->national_identification }}</p>
+                @endif
             </td>
             <td class="right">
                 Lubumbashi le {{ Carbon::parse($invoice->invoice_date)->format('d/m/Y') }}<br>
@@ -177,8 +189,8 @@
             @endforeach
             <tr>
                 <td colspan="2" class="right"><strong>Sous-total</strong></td>
-                <td class="right"><strong><span
-                            style="font-size: 8px;">{{ number_format($importTaxSubtotalUsd, 2) }} USD</span></strong>
+                <td class="right"><strong><span style="font-size: 8px;">{{ number_format($importTaxSubtotalUsd, 2) }}
+                            USD</span></strong>
                 </td>
             </tr>
         </tbody>
