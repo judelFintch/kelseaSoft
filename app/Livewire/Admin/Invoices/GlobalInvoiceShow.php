@@ -26,16 +26,15 @@ class GlobalInvoiceShow extends Component
     {
         $filename = 'Facture_Globale_' . $this->globalInvoice->global_invoice_number . '.pdf';
 
-        $enterprise = EnterpriseService::getEnterprise();
+
         $pdf = Pdf::loadView('pdf.global_invoice', [
             'globalInvoice' => $this->globalInvoice,
-            'enterprise' => $enterprise,
         ]);
         // La vue 'pdf.global_invoice' doit être créée.
         // Elle recevra la variable $globalInvoice contenant l'objet GlobalInvoice avec ses relations chargées.
 
         return response()->streamDownload(
-            fn () => print($pdf->output()),
+            fn() => print($pdf->output()),
             $filename
         );
     }

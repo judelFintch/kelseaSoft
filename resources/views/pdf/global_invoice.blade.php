@@ -1,5 +1,3 @@
-@php use Carbon\Carbon; @endphp
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -9,27 +7,27 @@
     <style>
         body {
             font-family: DejaVu Sans, sans-serif;
-            font-size: 10px;
-            margin: 10px;
+            font-size: 9px;
+            margin: 5px;
         }
 
         h2,
         h3,
         h4,
         p {
-            margin: 2px 0;
+            margin: 0;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 6px;
+            margin-bottom: 2px;
         }
 
         th,
         td {
             border: 1px solid #000;
-            padding: 3px;
+            padding: 2px;
             text-align: left;
         }
 
@@ -49,120 +47,77 @@
 </head>
 
 <body>
-    {{-- En-tête centré --}}
-    <{{-- En-tête société --}} <table class="no-border" style="width: 100%; margin-bottom: 10px; border-collapse: collapse;">
+
+    {{-- EN-TETE HARMONISÉ --}}
+    <table class="no-border">
         <tr>
-            <td style="width: 22%; vertical-align: middle; text-align: left;">
-                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 90px;">
+            <td style="width: 18%; text-align: left; vertical-align: middle;">
+                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 110px;">
             </td>
-            <td style="width: 78%; vertical-align: middle; text-align: center; padding-left: 10px;">
-                <h2 style="margin: 0; font-size: 16px;">LA MANNE DES BRAVES S.A.R.L</h2>
-                <p style="margin: 2px 0; font-size: 11px; font-weight: bold;">
-                    TRANSITAIRE EN DOUANE OFFICIEL – VOTRE SATISFACTION, C'EST NOTRE AFFAIRE
-                </p>
-                <p style="margin: 2px 0; font-size: 10px;">
-                    N° Impôt : A1000859K &nbsp;&nbsp;&nbsp; RCCM : CDL/SHR/RCM15-B3463
-                </p>
-                <p style="margin: 2px 0; font-size: 10px;">
-                    ID. NAT : 05-H1901-N57656K &nbsp;&nbsp;&nbsp; NUMÉRO AGREMENT : 000188
-                </p>
+            <td style="width: 82%; text-align: center; vertical-align: middle;">
+                <h2 style="font-size: 16px;">LA MANNE DES BRAVES S.A.R.L</h2>
+                <p style="font-size: 11px; font-weight: bold;">TRANSITAIRE EN DOUANE OFFICIEL</p>
+                <p style="font-size: 11px; font-weight: bold;">VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
+                <p style="font-size: 10px;">N° Impôt : A1000859X RCCM : CDL/SHR/RCM15-B3463</p>
+                <p style="font-size: 10px;">ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
             </td>
         </tr>
-        </table>
+    </table>
 
+    <h3 class="center" style="border: 1px solid black; padding: 2px;">FACTURE GLOBALE N°
+        {{ $globalInvoice->global_invoice_number }}</h3>
 
-        <h3 class="center" style="border: 1px solid black; padding: 4px;">FACTURE GLOBALE N°
-            {{ $globalInvoice->global_invoice_number }}</h3>
+    {{-- INFOS CLIENT --}}
+    <table class="no-border">
+        <tr>
+            <td>
+                <p><strong>Client :</strong> {{ $globalInvoice->company->name }}</p>
+                <p><strong>Adresse :</strong> {{ $globalInvoice->company->physical_address ?? 'Aucune adresse' }}</p>
+                <p><strong>Pays :</strong> {{ $globalInvoice->company->country ?? 'Non spécifié' }}</p>
+                <p><strong>Email :</strong> {{ $globalInvoice->company->email ?? 'Non spécifié' }}</p>
+            </td>
+            <td class="right">
+                <p>Lubumbashi le {{ \Carbon\Carbon::parse($globalInvoice->created_at)->format('d/m/Y') }}</p>
+                <p><strong>NOTRE COMPTE</strong> 1081911</p>
+            </td>
+        </tr>
+    </table>
 
-        {{-- Infos client --}}
-        <table class="no-border">
+    {{-- DÉTAILS DE LA FACTURE GLOBALE --}}
+    <h4 style="border-top: 1px solid #000;">DÉTAILS FACTURE GLOBALE</h4>
+    <table>
+        <thead>
             <tr>
-                <td>
-                    <strong>Client :</strong><br>
-                    {{ $globalInvoice->company->name }}<br>
-                    {{ $globalInvoice->company->physical_address ?? 'N/A' }}<br>
-                    NIF : {{ $globalInvoice->company->tax_id ?? 'N/A' }}
-                </td>
-                <td class="right">
-                    Lubumbashi le {{ Carbon::parse($globalInvoice->issue_date)->format('d/m/Y') }}<br><br>
-                    <strong>NOTRE COMPTE</strong> 1081911
-                </td>
+                <th style="width: 15%;">FACTURE N°</th>
+                <th style="width: 60%;">DESCRIPTION</th>
+                <th class="right" style="width: 25%;">MONTANT (USD)</th>
             </tr>
-        </table>
-
-        {{-- Détails des catégories --}}
-        @php
-            $categories = [
-                'import_tax' => 'A. IMPORT DUTY & TAXES',
-                'agency_fee' => 'B. AGENCY FEES',
-                'extra_fee' => 'C. AUTRES FRAIS',
-            ];
-        @endphp
-
-        @foreach ($categories as $cat => $label)
-            @php
-                $items = $globalInvoice->globalInvoiceItems->where('category', $cat);
-                $subtotal = $items->sum('total_price');
-            @endphp
-            @if ($items->count())
-                <h4>{{ $label }}</h4>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Description</th>
-                            <th class="right" style="width:15%;">Quantité</th>
-                            <th class="right" style="width:20%;">Prix Unitaire</th>
-                            <th class="right" style="width:20%;">Prix Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($items as $item)
-                            <tr>
-                                <td>{{ $item->description }}</td>
-                                <td class="right">{{ number_format($item->quantity, 2, ',', ' ') }}</td>
-                                <td class="right">{{ number_format($item->unit_price, 2, ',', ' ') }}</td>
-                                <td class="right">{{ number_format($item->total_price, 2, ',', ' ') }}</td>
-                            </tr>
-                        @endforeach
-                        <tr>
-                            <td colspan="3" class="right"><strong>Sous-total</strong></td>
-                            <td class="right"><strong>{{ number_format($subtotal, 2, ',', ' ') }}</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
-            @endif
-        @endforeach
-
-        {{-- Total général --}}
-        <table>
+        </thead>
+        <tbody>
+            @foreach ($globalInvoice->globalInvoiceItems as $item)
+                <tr>
+                    <td>{{ $item->original_invoice_number }}</td>
+                    <td>{{ $item->description }}</td>
+                    <td class="right">{{ number_format($item->total_price, 2) }}</td>
+                </tr>
+            @endforeach
             <tr>
-                <td class="right"><strong>MONTANT TOTAL :</strong></td>
-                <td class="right"><strong>{{ number_format($globalInvoice->total_amount, 2, ',', ' ') }}</strong></td>
+                <td colspan="2" class="right"><strong>Total général</strong></td>
+                <td class="right"><strong>{{ number_format($globalInvoice->total_amount, 2) }} USD</strong></td>
             </tr>
-        </table>
+        </tbody>
+    </table>
 
-        {{-- Notes éventuelles --}}
-        @if ($globalInvoice->notes)
-            <div style="margin-top: 8px;">
-                <h4>Notes :</h4>
-                <p>{!! nl2br(e($globalInvoice->notes)) !!}</p>
-            </div>
-        @endif
+    <p class="right" style="margin-top: 10px;">CHRISTELLE NTANGA<br><strong>RESP FACTURATION</strong></p>
 
-        {{-- Footer --}}
-        <p style="margin-top: 6px;">Nous disons, Dollars Américains, Quatre Mille Vingt, quatre centimes</p>
-        <p>Numéro compte : TMB 00017-25000-00232100001-85 USD</p>
-        <p>Mode de paiement : Provision</p>
+    <hr style="border: none; border-top: 1px solid #333;">
+    <p class="center" style="font-size: 8px;">
+        960, Av. Chaussée Laurent Désiré Kabila, Immeuble Méthodiste, 2ème étage – Quartier Makatano, Commune de
+        Lubumbashi<br>
+        Tél : (+243)998180745, (+243)815056461, (+243)0977960987 – E-mail : mannedesbraves@yahoo.fr<br>
+        Représentations : Kinshasa - Matadi - Kasumbalesa - Kolwezi
+    </p>
 
-        <p class="right" style="margin-top: 10px;">CHRISTELLE NTANGA<br><strong>RESP FACTURATION</strong></p>
-
-        <p class="center" style="margin-top: 6px; font-size: 9px;">
-            960, Av. Chaussée Laurent Désiré Kabila, Immeuble Méthodiste, 2ème étage<br>
-            Quartier Makatano, Commune de Lubumbashi<br>
-            Tél : (+243)998180745, (+243)815056461, (+243)0977960987<br>
-            E-mail : mannedesbraves@yahoo.fr, infos@mannedesbraves.com<br>
-            Représentations : Kinshasa - Matadi - Kasumbalesa - Kolwezi
-        </p>
 </body>
 
 </html>
