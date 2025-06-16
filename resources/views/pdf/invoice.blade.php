@@ -108,6 +108,10 @@
             <td class="word-break">
                 <p><strong>Client :</strong> {{ $invoice->company->name }}</p>
                 <p><strong>Adresse :</strong> {!! nl2br(e($formattedAddress)) !!}</p>
+                
+                <p class="text-xs text-gray-500">RCCM : {{ $invoice->company->commercial_register }}</p>
+                <p class="text-xs text-gray-500">N° Impôt : {{ $invoice->company->tax_id }}</p>
+                
             </td>
             <td class="right">
                 Lubumbashi le {{ Carbon::parse($invoice->invoice_date)->format('d/m/Y') }}<br>
