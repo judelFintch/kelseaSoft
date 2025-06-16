@@ -4,9 +4,19 @@
     function amountToWords($amount)
     {
         $formatter = new \NumberFormatter('fr', \NumberFormatter::SPELLOUT);
-        $amountInt = intval($amount);
-        $words = ucfirst($formatter->format($amountInt));
-        return $words . ' dollars américains';
+
+        $amountParts = explode('.', number_format($amount, 2, '.', ''));
+
+        $dollars = intval($amountParts[0]);
+        $cents = intval($amountParts[1]);
+
+        $words = ucfirst($formatter->format($dollars)) . ' dollars américains';
+
+        if ($cents > 0) {
+            $words .= ' et ' . $formatter->format($cents) . ' centimes';
+        }
+
+        return $words;
     }
 @endphp
 
