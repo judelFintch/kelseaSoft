@@ -48,9 +48,6 @@ class ShowInvoice extends Component
      */
     public function render()
     {
-        return view('livewire.admin.invoices.show-invoice', [
-            'enterprise' => EnterpriseService::getEnterprise(),
-        ]);
+        return view('livewire.admin.invoices.show-invoice');
     }
 }
-
