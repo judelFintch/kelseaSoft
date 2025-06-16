@@ -48,5 +48,6 @@ class FolderCreationTest extends TestCase
         $this->assertNull($folder->invoice_number);
         $this->assertEquals('TRK-123', $folder->truck_number);
         $this->assertEquals($company->id, $folder->company_id);
+        $this->assertEquals($type->name, $folder->goods_type);
     }
 }
