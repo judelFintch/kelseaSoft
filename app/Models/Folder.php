@@ -23,6 +23,7 @@ class Folder extends Model
         'truck_number',
         'trailer_number',
         'invoice_number',
+        'goods_type',
         'transporter_id',
         'driver_name',
         'driver_phone',
