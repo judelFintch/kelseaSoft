@@ -6,6 +6,9 @@
 
     $physicalAddress = $invoice->company->physical_address ?? 'Aucune adresse renseignée';
     $formattedAddress = wordwrap($physicalAddress, 70, "\n", true);
+    $cifAmountUsd = $invoice->cif_amount ?? 0;
+    $exchangeRate = $invoice->exchange_rate ?? 0;
+    $cifAmountCdf = $exchangeRate > 0 ? $cifAmountUsd * $exchangeRate : 0;
 
     $importTaxSubtotalCdf = $invoice->items->where('category', 'import_tax')->sum('amount_cdf');
     $importTaxSubtotalUsd = $invoice->exchange_rate ? $importTaxSubtotalCdf / $invoice->exchange_rate : 0;
@@ -137,37 +140,31 @@
                 <td><strong>NUMERO DOSSIER</strong></td>
                 <td>{{ $invoice->folder?->folder_number ?? 'Non spécifié' }}</td>
                 <td><strong>DESCRIPTION</strong></td>
-                <td>{{ $invoice->product ?? 'MGO' }}</td>
+                <td>{{ $invoice->folder->goods_type  ?? 'MGO' }}</td>
             </tr>
             <tr>
-                <td><strong>P.O</strong></td>
-                <td>{{ $invoice->operation_code ?? 'Non spécifié' }}</td>
                 <td><strong>POSITION TARIFAIRE</strong></td>
-                <td>{{ $invoice->tariff_position ?? 'Non spécifiée' }}</td>
-            </tr>
-            <tr>
+                <td>{{ $invoice->folder->description  ?? 'Non spécifiée' }}</td>
                 <td><strong>POIDS</strong></td>
                 <td>{{ $invoice->weight ?? 'Non spécifié' }}</td>
+            </tr>
+            <tr>
                 <td><strong>TAUX DE CHANGE</strong></td>
                 <td>{{ number_format($invoice->exchange_rate ?? 0, 2) }} CDF/USD</td>
-            </tr>
-            <tr>
                 <td><strong>FOB/USD</strong></td>
                 <td>{{ number_format($invoice->fob_amount ?? 0, 2) }}</td>
-                <td><strong>FRET/USD</strong></td>
-                <td>{{ number_format($invoice->freight_amount ?? 0, 2) }}</td>
             </tr>
             <tr>
+                <td><strong>FRET/USD</strong></td>
+                <td>{{ number_format($invoice->freight_amount ?? 0, 2) }}</td>
                 <td><strong>AUTRES CHARGES</strong></td>
-                <td>ASSURANCE</td>
-                <td></td>
-                <td>{{ number_format($invoice->insurance_amount ?? 0, 2) }}</td>
+                <td>ASSURANCE : {{ number_format($invoice->insurance_amount ?? 0, 2) }}</td>
             </tr>
             <tr>
                 <td><strong>CIF/USD</strong></td>
                 <td>{{ number_format($invoice->cif_amount ?? 0, 2) }}</td>
                 <td><strong>CIF/CDF</strong></td>
-                <td>{{ number_format($invoice->converted_total ?? 0, 0) }}</td>
+                <td>{{ number_format($cifAmountCdf ?? 0, 0) }}</td>
             </tr>
         </table>
 
@@ -193,7 +190,7 @@
                 <tr>
                     <td colspan="2" class="right"><strong>Sous-total</strong></td>
                     <td class="right">
-                      
+                        <strong>{{ number_format($importTaxSubtotalCdf, 0) }} CDF</strong><br>
                         <span style="font-size: 8px;">{{ number_format($importTaxSubtotalUsd, 2) }} USD</span>
                     </td>
                 </tr>
