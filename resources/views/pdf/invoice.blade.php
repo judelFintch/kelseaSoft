@@ -215,37 +215,19 @@
                 <th>RÉF.</th>
                 <th>LIBELLÉ</th>
                 <th class="right">MONTANT (USD)</th>
-                <th class="right">TVA (%)</th>
-                <th class="right">TVA (USD)</th>
-                <th class="right">MONTANT TOTAL</th>
             </tr>
         </thead>
         <tbody>
-            @php
-                $agencyItems = $invoice->items->where('category', 'agency_fee');
-                $agencySubtotal = $agencyItems->sum('amount_usd');
-                $agencySubtotalHt = round($agencySubtotal / 1.16, 2);
-                $agencySubtotalTva = $agencySubtotal - $agencySubtotalHt;
-            @endphp
-            @foreach ($agencyItems as $item)
-                @php
-                    $ht = round($item->amount_usd / 1.16, 2);
-                    $tva = $item->amount_usd - $ht;
-                @endphp
+            @php $agencySubtotal = $invoice->items->where('category', 'agency_fee')->sum('amount_usd'); @endphp
+            @foreach ($invoice->items->where('category', 'agency_fee') as $item)
                 <tr>
                     <td>{{ \Str::limit($item->label, 3, '') }}</td>
                     <td>{{ $item->label }}</td>
-                    <td class="right">{{ number_format($ht, 2) }}</td>
-                    <td class="right">16</td>
-                    <td class="right">{{ number_format($tva, 2) }}</td>
                     <td class="right">{{ number_format($item->amount_usd, 2) }}</td>
                 </tr>
             @endforeach
             <tr>
                 <td colspan="2" class="right"><strong>Sous-total</strong></td>
-                <td class="right"><strong>{{ number_format($agencySubtotalHt, 2) }}</strong></td>
-                <td class="right">16</td>
-                <td class="right"><strong>{{ number_format($agencySubtotalTva, 2) }}</strong></td>
                 <td class="right"><strong>{{ number_format($agencySubtotal, 2) }}</strong></td>
             </tr>
         </tbody>
