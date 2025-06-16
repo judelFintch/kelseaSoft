@@ -63,29 +63,23 @@
     {{-- En-tête société --}}
     <table class="no-border" style="width: 100%; margin-bottom: 10px; border-collapse: collapse;">
         <tr>
-
             <td style="width: 22%; vertical-align: middle; text-align: left;">
-                <img src="{{ $enterprise->logo ? public_path($enterprise->logo) : public_path('images/logo.png') }}" alt="Logo" style="max-height: 90px;">
+                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 90px;">
             </td>
             <td style="width: 78%; vertical-align: middle; text-align: center; padding-left: 10px;">
-                <h2 style="margin: 0; font-size: 16px;">{{ $enterprise->name }}</h2>
-                @if ($enterprise->tagline)
-                    <p style="margin: 2px 0; font-size: 11px; font-weight: bold;">{{ $enterprise->tagline }}</p>
-                @endif
-
-                <p style="margin: 2px 0; font-size: 10px;">
-                    N° Impôt : {{ $enterprise->tax_id }}
-                    &nbsp;&nbsp;&nbsp; RCCM : {{ $enterprise->commercial_register }}
+                <h2 style="margin: 0; font-size: 16px;">LA MANNE DES BRAVES S.A.R.L</h2>
+                <p style="margin: 2px 0; font-size: 11px; font-weight: bold;">
+                    TRANSITAIRE EN DOUANE OFFICIEL – VOTRE SATISFACTION, C'EST NOTRE AFFAIRE
                 </p>
-
                 <p style="margin: 2px 0; font-size: 10px;">
-                    ID. NAT : {{ $enterprise->national_identification }}
-                    &nbsp;&nbsp;&nbsp; NUMÉRO AGREMENT : {{ $enterprise->agreement_number }}
+                    N° Impôt : A1000859K &nbsp;&nbsp;&nbsp; RCCM : CDL/SHR/RCM15-B3463
+                </p>
+                <p style="margin: 2px 0; font-size: 10px;">
+                    ID. NAT : 05-H1901-N57656K &nbsp;&nbsp;&nbsp; NUMÉRO AGREMENT : 000188
                 </p>
             </td>
         </tr>
     </table>
-
 
 
 
@@ -289,9 +283,12 @@
     {{-- Signature --}}
     <p class="right" style="margin-top: 6px;">CHRISTELLE NTANGA<br><strong>RESP FACTURATION</strong></p>
     <hr style="border: none; border-top: 1px solid #333; margin: 8px 0;">
-    @if ($enterprise->footer_note)
-        <p class="center" style="font-size: 8px; margin-top: 4px;">{!! nl2br(e($enterprise->footer_note)) !!}</p>
-    @endif
+    <p class="center" style="font-size: 8px; margin-top: 4px;">
+        960, Av. Chaussée Laurent Désiré Kabila, Immeuble Méthodiste, 2ème étage – Quartier Makatano, Commune de
+        Lubumbashi<br>
+        Tél : (+243)998180745, (+243)815056461, (+243)0977960987 – E-mail : mannedesbraves@yahoo.fr<br>
+        Représentations : Kinshasa - Matadi - Kasumbalesa - Kolwezi
+    </p>
 
 </body>
 
