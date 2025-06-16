@@ -42,8 +42,6 @@ class GlobalInvoiceShow extends Component
 
     public function render()
     {
-        return view('livewire.admin.invoices.global-invoice-show', [
-            'enterprise' => EnterpriseService::getEnterprise(),
-        ]); // Supposant une layout admin existante
+        return view('livewire.admin.invoices.global-invoice-show'); // Supposant une layout admin existante
     }
 }
