@@ -7,6 +7,9 @@
     $physicalAddress = $invoice->company->physical_address ?? 'Aucune adresse renseignée';
     $formattedAddress = wordwrap($physicalAddress, 70, "\n", true);
 
+    $importTaxSubtotalCdf = $invoice->items->where('category', 'import_tax')->sum('amount_cdf');
+    $importTaxSubtotalUsd = $invoice->exchange_rate ? $importTaxSubtotalCdf / $invoice->exchange_rate : 0;
+
     function amountToWords($amount)
     {
         $formatter = new \NumberFormatter('fr', \NumberFormatter::SPELLOUT);
@@ -179,7 +182,6 @@
                 </tr>
             </thead>
             <tbody>
-                @php $importTaxSubtotal = $invoice->items->where('category', 'import_tax')->sum('amount_cdf'); @endphp
                 @foreach ($invoice->items->where('category', 'import_tax') as $item)
                     @php $tax = Tax::find($item->tax_id); @endphp
                     <tr>
@@ -190,7 +192,10 @@
                 @endforeach
                 <tr>
                     <td colspan="2" class="right"><strong>Sous-total</strong></td>
-                    <td class="right"><strong>{{ number_format($importTaxSubtotal, 0) }}</strong></td>
+                    <td class="right">
+                      
+                        <span style="font-size: 8px;">{{ number_format($importTaxSubtotalUsd, 2) }} USD</span>
+                    </td>
                 </tr>
             </tbody>
         </table>
