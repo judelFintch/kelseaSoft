@@ -9,6 +9,15 @@ class Enterprise extends Model
 {
     use HasFactory;
 
+    /**
+     * The table associated with the model.
+     *
+     * This application historically used the French table name
+     * "entreprises". Explicitly defining the table avoids issues when
+     * Laravel tries to infer the English pluralised form "enterprises".
+     */
+    protected $table = 'entreprises';
+
     protected $fillable = [
         'name',
         'tagline',
