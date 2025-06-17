@@ -108,10 +108,10 @@
             <td class="word-break">
                 <p><strong>Client :</strong> {{ $invoice->company->name }}</p>
                 <p><strong>Adresse :</strong> {!! nl2br(e($formattedAddress)) !!}</p>
-                
+
                 <p class="text-xs text-gray-500">RCCM : {{ $invoice->company->commercial_register }}</p>
                 <p class="text-xs text-gray-500">N° Impôt : {{ $invoice->company->tax_id }}</p>
-                
+
             </td>
             <td class="right">
                 Lubumbashi le {{ Carbon::parse($invoice->invoice_date)->format('d/m/Y') }}<br>
@@ -159,16 +159,19 @@
             <tr>
                 <th style="width: 80px;">RÉF.</th>
                 <th style="width: 280px;">LIBELLÉ</th>
-                <th style="width: 100px;" class="right">MONTANT/USD</th>
+                <th style="width: 100px;" class="right">MONTANT (USD)</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($invoice->items->where('category', 'import_tax') as $item)
-                @php $tax = Tax::find($item->tax_id); @endphp
+                @php
+                    $tax = Tax::find($item->tax_id);
+                    $amountUsd = $invoice->exchange_rate > 0 ? $item->amount_cdf / $invoice->exchange_rate : 0;
+                @endphp
                 <tr>
                     <td>{{ $tax?->code ?? '---' }}</td>
                     <td class="word-break">{{ $item->label }}</td>
-                    <td class="right">{{ number_format($item->amount_cdf, 0) }}</td>
+                    <td class="right">{{ number_format($amountUsd, 2) }}</td>
                 </tr>
             @endforeach
             <tr>
@@ -178,7 +181,8 @@
         </tbody>
     </table>
 
-    <h4 style="border-top: 1px solid #000; text-align: center;" >B. AGENCY FEES</h4>
+
+    <h4 style="border-top: 1px solid #000; text-align: center;">B. AGENCY FEES</h4>
     <table>
         <thead>
             <tr>
@@ -227,7 +231,7 @@
             </tr>
         </tbody>
     </table>
-   
+
 
 
     <h4 style="border-top: 1px solid #000;">TOTAL GÉNÉRAL</h4>
