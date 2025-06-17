@@ -159,7 +159,7 @@
             <tr>
                 <th style="width: 80px;">RÉF.</th>
                 <th style="width: 280px;">LIBELLÉ</th>
-                <th style="width: 100px;" class="right">MONTANT (USD)</th>
+                <th style="width: 100px;" class="right">MONTANT/USD</th>
             </tr>
         </thead>
         <tbody>
