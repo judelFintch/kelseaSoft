@@ -5,7 +5,7 @@
     use App\Models\ExtraFee;
 
     $physicalAddress = $invoice->company->physical_address ?? 'Aucune adresse renseignée';
-    $formattedAddress = wordwrap($physicalAddress, 70, "\n", true);
+    $formattedAddress = wordwrap($physicalAddress, 30, "\n", true);
     $cifAmountUsd = $invoice->cif_amount ?? 0;
     $exchangeRate = $invoice->exchange_rate ?? 0;
     $cifAmountCdf = $exchangeRate > 0 ? $cifAmountUsd * $exchangeRate : 0;
@@ -153,7 +153,7 @@
         </tr>
     </table>
 
-    <h4 style="border-top: 1px solid #000;">A. IMPORT DUTY & TAXES</h4>
+    <h4 style="border-top: 1px solid #000; text-align: center;">A. IMPORT DUTY & TAXES</h4>
     <table>
         <thead>
             <tr>
@@ -172,13 +172,13 @@
                 </tr>
             @endforeach
             <tr>
-                <td colspan="2" class="right"><strong>Sous-total</strong></td>
+                <td colspan="2" class="right"><strong>Sous-total A</strong></td>
                 <td class="right"><strong>{{ number_format($importTaxSubtotalUsd, 2) }}</strong></td>
             </tr>
         </tbody>
     </table>
 
-    <h4 style="border-top: 1px solid #000;">B. AGENCY FEES</h4>
+    <h4 style="border-top: 1px solid #000; text-align: center;" >B. AGENCY FEES</h4>
     <table>
         <thead>
             <tr>
@@ -197,13 +197,13 @@
                 </tr>
             @endforeach
             <tr>
-                <td colspan="2" class="right"><strong>Sous-total</strong></td>
+                <td colspan="2" class="right"><strong>Sous-total B</strong></td>
                 <td class="right"><strong>{{ number_format($agencySubtotal, 2) }}</strong></td>
             </tr>
         </tbody>
     </table>
 
-    <h4 style="border-top: 1px solid #000;">C. AUTRES FRAIS</h4>
+    <h4 style="border-top: 1px solid #000; text-align: center;">C. AUTRES FRAIS</h4>
     <table>
         <thead>
             <tr>
@@ -222,38 +222,12 @@
                 </tr>
             @endforeach
             <tr>
-                <td colspan="2" class="right"><strong>Sous-total</strong></td>
+                <td colspan="2" class="right"><strong>Sous-total A</strong></td>
                 <td class="right"><strong>{{ number_format($extraFeeSubtotal, 2) }}</strong></td>
             </tr>
         </tbody>
     </table>
-    <h4 style="border-top: 1px solid #000;">RÉCAPITULATIF DES SOUS-TOTAUX</h4>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 80px;">SECTION</th>
-                <th style="width: 280px;">LIBELLÉ</th>
-                <th style="width: 100px;" class="right">MONTANT (USD)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>A</td>
-                <td class="word-break">IMPORT DUTY & TAXES</td>
-                <td class="right">{{ number_format($importTaxSubtotalUsd, 2) }}</td>
-            </tr>
-            <tr>
-                <td>B</td>
-                <td class="word-break">AGENCY FEES</td>
-                <td class="right">{{ number_format($agencySubtotal, 2) }}</td>
-            </tr>
-            <tr>
-                <td>C</td>
-                <td class="word-break">AUTRES FRAIS</td>
-                <td class="right">{{ number_format($extraFeeSubtotal, 2) }}</td>
-            </tr>
-        </tbody>
-    </table>
+   
 
 
     <h4 style="border-top: 1px solid #000;">TOTAL GÉNÉRAL</h4>
@@ -275,7 +249,7 @@
             <td style="width: 40%; text-align: center;">
                 <p><strong>CHRISTELLE NTANGA</strong></p>
                 <p>RESP FACTURATION</p>
-                <div style="border: 1px solid #000; height: 40px; margin-top: 5px;">Signature</div>
+                <div style="border: 0px solid #000; height: 40px; margin-top: 5px;"></div>
             </td>
         </tr>
     </table>
