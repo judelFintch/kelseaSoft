@@ -90,6 +90,7 @@ Route::get('/notifications/latest', [NotificationController::class, 'latest'])->
         Route::get('/list', FolderList::class)->name('list');
         Route::get('/show/{id}', FolderShow::class)->name('show');
         Route::get('/{folder}/transactions', \App\Livewire\Admin\Folder\FolderTransactions::class)->name('transactions');
+        Route::get('/transactions', \App\Livewire\Admin\Folder\FolderTransactionIndex::class)->name('transactions.index');
         Route::get('/delete/{id}', FolderCreate::class)->name('delete');
         Route::get('/restore/{id}', FolderCreate::class)->name('restore');
     });
