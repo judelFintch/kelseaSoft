@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\Currency;
 use App\Models\DocumentType;
+use App\Models\FolderTransaction;
 use App\Traits\Auditable;
 use Kyslik\ColumnSortable\Sortable;
 
@@ -159,6 +160,14 @@ class Folder extends Model
     public function invoice()
     {
         return $this->hasOne(\App\Models\Invoice::class);
+    }
+
+    /**
+     * Get all accounting transactions related to the folder.
+     */
+    public function transactions()
+    {
+        return $this->hasMany(FolderTransaction::class);
     }
 
     public $sortable = [
