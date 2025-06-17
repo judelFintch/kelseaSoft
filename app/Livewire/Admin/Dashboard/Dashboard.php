@@ -8,6 +8,7 @@ use App\Models\GlobalInvoice;
 use App\Models\Licence;
 use App\Models\Company;
 use App\Models\FolderFile;
+use App\Models\Bivac;
 use Carbon\Carbon;
 use Livewire\Component;
 
@@ -53,6 +54,10 @@ class Dashboard extends Component
         $totalGlobalInvoices = GlobalInvoice::count();
         $totalCompanies = Company::notDeleted()->count();
 
+        // BIVAC
+        $totalBivacs = Bivac::count();
+        $latestBivacs = Bivac::latest()->take(5)->get();
+
         // Fichiers
         $totalUploadedFiles = FolderFile::count();
         $filesThisMonth = FolderFile::where('created_at', '>=', Carbon::now()->startOfMonth())->count();
@@ -90,6 +95,8 @@ class Dashboard extends Component
             'latestGlobalInvoices' => $latestGlobalInvoices,
             'latestCompanies' => $latestCompanies,
             'latestFiles' => $latestFiles,
+            'totalBivacs' => $totalBivacs,
+            'latestBivacs' => $latestBivacs,
             'archivedFolders' => $archivedFolders,
             'archivedInvoices' => $archivedInvoices,
             'archivedGlobalInvoices' => $archivedGlobalInvoices,

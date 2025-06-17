@@ -30,6 +30,7 @@
                 ['label' => 'Factures', 'route' => route('invoices.index'), 'icon' => '🧾'],
                 ['label' => 'Licences', 'route' => route('licence.list'), 'icon' => '🔐'],
                 ['label' => 'Factures Globales', 'route' => route('admin.global-invoices.index'), 'icon' => '💼'],
+                ['label' => 'BIVAC', 'route' => route('bivac.index'), 'icon' => '🛂'],
                 ['label' => 'Taxes', 'route' => route('taxes.index'), 'icon' => '💰'],
                 ['label' => 'Autres Frais', 'route' => route('extra-fees.index'), 'icon' => '💸'],
                 ['label' => 'Frais Agence', 'route' => route('agency-fees.index'), 'icon' => '🏦'],
@@ -51,7 +52,7 @@
     </div>
 
     <!-- KPIs Section -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 mb-12">
         @php
             $kpis = [
                 ['label' => 'Total Clients', 'value' => $totalCompanies, 'icon' => '🏢', 'color' => 'bg-indigo-100'],
@@ -59,6 +60,7 @@
                 ['label' => 'Factures (Mois)', 'value' => $invoicesThisMonth, 'icon' => '🧾', 'color' => 'bg-green-100'],
                 ['label' => 'Licences Actives', 'value' => $activeLicences, 'icon' => '🔐', 'color' => 'bg-teal-100'],
                 ['label' => 'Licences Expirant Bientôt', 'value' => $expiringSoonLicences, 'icon' => '⌛', 'color' => 'bg-orange-100'],
+                ['label' => 'Total BIVACs', 'value' => $totalBivacs, 'icon' => '🛂', 'color' => 'bg-purple-100'],
             ];
         @endphp
         @foreach ($kpis as $kpi)
@@ -94,7 +96,7 @@
     @endif
 
     <!-- Recent Activity Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <!-- Clients -->
         <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Clients Récents</h3>
@@ -131,6 +133,16 @@
                 </a>
             @empty
                 <p class="text-gray-500 text-sm">Aucune facture disponible.</p>
+            @endforelse
+        </div>
+
+        <!-- BIVAC -->
+        <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">BIVAC Récents</h3>
+            @forelse($latestBivacs as $bivac)
+                <p class="text-gray-700 dark:text-gray-300 mb-2">{{ $bivac->code }} - {{ $bivac->label }}</p>
+            @empty
+                <p class="text-gray-500 text-sm">Aucun BIVAC enregistré.</p>
             @endforelse
         </div>
     </div>
