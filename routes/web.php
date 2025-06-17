@@ -133,6 +133,7 @@ Route::get('/notifications/latest', [NotificationController::class, 'latest'])->
         Route::get('/create', LicenceCreate::class)->name('create');
         Route::get('/show/{id}', LicenceShow::class)->name('show');
         Route::get('/edit/{id}', LicenceEdit::class)->name('edit');
+        Route::get('/{licence}/bivac-files', \App\Livewire\Admin\Licence\Upload\UploadFiles::class)->name('bivac-files');
     });
 
 

@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Licence;
 use Livewire\Component;
 use App\Models\Licence;
 use App\Models\Company;
+use App\Models\Bivac;
 use App\Services\Licence\LicenceService;
 
 class LicenceEdit extends Component
@@ -31,6 +32,7 @@ class LicenceEdit extends Component
 
     // Relations
     public $company_id;
+    public $bivac_id;
 
     public function mount($id)
     {
@@ -54,6 +56,7 @@ class LicenceEdit extends Component
         $this->payment_mode = $this->license->payment_mode;
 
         $this->company_id = $this->license->company_id;
+        $this->bivac_id = $this->license->bivac_id;
     }
 
     protected function rules()
@@ -76,6 +79,7 @@ class LicenceEdit extends Component
 
             'payment_mode' => 'nullable|string',
             'company_id' => 'required|exists:companies,id',
+            'bivac_id' => 'nullable|exists:bivacs,id',
         ];
     }
 
@@ -97,6 +101,7 @@ class LicenceEdit extends Component
                                   ->where('is_deleted', false)
                                   ->orderBy('name')
                                   ->get(),
+            'bivacs' => Bivac::orderBy('label')->get(),
         ]);
     }
 }

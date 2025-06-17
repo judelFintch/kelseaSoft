@@ -16,6 +16,10 @@
                 class="inline-flex items-center px-3 py-1.5 text-sm bg-gray-100 text-gray-800 rounded hover:bg-gray-200">
                 🖨️ Imprimer
             </button>
+            <a href="{{ route('licence.bivac-files', $license) }}"
+                class="inline-flex items-center px-3 py-1.5 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200">
+                📂 BIVAC
+            </a>
         </div>
     </div>
 
@@ -55,6 +59,7 @@
                     ['label' => '👤 Bénéficiaire', 'value' => $license->payment_beneficiary, 'bg' => 'bg-yellow-50'],
                     ['label' => '🚚 Transport', 'value' => $license->transport_mode, 'bg' => 'bg-purple-50'],
                     ['label' => '🔎 Référence', 'value' => $license->transport_reference, 'bg' => 'bg-pink-50'],
+                    ['label' => '🏢 BIVAC', 'value' => optional($license->bivac)->label, 'bg' => 'bg-teal-50'],
                 ];
             @endphp
             @foreach ($infos as $item)

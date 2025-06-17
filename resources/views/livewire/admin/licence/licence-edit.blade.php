@@ -35,6 +35,14 @@
                                 optionLabel="1"
                                 placeholder="Sélectionner une entreprise"
                             />
+                            <x-forms.select
+                                label="BIVAC"
+                                model="bivac_id"
+                                :options="$bivacs->map(fn($b) => [$b->id, $b->label])->toArray()"
+                                optionValue="0"
+                                optionLabel="1"
+                                placeholder="Sélectionner un BIVAC"
+                            />
                             <x-forms.input label="License Number" model="license_number" required />
                             <x-forms.input label="License Type" model="license_type" required />
                             <x-forms.input label="License Category" model="license_category" />
