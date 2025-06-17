@@ -21,12 +21,19 @@
                     <div class="pb-5">
                         <h4 class="mb-4 text-base font-medium text-gray-800 dark:text-white/90">📝 Type Details</h4>
                         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                            <x-forms.input 
-                                label="Merchandise Type Name" 
-                                wire:model="name" 
-                                placeholder="e.g., Electronics, Furniture, etc." 
+                            <x-forms.input
+                                label="Merchandise Type Name"
+                                wire:model="name"
+                                placeholder="e.g., Electronics, Furniture, etc."
                             />
                             @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+
+                            <x-forms.input
+                                label="Tariff Position"
+                                wire:model="tariff_position"
+                                placeholder="e.g., 8504.40"
+                            />
+                            @error('tariff_position') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
                     </div>
                 </div>
@@ -75,6 +82,7 @@
                 <thead class="bg-gray-100 dark:bg-gray-700">
                     <tr>
                         <th class="px-4 py-2 text-left text-gray-700 dark:text-gray-200">Name</th>
+                        <th class="px-4 py-2 text-left text-gray-700 dark:text-gray-200">Tariff Position</th>
                         <th class="px-4 py-2 text-left text-gray-700 dark:text-gray-200">Actions</th>
                     </tr>
                 </thead>
@@ -82,6 +90,7 @@
                     @forelse($types as $type)
                         <tr>
                             <td class="px-4 py-2 text-gray-900 dark:text-white">{{ $type->name }}</td>
+                            <td class="px-4 py-2 text-gray-900 dark:text-white">{{ $type->tariff_position ?? '—' }}</td>
                             <td class="px-4 py-2 flex gap-3">
                                 <x-buttons.action type="button" variant="text" wire:click="edit({{ $type->id }})">
                                     Edit
@@ -106,7 +115,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="2" class="px-4 py-4 text-gray-500 text-center">
+                            <td colspan="3" class="px-4 py-4 text-gray-500 text-center">
                                 No merchandise types found.
                             </td>
                         </tr>

@@ -11,6 +11,7 @@ class MerchandiseTypeCreate extends Component
     use WithPagination;
 
     public $name;
+    public $tariff_position;
 
     public $editingId = null;
 
@@ -22,6 +23,7 @@ class MerchandiseTypeCreate extends Component
 
     protected $rules = [
         'name' => 'required|string|min:2|max:255',
+        'tariff_position' => 'nullable|string|max:255',
     ];
 
     public function save()
@@ -30,18 +32,22 @@ class MerchandiseTypeCreate extends Component
 
         MerchandiseType::updateOrCreate(
             ['id' => $this->editingId],
-            ['name' => $this->name]
+            [
+                'name' => $this->name,
+                'tariff_position' => $this->tariff_position,
+            ]
         );
 
         session()->flash('success', 'Merchandise type '.($this->editingId ? 'updated' : 'added').' successfully.');
 
-        $this->reset(['name', 'editingId']);
+        $this->reset(['name', 'tariff_position', 'editingId']);
     }
 
     public function edit($id)
     {
         $type = MerchandiseType::findOrFail($id);
         $this->name = $type->name;
+        $this->tariff_position = $type->tariff_position;
         $this->editingId = $type->id;
     }
 
@@ -64,7 +70,7 @@ class MerchandiseTypeCreate extends Component
 
     public function resetForm()
     {
-        $this->reset(['name', 'editingId', 'search', 'confirmingReset']);
+        $this->reset(['name', 'tariff_position', 'editingId', 'search', 'confirmingReset']);
     }
 
     public function render()
