@@ -6,9 +6,12 @@ use App\Models\Licence;
 use App\Models\Company;
 use App\Models\Bivac;
 use Livewire\Component;
+use Livewire\WithFileUploads;
+use App\Models\LicenceFile;
 
 class LicenceCreate extends Component
 {
+    use WithFileUploads;
     // Champs de formulaire
     public $license_number;
     public $license_type;
@@ -26,6 +29,9 @@ class LicenceCreate extends Component
     public $cif_amount;
 
     public $payment_mode;
+
+    // Fichier de la licence
+    public $file;
 
     // BIVAC associé
     public $bivac_id;
@@ -52,13 +58,14 @@ class LicenceCreate extends Component
         'payment_mode' => 'nullable|string',
         'company_id' => 'required|exists:companies,id',
         'bivac_id' => 'nullable|exists:bivacs,id',
+        'file' => 'nullable|file|max:10240',
     ];
 
     public function save()
     {
         $this->validate();
 
-        Licence::create([
+        $licence = Licence::create([
             'license_number' => $this->license_number,
             'license_type' => $this->license_type,
             'license_category' => $this->license_category,
@@ -82,6 +89,14 @@ class LicenceCreate extends Component
             'company_id' => $this->company_id,
             'bivac_id' => $this->bivac_id,
         ]);
+
+        if ($this->file) {
+            $storedPath = $this->file->store('licence_files', 'public');
+            $licence->files()->create([
+                'name' => $this->file->getClientOriginalName(),
+                'path' => $storedPath,
+            ]);
+        }
 
         session()->flash('success', 'Licence enregistrée avec succès.');
         $this->reset();
