@@ -86,20 +86,22 @@
 
 <body>
 
-    <table class="no-border">
-        <tr>
-            <td style="width: 18%; text-align: left; vertical-align: middle;">
-                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 95px;">
-            </td>
-            <td style="width: 82%; text-align: center; vertical-align: middle;">
-                <h2 style="font-size: 15px;">LA MANNE DES BRAVES S.A.R.L</h2>
-                <p style="font-size: 10px; font-weight: bold;">TRANSITAIRE EN DOUANE OFFICIEL</p>
-                <p style="font-size: 10px; font-weight: bold;">VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
-                <p style="font-size: 9px;">N° Impôt : A1000859X RCCM: CD/LSHI/RCCM15-B3463</p>
-                <p style="font-size: 9px;">ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
-            </td>
-        </tr>
-    </table>
+    <table class="no-border" style="margin-bottom: 0; padding: 0;">
+    <tr>
+        <td style="width: 18%; text-align: left; vertical-align: top; padding: 2px;">
+            <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 95px;">
+        </td>
+        <td style="width: 82%; text-align: center; vertical-align: top; padding: 2px;">
+            <h2 style="font-size: 25px; margin: 2px 0;">LA MANNE DES BRAVES S.A.R.L</h2>
+            <p style="font-size: 20px; font-weight: bold; margin: 2px 0;">TRANSITAIRE EN DOUANE OFFICIEL</p>
+            <p style="font-size: 12px; font-weight: bold; margin: 2px 0;">VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
+            <p style="font-size: 12px; margin: 2px 0;">N° Impôt : A1000859X RCCM: CD/LSHI/RCCM15-B3463</p>
+            <p style="font-size: 12px; margin: 2px 0;">ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
+        </td>
+    </tr>
+</table>
+
+
 
     <h3 class="center" style="border: 1px solid black; padding: 2px;">FACTURE N° {{ $invoice->invoice_number }}</h3>
 
@@ -247,7 +249,7 @@
     <p>Mode de paiement : Provision</p>
 
     {{-- Signature --}}
-    <table class="no-border" style="width: 100%; margin-top: 8px; margin-bottom: 60px;">
+    <table class="no-border" style="width: 100%; margin-top: 8px; margin-bottom: 40px;">
         <tr>
             <td style="width: 60%;"></td>
             <td style="width: 40%; text-align: center;">
