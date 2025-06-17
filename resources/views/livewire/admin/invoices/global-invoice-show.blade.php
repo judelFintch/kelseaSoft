@@ -65,40 +65,46 @@
                 </div>
 
                 <h3 class="text-xl font-semibold text-gray-700 mb-4 pt-4 border-t">Détails des Lignes de Facture Globale</h3>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Quantité</th>
-                                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Prix Unitaire</th>
-                                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Prix Total</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($globalInvoice->globalInvoiceItems as $item)
-                                <tr wire:key="item-{{ $item->id }}">
-                                    <td class="px-4 py-4 whitespace-normal text-sm text-gray-800">{{ $item->description }}</td>
-                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 text-right">{{ number_format($item->quantity, 2) }}</td>
-                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 text-right">{{ number_format($item->unit_price, 2) }}</td>
-                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800 text-right font-medium">{{ number_format($item->total_price, 2) }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="px-6 py-12 text-center text-sm text-gray-500">
-                                        Aucun article trouvé pour cette facture globale.
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="3" class="px-4 py-3 text-right text-sm font-semibold text-gray-700 uppercase">Total Général :</td>
-                                <td class="px-4 py-3 text-right text-sm font-bold text-gray-800">
-                                    {{ number_format($globalInvoice->total_amount, 2) }} {{-- Devise --}}
-                                </td>
-                            </tr>
-                        </tfoot>
+                @foreach(['import_tax' => 'A. IMPORT DUTY & TAXES', 'agency_fee' => 'B. AGENCY FEES', 'extra_fee' => 'C. AUTRES FRAIS'] as $cat => $label)
+                    @php $items = $globalInvoice->globalInvoiceItems->where('category', $cat); @endphp
+                    @if($items->count())
+                        <div class="overflow-x-auto border-t pt-4">
+                            <h2 class="text-lg font-semibold mb-2">{{ $label }}</h2>
+                            <table class="min-w-full text-sm border border-gray-200 mb-2">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="border px-2 py-1">Réf.</th>
+                                        <th class="border px-2 py-1">Libellé</th>
+                                        <th class="border px-2 py-1 text-right">Qté</th>
+                                        <th class="border px-2 py-1 text-right">P.U (USD)</th>
+                                        <th class="border px-2 py-1 text-right">Total (USD)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($items as $item)
+                                        <tr>
+                                            <td class="border px-2 py-1">{{ $item->ref_code }}</td>
+                                            <td class="border px-2 py-1">{{ $item->description }}</td>
+                                            <td class="border px-2 py-1 text-right">{{ number_format($item->quantity, 2) }}</td>
+                                            <td class="border px-2 py-1 text-right">{{ number_format($item->unit_price, 2) }}</td>
+                                            <td class="border px-2 py-1 text-right">{{ number_format($item->total_price, 2) }}</td>
+                                        </tr>
+                                    @endforeach
+                                    <tr>
+                                        <td colspan="4" class="border px-2 py-1 text-right font-semibold">Sous-total</td>
+                                        <td class="border px-2 py-1 text-right font-semibold">{{ number_format($items->sum('total_price'), 2) }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+                @endforeach
+                <div class="border-t pt-4">
+                    <table class="w-full text-sm">
+                        <tr>
+                            <td class="text-right font-semibold pr-4">Total Général (USD) :</td>
+                            <td class="text-right font-bold text-lg text-gray-800">{{ number_format($globalInvoice->total_amount, 2) }}</td>
+                        </tr>
                     </table>
                 </div>
 
