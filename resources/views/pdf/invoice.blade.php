@@ -37,8 +37,8 @@
     <title>Facture Proforma</title>
     <style>
         body {
-            font-family: DejaVu Sans, sans-serif;
-            font-size: 8.5px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
             margin: 5px;
         }
 
@@ -159,7 +159,7 @@
             <tr>
                 <th style="width: 80px;">RÉF.</th>
                 <th style="width: 280px;">LIBELLÉ</th>
-                <th style="width: 100px;" class="right">USD</th>
+                <th style="width: 100px;" class="right">MONTANT/USD</th>
             </tr>
         </thead>
         <tbody>
@@ -243,7 +243,7 @@
     <p>Mode de paiement : Provision</p>
 
     {{-- Signature --}}
-    <table class="no-border" style="width: 100%; margin-top: 8px;">
+    <table class="no-border" style="width: 100%; margin-top: 8px; margin-bottom: 60px;">
         <tr>
             <td style="width: 60%;"></td>
             <td style="width: 40%; text-align: center;">
@@ -255,7 +255,7 @@
     </table>
 
     <hr style="border: none; border-top: 1px solid #333;">
-    <p class="center" style="font-size: 7.8px;">
+    <p class="center" style="font-size: 11px;">
         960, Av. Chaussée Laurent Désiré Kabila, Immeuble Méthodiste, 2ème étage – Quartier Makatano, Commune de
         Lubumbashi<br>
         Tél : (+243)998180745, (+243)815056461, (+243)0977960987 – E-mail : mannedesbraves@yahoo.fr<br>
