@@ -13,11 +13,34 @@ use Livewire\Component;
 
 class Dashboard extends Component
 {
-    public $expiringSoonLicences = 1;
-    public $activeLicences = 1;
+    public $expiringSoonLicences = 0;
+    public $activeLicences = 0;
+    public array $capacityAlerts = [];
 
     public function render()
     {
+        // Licences actives et expirant bientôt
+        $this->activeLicences = Licence::where(function ($q) {
+            $q->whereNull('expiry_date')->orWhere('expiry_date', '>=', Carbon::today());
+        })->count();
+
+        $this->expiringSoonLicences = Licence::whereNotNull('expiry_date')
+            ->whereBetween('expiry_date', [Carbon::today(), Carbon::today()->addDays(30)])
+            ->count();
+
+        $this->capacityAlerts = Licence::all()->map(function ($licence) {
+            $weightUsed = $licence->initial_weight > 0 ? 100 - ($licence->remaining_weight / $licence->initial_weight * 100) : 0;
+            $fobUsed = $licence->initial_fob_amount > 0 ? 100 - ($licence->remaining_fob_amount / $licence->initial_fob_amount * 100) : 0;
+            if ($weightUsed >= 80 || $fobUsed >= 80) {
+                return [
+                    'license_number' => $licence->license_number,
+                    'weightUsed' => $weightUsed,
+                    'fobUsed' => $fobUsed,
+                ];
+            }
+            return null;
+        })->filter()->values()->toArray();
+
         // Statistiques dossiers
         $totalFolders = Folder::count();
         $foldersThisMonth = Folder::where('created_at', '>=', Carbon::now()->startOfMonth())->count();
@@ -59,6 +82,7 @@ class Dashboard extends Component
             'totalCompanies' => $totalCompanies,
             'activeLicences' => $this->activeLicences,
             'expiringSoonLicences' => $this->expiringSoonLicences,
+            'capacityAlerts' => $this->capacityAlerts,
             'totalUploadedFiles' => $totalUploadedFiles,
             'filesThisMonth' => $filesThisMonth,
             'latestFolders' => $latestFolders,
