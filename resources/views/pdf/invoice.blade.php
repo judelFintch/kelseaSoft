@@ -5,7 +5,7 @@
     use App\Models\ExtraFee;
 
     $physicalAddress = $invoice->company->physical_address ?? 'Aucune adresse renseignée';
-    $formattedAddress = wordwrap($physicalAddress, 30, "\n", true);
+    $formattedAddress = wordwrap($physicalAddress, 40, "\n", true);
     $cifAmountUsd = $invoice->cif_amount ?? 0;
     $exchangeRate = $invoice->exchange_rate ?? 0;
     $cifAmountCdf = $exchangeRate > 0 ? $cifAmountUsd * $exchangeRate : 0;
@@ -110,9 +110,9 @@
             <td class="word-break">
                 <p><strong>Client :</strong> {{ $invoice->company->name }}</p>
                 <p><strong>Adresse :</strong> {!! nl2br(e($formattedAddress)) !!}</p>
-
                 <p class="text-xs text-gray-500">RCCM : {{ $invoice->company->commercial_register }}</p>
-                <p class="text-xs text-gray-500">N° Impôt : {{ $invoice->company->tax_id }}</p>
+                 <p class="text-xs text-gray-500">{{ $invoice->company->nbc_number }}</p>
+                <p class="text-xs text-gray-500">{{ $invoice->company->national_identification }}</p>
 
             </td>
             <td class="right">
