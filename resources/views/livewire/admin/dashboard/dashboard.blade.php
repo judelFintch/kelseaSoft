@@ -58,6 +58,7 @@
                 ['label' => 'Total Dossiers', 'value' => $totalFolders, 'icon' => '📁', 'color' => 'bg-blue-100'],
                 ['label' => 'Factures (Mois)', 'value' => $invoicesThisMonth, 'icon' => '🧾', 'color' => 'bg-green-100'],
                 ['label' => 'Licences Actives', 'value' => $activeLicences, 'icon' => '🔐', 'color' => 'bg-teal-100'],
+                ['label' => 'Licences Expirant Bientôt', 'value' => $expiringSoonLicences, 'icon' => '⌛', 'color' => 'bg-orange-100'],
             ];
         @endphp
         @foreach ($kpis as $kpi)
@@ -72,6 +73,25 @@
             </div>
         @endforeach
     </div>
+
+    @if(!empty($capacityAlerts))
+        <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow mb-8">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Alertes Capacité & FOB</h3>
+            <ul class="space-y-2">
+                @foreach ($capacityAlerts as $alert)
+                    <li class="text-sm text-gray-700 dark:text-gray-300">
+                        Licence {{ $alert['license_number'] }}:
+                        @if ($alert['weightUsed'] >= 80)
+                            ⚖️ {{ number_format($alert['weightUsed'], 1) }}% poids utilisé
+                        @endif
+                        @if ($alert['fobUsed'] >= 80)
+                            <span class="ml-2">💰 {{ number_format($alert['fobUsed'], 1) }}% FOB utilisé</span>
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <!-- Recent Activity Section -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
