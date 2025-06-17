@@ -5,7 +5,7 @@
     use App\Models\ExtraFee;
 
     $physicalAddress = $invoice->company->physical_address ?? 'Aucune adresse renseignée';
-    $formattedAddress = wordwrap($physicalAddress, 47, "\n", true);
+    $formattedAddress = wordwrap($physicalAddress, 39, "\n", true);
     $cifAmountUsd = $invoice->cif_amount ?? 0;
     $exchangeRate = $invoice->exchange_rate ?? 0;
     $cifAmountCdf = $exchangeRate > 0 ? $cifAmountUsd * $exchangeRate : 0;
