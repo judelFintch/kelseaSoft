@@ -182,6 +182,10 @@ Route::get('/notifications/latest', [NotificationController::class, 'latest'])->
         Route::get('/index', ManageAgencyFee::class)->name('index');
     });
 
+    Route::prefix('bivac')->name('bivac.')->group(function () {
+        Route::get('/', \App\Livewire\Admin\Bivac\Bivac::class)->name('index');
+    });
+
     // Audit Logs
     Route::prefix('audit-logs')->name('audit-logs.')->group(function () {
         Route::get('/', \App\Livewire\Admin\Audit\AuditLogIndex::class)->name('index');

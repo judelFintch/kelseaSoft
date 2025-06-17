@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
         TaxSeeder::class,
         AgencyFeeSeeder::class,
         ExtraFeeSeeder::class,
+        BivacSeeder::class,
 
         // Entreprises et licences liées aux dossiers
        // CompanySeeder::class,

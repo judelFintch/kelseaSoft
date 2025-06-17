@@ -283,17 +283,10 @@
                                 <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                     class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                                     <li>
-                                        <a href="/bivac" class="menu-dropdown-item group"
+                                        <a href="{{ route('bivac.index') }}" class="menu-dropdown-item group"
                                             :class="page === 'bivacListe' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Liste BIVAC
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/bivac/create" class="menu-dropdown-item group"
-                                            :class="page === 'bivacCreate' ? 'menu-dropdown-item-active' :
-                                                'menu-dropdown-item-inactive'">
-                                            Nouveau BIVAC
                                         </a>
                                     </li>
                                 </ul>
