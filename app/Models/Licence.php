@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\Auditable;
+use App\Models\Bivac;
+use App\Models\LicenceFile;
 
 /**
  * App\Models\Licence
@@ -71,6 +73,7 @@ class Licence extends Model
         'customs_regime',
         'customs_office_id',
         'supplier_id',
+        'bivac_id',
         'company_id',
         'notes',
     ];
@@ -115,5 +118,17 @@ class Licence extends Model
     public function folders()
     {
         return $this->hasMany(Folder::class);
+    }
+
+    // BIVAC lié à la licence
+    public function bivac()
+    {
+        return $this->belongsTo(Bivac::class);
+    }
+
+    // Fichiers BIVAC associés
+    public function files()
+    {
+        return $this->hasMany(LicenceFile::class);
     }
 }

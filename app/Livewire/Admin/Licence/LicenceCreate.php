@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Licence;
 
 use App\Models\Licence;
 use App\Models\Company;
+use App\Models\Bivac;
 use Livewire\Component;
 
 class LicenceCreate extends Component
@@ -26,6 +27,9 @@ class LicenceCreate extends Component
 
     public $payment_mode;
 
+    // BIVAC associé
+    public $bivac_id;
+
     // Relation principale
     public $company_id;
 
@@ -47,6 +51,7 @@ class LicenceCreate extends Component
 
         'payment_mode' => 'nullable|string',
         'company_id' => 'required|exists:companies,id',
+        'bivac_id' => 'nullable|exists:bivacs,id',
     ];
 
     public function save()
@@ -75,6 +80,7 @@ class LicenceCreate extends Component
 
             'payment_mode' => $this->payment_mode,
             'company_id' => $this->company_id,
+            'bivac_id' => $this->bivac_id,
         ]);
 
         session()->flash('success', 'Licence enregistrée avec succès.');
@@ -88,6 +94,7 @@ class LicenceCreate extends Component
                                   ->where('is_deleted', false)
                                   ->orderBy('name')
                                   ->get(),
+            'bivacs' => Bivac::orderBy('label')->get(),
         ]);
     }
 }
