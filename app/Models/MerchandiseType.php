@@ -12,5 +12,6 @@ class MerchandiseType extends Model
     //
     protected $fillable = [
         'name',
+        'tariff_position',
     ];
 }
