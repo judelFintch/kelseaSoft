@@ -379,6 +379,13 @@
                                             Liste comptabilité
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="{{ route('folder.transactions.index') }}" class="menu-dropdown-item group"
+                                            :class="page === 'folderTransactions' ? 'menu-dropdown-item-active' :
+                                                'menu-dropdown-item-inactive'">
+                                            Transactions dossiers
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                             <!-- Dropdown Menu End -->
