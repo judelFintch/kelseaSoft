@@ -27,6 +27,7 @@ class Folder extends Model
         'goods_type',
         'transporter_id',
         'driver_name',
+        'order_number',
         'driver_phone',
         'driver_nationality',
         'origin_id',

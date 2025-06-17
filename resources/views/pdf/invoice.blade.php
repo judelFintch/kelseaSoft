@@ -87,19 +87,20 @@
 <body>
 
     <table class="no-border" style="margin-bottom: 0; padding: 0;">
-    <tr>
-        <td style="width: 18%; text-align: left; vertical-align: top; padding: 2px;">
-            <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 95px;">
-        </td>
-        <td style="width: 82%; text-align: center; vertical-align: top; padding: 2px;">
-            <h2 style="font-size: 25px; margin: 2px 0;">LA MANNE DES BRAVES S.A.R.L</h2>
-            <p style="font-size: 20px; font-weight: bold; margin: 2px 0;">TRANSITAIRE EN DOUANE OFFICIEL</p>
-            <p style="font-size: 12px; font-weight: bold; margin: 2px 0;">VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
-            <p style="font-size: 12px; margin: 2px 0;">N° Impôt : A1000859X RCCM: CD/LSHI/RCCM15-B3463</p>
-            <p style="font-size: 12px; margin: 2px 0;">ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
-        </td>
-    </tr>
-</table>
+        <tr>
+            <td style="width: 18%; text-align: left; vertical-align: top; padding: 2px;">
+                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 95px;">
+            </td>
+            <td style="width: 82%; text-align: center; vertical-align: top; padding: 2px;">
+                <h2 style="font-size: 25px; margin: 2px 0;">LA MANNE DES BRAVES S.A.R.L</h2>
+                <p style="font-size: 20px; font-weight: bold; margin: 2px 0;">TRANSITAIRE EN DOUANE OFFICIEL</p>
+                <p style="font-size: 12px; font-weight: bold; margin: 2px 0;">VOTRE SATISFACTION, C'EST NOTRE AFFAIRE
+                </p>
+                <p style="font-size: 12px; margin: 2px 0;">N° Impôt : A1000859X RCCM: CD/LSHI/RCCM15-B3463</p>
+                <p style="font-size: 12px; margin: 2px 0;">ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
+            </td>
+        </tr>
+    </table>
 
 
 
@@ -111,7 +112,7 @@
                 <p><strong>Client :</strong> {{ $invoice->company->name }}</p>
                 <p><strong>Adresse :</strong> {!! nl2br(e($formattedAddress)) !!}</p>
                 <p class="text-xs text-gray-500">RCCM : {{ $invoice->company->commercial_register }}</p>
-                 <p class="text-xs text-gray-500">{{ $invoice->company->nbc_number }}</p>
+                <p class="text-xs text-gray-500">{{ $invoice->company->nbc_number }}</p>
                 <p class="text-xs text-gray-500">{{ $invoice->company->national_identification }}</p>
 
             </td>
@@ -153,7 +154,13 @@
             <td><strong>CIF/CDF</strong></td>
             <td>{{ number_format($cifAmountCdf, 0) }}</td>
         </tr>
+        <tr>
+            <td><strong>PO</strong></td>
+            <td colspan="3">{{ $invoice->folder->order_number ?? 'Non spécifié' }}</td>
+        </tr>
     </table>
+
+
 
     <h4 style="border-top: 1px solid #000; text-align: center;">A. IMPORT DUTY & TAXES</h4>
     <table>
