@@ -16,8 +16,14 @@ class LicenceIndex extends Component
     public function render()
     {
         $licenses = Licence::query()
-            ->where('license_number', 'like', "%{$this->search}%")
-            ->orWhere('license_type', 'like', "%{$this->search}%")
+            ->with('company')
+            ->where(function ($query) {
+                $query->where('license_number', 'like', "%{$this->search}%")
+                    ->orWhere('license_type', 'like', "%{$this->search}%")
+                    ->orWhereHas('company', function ($q) {
+                        $q->where('name', 'like', "%{$this->search}%");
+                    });
+            })
             ->orderByDesc('created_at')
             ->paginate(10);
 
