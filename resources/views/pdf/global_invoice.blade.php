@@ -85,27 +85,43 @@
 
     {{-- DÉTAILS DE LA FACTURE GLOBALE --}}
     <h4 style="border-top: 1px solid #000;">DÉTAILS FACTURE GLOBALE</h4>
+    @foreach(['import_tax' => 'A. IMPORT DUTY & TAXES', 'agency_fee' => 'B. AGENCY FEES', 'extra_fee' => 'C. AUTRES FRAIS'] as $cat => $label)
+        @php $items = $globalInvoice->globalInvoiceItems->where('category', $cat); @endphp
+        @if($items->count())
+            <h5 style="margin-top: 4px;">{{ $label }}</h5>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">RÉF.</th>
+                        <th style="width: 45%;">LIBELLÉ</th>
+                        <th style="width: 10%;" class="right">QTÉ</th>
+                        <th style="width: 15%;" class="right">P.U</th>
+                        <th style="width: 15%;" class="right">TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($items as $item)
+                        <tr>
+                            <td>{{ $item->ref_code }}</td>
+                            <td>{{ $item->description }}</td>
+                            <td class="right">{{ number_format($item->quantity, 2) }}</td>
+                            <td class="right">{{ number_format($item->unit_price, 2) }}</td>
+                            <td class="right">{{ number_format($item->total_price, 2) }}</td>
+                        </tr>
+                    @endforeach
+                    <tr>
+                        <td colspan="4" class="right"><strong>Sous-total</strong></td>
+                        <td class="right"><strong>{{ number_format($items->sum('total_price'), 2) }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        @endif
+    @endforeach
     <table>
-        <thead>
-            <tr>
-                <th style="width: 15%;">FACTURE N°</th>
-                <th style="width: 60%;">DESCRIPTION</th>
-                <th class="right" style="width: 25%;">MONTANT (USD)</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($globalInvoice->globalInvoiceItems as $item)
-                <tr>
-                    <td>{{ $item->original_invoice_number }}</td>
-                    <td>{{ $item->description }}</td>
-                    <td class="right">{{ number_format($item->total_price, 2) }}</td>
-                </tr>
-            @endforeach
-            <tr>
-                <td colspan="2" class="right"><strong>Total général</strong></td>
-                <td class="right"><strong>{{ number_format($globalInvoice->total_amount, 2) }} USD</strong></td>
-            </tr>
-        </tbody>
+        <tr>
+            <td colspan="4" class="right"><strong>Total général</strong></td>
+            <td class="right"><strong>{{ number_format($globalInvoice->total_amount, 2) }} USD</strong></td>
+        </tr>
     </table>
 
     <p class="right" style="margin-top: 10px;">CHRISTELLE NTANGA<br><strong>RESP FACTURATION</strong></p>
