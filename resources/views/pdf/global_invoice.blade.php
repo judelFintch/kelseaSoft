@@ -102,7 +102,7 @@
     </table>
 
     {{-- DÉTAILS DE LA FACTURE GLOBALE --}}
-    <h4 style="border-top: 1px solid #000;">DÉTAILS FACTURE GLOBALE</h4>
+    <h4 style="border-top: 1px solid #000; margin-bottom: 8px;">DÉTAILS FACTURE GLOBALE</h4>
     @php
         $folders = $globalInvoice->invoices->load('folder')->pluck('folder')->filter();
         $declarationCount = $folders->filter(fn($f) => !empty($f->declaration_number))->unique('declaration_number')->count();
@@ -110,7 +110,7 @@
         $scelleItem = $globalInvoice->globalInvoiceItems->first(fn($i) => str_contains(strtolower($i->description), 'scelle'));
         $nacItem = $globalInvoice->globalInvoiceItems->first(fn($i) => str_contains(strtolower($i->description), 'nac'));
     @endphp
-    <table class="no-border" style="margin-bottom: 4px;">
+    <table class="no-border" style="margin-bottom: 8px;">
         <tr>
             <td><strong>Déclaration:</strong> {{ $declarationCount }}</td>
             <td><strong>Truck:</strong> {{ $truckCount }}</td>
@@ -121,7 +121,7 @@
     @foreach(['import_tax' => 'A. IMPORT DUTY & TAXES', 'agency_fee' => 'B. AGENCY FEES', 'extra_fee' => 'C. AUTRES FRAIS'] as $cat => $label)
         @php $items = $globalInvoice->globalInvoiceItems->where('category', $cat); @endphp
         @if($items->count())
-            <h5 style="margin-top: 4px;">{{ $label }}</h5>
+            <h5 style="margin-top: 8px;">{{ $label }}</h5>
             <table>
                 <thead>
                     <tr>
