@@ -6,6 +6,9 @@ use App\Models\GlobalInvoice;
 use Livewire\Component;
 use Barryvdh\DomPDF\Facade\Pdf; // Assurez-vous que Barryvdh DomPDF est installé et configuré
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\GlobalInvoiceSummaryExport;
 use App\Services\Enterprise\EnterpriseService;
 
 class GlobalInvoiceShow extends Component
@@ -37,6 +40,13 @@ class GlobalInvoiceShow extends Component
             fn() => print($pdf->output()),
             $filename
         );
+    }
+
+    public function exportSummary(): BinaryFileResponse
+    {
+        $filename = 'Global_Invoice_Summary_' . $this->globalInvoice->global_invoice_number . '.xlsx';
+
+        return Excel::download(new GlobalInvoiceSummaryExport($this->globalInvoice), $filename);
     }
 
     public function render()
