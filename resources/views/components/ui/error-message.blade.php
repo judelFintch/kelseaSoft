@@ -1,11 +1,11 @@
 <div>
     <div class="fixed top-2 right-2 z-50">
-        @if ($errors->any())
-            <div 
-                x-data="{ show: true }" 
-                x-init="setTimeout(() => show = false, 7000)" 
-                x-show="show" 
-                x-transition 
+        @if ($errors->any() || session()->has('error'))
+            <div
+                x-data="{ show: true }"
+                x-init="setTimeout(() => show = false, 7000)"
+                x-show="show"
+                x-transition
                 class="rounded-xl border border-red-500 bg-red-50 p-4 dark:border-red-500/30 dark:bg-red-500/15 w-[400px]"
             >
                 <div class="flex items-start justify-between gap-3">
@@ -31,6 +31,9 @@
                                     <li>{{ $error }}</li>
                                 @endforeach
                             </ul>
+                            @if (session()->has('error'))
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">{{ session('error') }}</p>
+                            @endif
                         </div>
                     </div>
                     <button @click="show = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition">

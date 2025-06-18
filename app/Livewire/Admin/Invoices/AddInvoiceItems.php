@@ -5,6 +5,8 @@ namespace App\Livewire\Admin\Invoices;
 use Livewire\Component;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\Tax;
 use App\Models\AgencyFee;
 use App\Models\ExtraFee;
@@ -69,41 +71,49 @@ class AddInvoiceItems extends Component
             'extraFeeItems.*.amount_usd' => 'required|numeric|min:0',
         ]);
 
-        foreach ($this->taxItems as $item) {
-            $label = Tax::find($item['tax_id'])?->label;
-            $this->invoice->items()->create([
-                'label' => $label,
-                'category' => 'import_tax',
-                'amount_usd' => $item['amount_usd'],
-                'tax_id' => $item['tax_id'],
-            ]);
+        DB::beginTransaction();
+        try {
+            foreach ($this->taxItems as $item) {
+                $label = Tax::find($item['tax_id'])?->label;
+                $this->invoice->items()->create([
+                    'label' => $label,
+                    'category' => 'import_tax',
+                    'amount_usd' => $item['amount_usd'],
+                    'tax_id' => $item['tax_id'],
+                ]);
+            }
+
+            foreach ($this->agencyFeeItems as $item) {
+                $label = AgencyFee::find($item['agency_fee_id'])?->label;
+                $this->invoice->items()->create([
+                    'label' => $label,
+                    'category' => 'agency_fee',
+                    'amount_usd' => $item['amount_usd'],
+                    'agency_fee_id' => $item['agency_fee_id'],
+                ]);
+            }
+
+            foreach ($this->extraFeeItems as $item) {
+                $label = ExtraFee::find($item['extra_fee_id'])?->label;
+                $this->invoice->items()->create([
+                    'label' => $label,
+                    'category' => 'extra_fee',
+                    'amount_usd' => $item['amount_usd'],
+                    'extra_fee_id' => $item['extra_fee_id'],
+                ]);
+            }
+
+            $this->invoice->total_usd = $this->invoice->items()->sum('amount_usd');
+            $this->invoice->save();
+
+            DB::commit();
+            session()->flash('success', 'Éléments ajoutés à la facture.');
+            redirect()->route('invoices.show', $this->invoice->id);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Error while adding invoice items: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            session()->flash('error', "Une erreur est survenue lors de l'ajout des éléments.");
         }
-
-        foreach ($this->agencyFeeItems as $item) {
-            $label = AgencyFee::find($item['agency_fee_id'])?->label;
-            $this->invoice->items()->create([
-                'label' => $label,
-                'category' => 'agency_fee',
-                'amount_usd' => $item['amount_usd'],
-                'agency_fee_id' => $item['agency_fee_id'],
-            ]);
-        }
-
-        foreach ($this->extraFeeItems as $item) {
-            $label = ExtraFee::find($item['extra_fee_id'])?->label;
-            $this->invoice->items()->create([
-                'label' => $label,
-                'category' => 'extra_fee',
-                'amount_usd' => $item['amount_usd'],
-                'extra_fee_id' => $item['extra_fee_id'],
-            ]);
-        }
-
-        $this->invoice->total_usd = $this->invoice->items()->sum('amount_usd');
-        $this->invoice->save();
-
-        session()->flash('success', 'Éléments ajoutés à la facture.');
-        redirect()->route('invoices.show', $this->invoice->id);
     }
 
     public function render()
