@@ -27,9 +27,10 @@
                 <h3 class="text-md font-semibold text-gray-800 dark:text-white">Lignes de Facture</h3>
                 <div class="space-y-4">
                     @foreach($items as $i => $item)
-                        <div class="grid grid-cols-6 gap-2 items-end">
+                        <div class="grid grid-cols-7 gap-2 items-end">
                             <x-forms.input label="Libellé" :model="'items.' . $i . '.label'" />
                             <x-forms.input label="Montant USD" :model="'items.' . $i . '.amount_usd'" type="number" step="0.01" />
+                            <x-forms.select label="Catégorie" :model="'items.' . $i . '.category'" :options="[['id'=>'import_tax','name'=>'Taxe'],['id'=>'agency_fee','name'=>'Frais agence'],['id'=>'extra_fee','name'=>'Frais divers']]" optionLabel="name" optionValue="id" />
                             <x-forms.select label="Taxe" :model="'items.' . $i . '.tax_id'" :options="$taxes" optionLabel="label" optionValue="id" />
                             <x-forms.select label="Frais agence" :model="'items.' . $i . '.agency_fee_id'" :options="$agencyFees" optionLabel="label" optionValue="id" />
                             <x-forms.select label="Frais divers" :model="'items.' . $i . '.extra_fee_id'" :options="$extraFees" optionLabel="label" optionValue="id" />
