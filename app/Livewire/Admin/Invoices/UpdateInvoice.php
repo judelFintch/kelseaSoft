@@ -55,14 +55,32 @@ class UpdateInvoice extends Component
     {
         if (str_contains($property, 'tax_id')) {
             $this->updateAmountFromReference($property, 'tax');
+            $index = explode('.', $property)[1] ?? null;
+            if (is_numeric($index)) {
+                $this->items[$index]['category'] = 'import_tax';
+                $this->items[$index]['agency_fee_id'] = null;
+                $this->items[$index]['extra_fee_id'] = null;
+            }
         }
 
         if (str_contains($property, 'agency_fee_id')) {
             $this->updateAmountFromReference($property, 'agency');
+            $index = explode('.', $property)[1] ?? null;
+            if (is_numeric($index)) {
+                $this->items[$index]['category'] = 'agency_fee';
+                $this->items[$index]['tax_id'] = null;
+                $this->items[$index]['extra_fee_id'] = null;
+            }
         }
 
         if (str_contains($property, 'extra_fee_id')) {
             $this->updateAmountFromReference($property, 'extra');
+            $index = explode('.', $property)[1] ?? null;
+            if (is_numeric($index)) {
+                $this->items[$index]['category'] = 'extra_fee';
+                $this->items[$index]['tax_id'] = null;
+                $this->items[$index]['agency_fee_id'] = null;
+            }
         }
     }
 
