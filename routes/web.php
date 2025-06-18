@@ -155,6 +155,7 @@ Route::get('/notifications/latest', [NotificationController::class, 'latest'])->
         Route::get('/download/{invoice}', [ShowInvoice::class, 'downloadPdf'])->name('download');
         Route::get('/index', InvoiceIndex::class)->name('index');
         Route::get('/invoices/{invoice}/edit', UpdateInvoice::class)->name('invoices.edit');
+        Route::get('/invoices/{invoice}/items', \App\Livewire\Admin\Invoices\AddInvoiceItems::class)->name('items.add');
         Route::get('/trash', InvoiceTrash::class)->name('trash');
 
     });
