@@ -114,8 +114,8 @@
         <tr>
             <td><strong>Déclaration:</strong> {{ $declarationCount }}</td>
             <td><strong>Truck:</strong> {{ $truckCount }}</td>
-            <td><strong>Scellés:</strong> {{ $scelleItem?->quantity ?? 0 }} ({{ number_format($scelleItem->total_price ?? 0, 2) }} USD)</td>
-            <td><strong>NAC:</strong> {{ $nacItem?->quantity ?? 0 }} ({{ number_format($nacItem->total_price ?? 0, 2) }} USD)</td>
+            <td><strong>Scellés:</strong> {{ $scelleItem?->quantity ?? 0 }} </td>
+            <td><strong>NAC:</strong> {{ $nacItem?->quantity ?? 0 }} </td>
         </tr>
     </table>
     @foreach(['import_tax' => 'A. IMPORT DUTY & TAXES', 'agency_fee' => 'B. AGENCY FEES', 'extra_fee' => 'C. AUTRES FRAIS'] as $cat => $label)
