@@ -23,8 +23,8 @@
     <title>Facture Globale</title>
     <style>
         body {
-            font-family: DejaVu Sans, sans-serif;
-            font-size: 9px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
             margin: 5px;
         }
 
@@ -38,13 +38,13 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         th,
         td {
             border: 1px solid #000;
-            padding: 2px;
+            padding: 1.2px;
             text-align: left;
         }
 
@@ -72,11 +72,11 @@
                 <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 110px;">
             </td>
             <td style="width: 82%; text-align: center; vertical-align: middle;">
-                <h2 style="font-size: 16px;">LA MANNE DES BRAVES S.A.R.L</h2>
-                <p style="font-size: 11px; font-weight: bold;">TRANSITAIRE EN DOUANE OFFICIEL</p>
-                <p style="font-size: 11px; font-weight: bold;">VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
-                <p style="font-size: 10px;">N° Impôt : A1000859X RCCM : CDL/SHR/RCM15-B3463</p>
-                <p style="font-size: 10px;">ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
+                <h2 style="font-size: 25px; margin: 2px 0;">LA MANNE DES BRAVES S.A.R.L</h2>
+                <p style="font-size: 20px; font-weight: bold; margin: 2px 0;">TRANSITAIRE EN DOUANE OFFICIEL</p>
+                <p style="font-size: 12px; font-weight: bold; margin: 2px 0;">VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
+                <p style="font-size: 12px; margin: 2px 0;">N° Impôt : A1000859X RCCM : CDL/SHR/RCM15-B3463</p>
+                <p style="font-size: 12px; margin: 2px 0;">ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
             </td>
         </tr>
     </table>
@@ -161,16 +161,16 @@
     <p>Numéro compte : TMB 00017-25000-00232100001-85 USD</p>
     <p>Mode de paiement : Provision</p>
 
-    <p class="right" style="margin-top: 10px;">CHRISTELLE NTANGA<br><strong>RESP FACTURATION</strong></p>
+    <p class="right" style="margin-top: 10px; margin-bottom: 20px;">CHRISTELLE NTANGA<br><strong>RESP FACTURATION</strong></p>
 
     <hr style="border: none; border-top: 1px solid #333;">
-    <p class="center" style="font-size: 8px;">
+    <p class="center" style="font-size: 11px;">
         960, Av. Chaussée Laurent Désiré Kabila, Immeuble Méthodiste, 2ème étage – Quartier Makatano, Commune de
         Lubumbashi<br>
         Tél : (+243)998180745, (+243)815056461, (+243)0977960987 – E-mail : mannedesbraves@yahoo.fr<br>
         Représentations : Kinshasa - Matadi - Kasumbalesa - Kolwezi
     </p>
-    <p class="center" style="font-size: 8px;">Veuillez vous référer à la facture partielle.</p>
+    <p class="center" style="font-size: 11px;">Veuillez vous référer à la facture partielle.</p>
 
 </body>
 
