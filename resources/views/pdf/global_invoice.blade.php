@@ -143,6 +143,8 @@
     </table>
 
     <p><strong>Montant en lettres :</strong> {{ amountToWords($globalInvoice->total_amount ?? 0) }}</p>
+    <p>Numéro compte : TMB 00017-25000-00232100001-85 USD</p>
+    <p>Mode de paiement : Provision</p>
 
     <p class="right" style="margin-top: 10px;">CHRISTELLE NTANGA<br><strong>RESP FACTURATION</strong></p>
 
@@ -153,6 +155,7 @@
         Tél : (+243)998180745, (+243)815056461, (+243)0977960987 – E-mail : mannedesbraves@yahoo.fr<br>
         Représentations : Kinshasa - Matadi - Kasumbalesa - Kolwezi
     </p>
+    <p class="center" style="font-size: 8px;">Veuillez vous référer à la facture partielle.</p>
 
 </body>
 
