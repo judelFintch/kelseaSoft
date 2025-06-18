@@ -166,6 +166,13 @@ class UpdateInvoice extends Component
         session()->flash('success', 'Facture mise à jour avec succès.');
         return redirect()->route('invoices.show', $this->invoice->id);
     }
+
+    public function validateInvoice(): void
+    {
+        $this->invoice->update(['status' => 'approved']);
+        session()->flash('success', 'Facture validée avec succès.');
+        return redirect()->route('invoices.show', $this->invoice->id);
+    }
     public function render()
     {
         return view('livewire.admin.invoices.update-invoice');
