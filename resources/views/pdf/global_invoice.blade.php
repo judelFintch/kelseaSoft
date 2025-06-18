@@ -15,6 +15,7 @@
         return $words;
     }
 @endphp
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -25,28 +26,37 @@
         body {
             font-family: Arial, Helvetica, sans-serif;
             font-size: 12px;
+            /* Réduction de la police */
             margin: 5px;
-            line-height: 1.3;
+            line-height: 1.1;
+            /* Réduction de l’interligne */
+            font-size-adjust: 0.5;
+            /* Ajustement de la lisibilité */
         }
 
         h2,
         h3,
         h4,
+        h5,
         p {
-            margin: 0;
+            margin: 2px 0;
+            /* Marges réduites */
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
+            /* Espacement réduit entre tableaux */
         }
 
         th,
         td {
             border: 1px solid #000;
-            padding: 3px;
-            text-align: left;
+            padding: 2px;
+            /* Padding réduit */
+            word-wrap: break-word;
+            /* Retour à la ligne pour éviter débordements */
         }
 
         .no-border td,
@@ -61,29 +71,37 @@
         .right {
             text-align: right;
         }
+
+        /* Empêche les sauts de page intempestifs dans les tableaux */
+        table,
+        tr,
+        td,
+        th {
+            page-break-inside: avoid;
+        }
     </style>
 </head>
 
 <body>
-
     {{-- EN-TETE HARMONISÉ --}}
     <table class="no-border">
         <tr>
             <td style="width: 18%; text-align: left; vertical-align: middle;">
-                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 110px;">
+                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 80px;">
             </td>
             <td style="width: 82%; text-align: center; vertical-align: middle;">
-                <h2 style="font-size: 25px; margin: 2px 0;">LA MANNE DES BRAVES S.A.R.L</h2>
-                <p style="font-size: 20px; font-weight: bold; margin: 2px 0;">TRANSITAIRE EN DOUANE OFFICIEL</p>
-                <p style="font-size: 12px; font-weight: bold; margin: 2px 0;">VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
-                <p style="font-size: 12px; margin: 2px 0;">N° Impôt : A1000859X RCCM : CDL/SHR/RCM15-B3463</p>
-                <p style="font-size: 12px; margin: 2px 0;">ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
+                <h2 style="font-size: 22px;">LA MANNE DES BRAVES S.A.R.L</h2>
+                <p style="font-size: 18px; font-weight: bold;">TRANSITAIRE EN DOUANE OFFICIEL</p>
+                <p style="font-size: 11px; font-weight: bold;">VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
+                <p style="font-size: 11px;">N° Impôt : A1000859X RCCM : CDL/SHR/RCM15-B3463</p>
+                <p style="font-size: 11px;">ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
             </td>
         </tr>
     </table>
 
-    <h3 class="center" style="border: 1px solid black; padding: 2px;">FACTURE GLOBALE N°
-        {{ $globalInvoice->global_invoice_number }}</h3>
+    <h3 class="center" style="border: 1px solid black; padding: 2px;">
+        FACTURE GLOBALE N° {{ $globalInvoice->global_invoice_number }}
+    </h3>
 
     {{-- INFOS CLIENT --}}
     <table class="no-border">
@@ -103,25 +121,31 @@
     </table>
 
     {{-- DÉTAILS DE LA FACTURE GLOBALE --}}
-    <h4 style="border-top: 1px solid #000; margin-bottom: 8px;">DÉTAILS FACTURE GLOBALE</h4>
+    <h4 style="border-top: 3px solid #000; margin-bottom: 12px;">DÉTAILS FACTURE GLOBALE</h4>
     @php
         $folders = $globalInvoice->invoices->load('folder')->pluck('folder')->filter();
         $declarationCount = $folders->filter(fn($f) => !empty($f->truck_number))->count();
         $truckCount = $folders->filter(fn($f) => !empty($f->truck_number))->unique('truck_number')->count();
-        $scelleItem = $globalInvoice->globalInvoiceItems->first(fn($i) => str_contains(strtolower($i->description), 'scelle'));
-        $nacItem = $globalInvoice->globalInvoiceItems->first(fn($i) => str_contains(strtolower($i->description), 'nac'));
+        $scelleItem = $globalInvoice->globalInvoiceItems->first(
+            fn($i) => str_contains(strtolower($i->description), 'scelle'),
+        );
+        $nacItem = $globalInvoice->globalInvoiceItems->first(
+            fn($i) => str_contains(strtolower($i->description), 'nac'),
+        );
     @endphp
-    <table class="no-border" style="margin-bottom: 8px;">
+
+    <table class="no-border" style="margin-bottom: 15px;">
         <tr>
             <td><strong>Déclaration:</strong> {{ $declarationCount }}</td>
             <td><strong>Truck:</strong> {{ $truckCount }}</td>
-            <td><strong>Scellés:</strong> {{ $scelleItem?->quantity ?? 0 }} </td>
-            <td><strong>NAC:</strong> {{ $nacItem?->quantity ?? 0 }} </td>
+            <td><strong>Scellés:</strong> {{ $scelleItem?->quantity ?? 0 }}</td>
+            <td><strong>NAC:</strong> {{ $nacItem?->quantity ?? 0 }}</td>
         </tr>
     </table>
-    @foreach(['import_tax' => 'A. IMPORT DUTY & TAXES', 'agency_fee' => 'B. AGENCY FEES', 'extra_fee' => 'C. AUTRES FRAIS'] as $cat => $label)
+
+    @foreach (['import_tax' => 'A. IMPORT DUTY & TAXES', 'agency_fee' => 'B. AGENCY FEES', 'extra_fee' => 'C. AUTRES FRAIS'] as $cat => $label)
         @php $items = $globalInvoice->globalInvoiceItems->where('category', $cat); @endphp
-        @if($items->count())
+        @if ($items->count())
             <h5 style="margin-top: 8px;">{{ $label }}</h5>
             <table>
                 <thead>
@@ -134,7 +158,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($items as $item)
+                    @foreach ($items as $item)
                         <tr>
                             <td>{{ $item->ref_code }}</td>
                             <td>{{ $item->description }}</td>
@@ -144,13 +168,14 @@
                         </tr>
                     @endforeach
                     <tr>
-                        <td colspan="4" class="right"><strong>Sous-total</strong></td>
+                        <td colspan="4" class="right"><strong>Sous‑total</strong></td>
                         <td class="right"><strong>{{ number_format($items->sum('total_price'), 2) }}</strong></td>
                     </tr>
                 </tbody>
             </table>
         @endif
     @endforeach
+
     <table>
         <tr>
             <td colspan="4" class="right"><strong>Total général</strong></td>
@@ -162,17 +187,24 @@
     <p>Numéro compte : TMB 00017-25000-00232100001-85 USD</p>
     <p>Mode de paiement : Provision</p>
 
-    <p class="right" style="margin-top: 10px; margin-bottom: 20px;">CHRISTELLE NTANGA<br><strong>RESP FACTURATION</strong></p>
+    <p class="right" style="margin-top: 10px; margin-bottom: 20px;">
+        CHRISTELLE NTANGA <br><!-- Ajout d'un saut de ligne pour signature -->
+        <strong>RESP FACTURATION</strong>
+        <br><br><br><br><br><br>
+    </p>
 
     <hr style="border: none; border-top: 1px solid #333;">
-    <p class="center" style="font-size: 11px;">
+
+    <p class="center" style="font-size: 10px;">
         960, Av. Chaussée Laurent Désiré Kabila, Immeuble Méthodiste, 2ème étage – Quartier Makatano, Commune de
         Lubumbashi<br>
         Tél : (+243)998180745, (+243)815056461, (+243)0977960987 – E-mail : mannedesbraves@yahoo.fr<br>
-        Représentations : Kinshasa - Matadi - Kasumbalesa - Kolwezi
+        Représentations : Kinshasa – Matadi – Kasumbalesa – Kolwezi
     </p>
-    <p class="center" style="font-size: 11px;">Veuillez vous référer à la facture partielle.</p>
 
+    <p class="center" style="font-size: 10px;">
+        Veuillez vous référer à la facture partielle.
+    </p>
 </body>
 
 </html>
