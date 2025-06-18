@@ -20,4 +20,20 @@ class AuditLog extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Retrieve a human-friendly identifier for the audited model.
+     */
+    public function getIdentifierAttribute(): string
+    {
+        $data = $this->new_data ?: $this->previous_data ?: [];
+
+        foreach (['folder_number', 'invoice_number', 'operation_code', 'name', 'label', 'title'] as $field) {
+            if (isset($data[$field]) && $data[$field] !== '') {
+                return (string) $data[$field];
+            }
+        }
+
+        return (string) $this->auditable_id;
+    }
 }
