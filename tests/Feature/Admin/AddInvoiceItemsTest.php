@@ -56,4 +56,21 @@ class AddInvoiceItemsTest extends TestCase
             'amount_usd' => 5,
         ]);
     }
+
+    public function test_cannot_add_items_to_grouped_invoice(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $company = Company::factory()->create();
+        $global = \App\Models\GlobalInvoice::factory()->for($company)->create();
+        $invoice = Invoice::factory()->for($company)->create([
+            'status' => 'grouped_in_global_invoice',
+            'global_invoice_id' => $global->id,
+        ]);
+
+        Livewire::test(AddInvoiceItems::class, ['invoice' => $invoice->id])
+            ->assertRedirect(route('invoices.show', $invoice->id))
+            ->assertSessionHas('error');
+    }
 }

@@ -25,6 +25,11 @@ class AddInvoiceItems extends Component
 
     public function mount(Invoice $invoice)
     {
+        if ($invoice->global_invoice_id) {
+            session()->flash('error', "La facture {$invoice->invoice_number} est déjà incluse dans une facture globale. Impossible de la modifier.");
+            redirect()->route('invoices.show', $invoice->id);
+        }
+
         $this->invoice = $invoice->load('items');
         $this->taxes = Tax::orderBy('label')->get();
         $this->agencyFees = AgencyFee::orderBy('label')->get();
