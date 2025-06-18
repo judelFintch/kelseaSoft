@@ -67,7 +67,7 @@
                 <h3 class="text-xl font-semibold text-gray-700 mb-4 pt-4 border-t">Détails des Lignes de Facture Globale</h3>
                 @php
                     $folders = $globalInvoice->invoices->load('folder')->pluck('folder')->filter();
-                    $declarationCount = $folders->filter(fn($f) => !empty($f->declaration_number))->unique('declaration_number')->count();
+                    $declarationCount = $folders->filter(fn($f) => !empty($f->truck_number))->count();
                     $truckCount = $folders->filter(fn($f) => !empty($f->truck_number))->unique('truck_number')->count();
                     $scelleItem = $globalInvoice->globalInvoiceItems->first(fn($i) => str_contains(strtolower($i->description), 'scelle'));
                     $nacItem = $globalInvoice->globalInvoiceItems->first(fn($i) => str_contains(strtolower($i->description), 'nac'));
