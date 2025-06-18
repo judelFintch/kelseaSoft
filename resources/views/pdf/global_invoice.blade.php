@@ -1,3 +1,7 @@
+@php
+    $physicalAddress = $globalInvoice->company->physical_address ?? 'Aucune adresse';
+    $formattedAddress = wordwrap($physicalAddress, 39, "\n", true);
+@endphp
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -72,9 +76,10 @@
         <tr>
             <td>
                 <p><strong>Client :</strong> {{ $globalInvoice->company->name }}</p>
-                <p><strong>Adresse :</strong> {{ $globalInvoice->company->physical_address ?? 'Aucune adresse' }}</p>
-                <p><strong>Pays :</strong> {{ $globalInvoice->company->country ?? 'Non spécifié' }}</p>
-                <p><strong>Email :</strong> {{ $globalInvoice->company->email ?? 'Non spécifié' }}</p>
+                <p><strong>Adresse :</strong> {!! nl2br(e($formattedAddress)) !!}</p>
+                <p class="text-xs text-gray-500">RCCM : {{ $globalInvoice->company->commercial_register }}</p>
+                <p class="text-xs text-gray-500">{{ $globalInvoice->company->nbc_number }}</p>
+                <p class="text-xs text-gray-500">{{ $globalInvoice->company->national_identification }}</p>
             </td>
             <td class="right">
                 <p>Lubumbashi le {{ \Carbon\Carbon::parse($globalInvoice->created_at)->format('d/m/Y') }}</p>
