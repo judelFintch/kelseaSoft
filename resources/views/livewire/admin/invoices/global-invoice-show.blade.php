@@ -65,6 +65,27 @@
                 </div>
 
                 <h3 class="text-xl font-semibold text-gray-700 mb-4 pt-4 border-t">Détails des Lignes de Facture Globale</h3>
+                @php
+                    $folders = $globalInvoice->invoices->load('folder')->pluck('folder')->filter();
+                    $declarationCount = $folders->filter(fn($f) => !empty($f->declaration_number))->unique('declaration_number')->count();
+                    $truckCount = $folders->filter(fn($f) => !empty($f->truck_number))->unique('truck_number')->count();
+                    $scelleItem = $globalInvoice->globalInvoiceItems->first(fn($i) => str_contains(strtolower($i->description), 'scelle'));
+                    $nacItem = $globalInvoice->globalInvoiceItems->first(fn($i) => str_contains(strtolower($i->description), 'nac'));
+                @endphp
+                <table class="min-w-full text-sm border border-gray-200 mb-4">
+                    <tr class="bg-gray-50">
+                        <th class="border px-2 py-1">Déclaration</th>
+                        <th class="border px-2 py-1">Truck</th>
+                        <th class="border px-2 py-1">Scellés</th>
+                        <th class="border px-2 py-1">NAC</th>
+                    </tr>
+                    <tr>
+                        <td class="border px-2 py-1 text-center">{{ $declarationCount }}</td>
+                        <td class="border px-2 py-1 text-center">{{ $truckCount }}</td>
+                        <td class="border px-2 py-1 text-center">{{ $scelleItem?->quantity ?? 0 }} ({{ number_format($scelleItem->total_price ?? 0, 2) }} USD)</td>
+                        <td class="border px-2 py-1 text-center">{{ $nacItem?->quantity ?? 0 }} ({{ number_format($nacItem->total_price ?? 0, 2) }} USD)</td>
+                    </tr>
+                </table>
                 @foreach(['import_tax' => 'A. IMPORT DUTY & TAXES', 'agency_fee' => 'B. AGENCY FEES', 'extra_fee' => 'C. AUTRES FRAIS'] as $cat => $label)
                     @php $items = $globalInvoice->globalInvoiceItems->where('category', $cat); @endphp
                     @if($items->count())
