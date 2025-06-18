@@ -1,4 +1,4 @@
-<div class="max-w-4xl mx-auto space-y-6">
+<div class="w-full mx-auto space-y-6">
     <x-ui.flash-message />
     <x-ui.error-message />
 
