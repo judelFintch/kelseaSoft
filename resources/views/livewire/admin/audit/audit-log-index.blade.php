@@ -12,6 +12,7 @@
                 <th class="border px-2 py-1">Utilisateur</th>
                 <th class="border px-2 py-1">Opération</th>
                 <th class="border px-2 py-1">Modèle</th>
+                <th class="border px-2 py-1">Référence</th>
                 <th class="border px-2 py-1">Message</th>
             </tr>
         </thead>
@@ -22,11 +23,12 @@
                     <td class="border px-2 py-1">{{ optional($log->user)->name ?? 'System' }}</td>
                     <td class="border px-2 py-1">{{ $log->operation }}</td>
                     <td class="border px-2 py-1">{{ class_basename($log->auditable_type) }}</td>
+                    <td class="border px-2 py-1">{{ $log->identifier }}</td>
                     <td class="border px-2 py-1">{{ $log->message }}</td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" class="border px-2 py-1 text-center">Aucun log</td>
+                    <td colspan="6" class="border px-2 py-1 text-center">Aucun log</td>
                 </tr>
             @endforelse
         </tbody>

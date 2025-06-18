@@ -7,6 +7,17 @@ use Illuminate\Support\Facades\Auth;
 
 class AuditObserver
 {
+    private function getLabel($model): string
+    {
+        foreach (['folder_number', 'invoice_number', 'operation_code', 'name', 'label', 'title'] as $field) {
+            if (isset($model->{$field}) && $model->{$field} !== '') {
+                return (string) $model->{$field};
+            }
+        }
+
+        return (string) $model->id;
+    }
+
     /**
      * Enregistre l’audit lors de la création d’un modèle.
      */
@@ -19,7 +30,7 @@ class AuditObserver
             'operation' => 'CREATE',
             'previous_data' => null,
             'new_data' => $model->toArray(),
-            'message' => 'Création de '.class_basename($model),
+            'message' => 'Création de '.class_basename($model).' ('.$this->getLabel($model).')',
         ]);
     }
 
@@ -35,7 +46,7 @@ class AuditObserver
             'operation' => 'UPDATE',
             'previous_data' => $model->getOriginal(),
             'new_data' => $model->toArray(),
-            'message' => 'Mise à jour de '.class_basename($model),
+            'message' => 'Mise à jour de '.class_basename($model).' ('.$this->getLabel($model).')',
         ]);
     }
 
@@ -51,7 +62,7 @@ class AuditObserver
             'operation' => 'DELETE',
             'previous_data' => $model->toArray(),
             'new_data' => null,
-            'message' => 'Suppression de '.class_basename($model),
+            'message' => 'Suppression de '.class_basename($model).' ('.$this->getLabel($model).')',
         ]);
     }
 }
