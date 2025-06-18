@@ -1,9 +1,21 @@
 <div>
-    <button {{ $attributes->merge([
+    @props([
         'type' => 'button',
-        'class' => 'inline-flex ipx-4 py-2 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600'
+        'color' => 'brand',
+    ])
+
+    @php
+        $colors = [
+            'brand' => 'bg-brand-500 hover:bg-brand-600',
+            'purple' => 'bg-purple-600 hover:bg-purple-700',
+        ];
+    @endphp
+
+    <button {{ $attributes->merge([
+        'type' => $type,
+        'class' => 'inline-flex px-4 py-2 text-sm font-medium text-white rounded-lg ' . ($colors[$color] ?? $colors['brand'])
     ]) }}>
         {{ $slot }}
     </button>
-    
+
 </div>
