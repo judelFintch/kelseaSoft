@@ -26,6 +26,7 @@
             font-family: Arial, Helvetica, sans-serif;
             font-size: 12px;
             margin: 5px;
+            line-height: 1.3;
         }
 
         h2,
@@ -38,13 +39,13 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 1px;
+            margin-bottom: 4px;
         }
 
         th,
         td {
             border: 1px solid #000;
-            padding: 1.2px;
+            padding: 3px;
             text-align: left;
         }
 
