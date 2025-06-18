@@ -90,6 +90,10 @@
 
     {{-- Bouton PDF --}}
     <div class="text-right">
+        <a href="{{ route('invoices.items.add', $invoice->id) }}"
+            class="inline-block mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 mr-2">
+            ➕ Ajouter éléments
+        </a>
         <button wire:click="downloadPdf"
             class="mt-4 px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
             📥 Télécharger PDF

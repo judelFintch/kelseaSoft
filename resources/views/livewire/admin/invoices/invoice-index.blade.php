@@ -99,6 +99,7 @@
                             <x-slot name="content">
                                 <x-dropdown-link :href="route('invoices.show', $invoice->id)">Voir</x-dropdown-link>
                                 <x-dropdown-link :href="route('invoices.invoices.edit', $invoice->id)">Modifier</x-dropdown-link>
+                                <x-dropdown-link :href="route('invoices.items.add', $invoice->id)" class="text-blue-600 hover:text-blue-800">Ajouter éléments</x-dropdown-link>
                                 <button wire:click="confirmDeleteInvoice({{ $invoice->id }})"
                                     class="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
                                     Archiver
