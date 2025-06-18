@@ -171,7 +171,7 @@ class UpdateInvoice extends Component
     {
         $this->invoice->update(['status' => 'approved']);
         session()->flash('success', 'Facture validée avec succès.');
-        return redirect()->route('invoices.show', $this->invoice->id);
+        redirect()->route('invoices.show', $this->invoice->id);
     }
     public function render()
     {
