@@ -43,7 +43,7 @@
 
                 <div class="flex justify-end pt-4 space-x-2">
                     <x-forms.button type="submit">Mettre à jour</x-forms.button>
-                    <button type="button" wire:click="validateInvoice" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Valider</button>
+                    <button type="button" wire:click="validateInvoice" class="px-4 py-2 text-white rounded bg-brand-500 hover:bg-brand-600">Valider</button>
                 </div>
             </div>
         </form>
