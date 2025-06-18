@@ -1,3 +1,20 @@
+@php
+    $physicalAddress = $globalInvoice->company->physical_address ?? 'Aucune adresse';
+    $formattedAddress = wordwrap($physicalAddress, 39, "\n", true);
+
+    function amountToWords($amount)
+    {
+        $formatter = new \NumberFormatter('fr', \NumberFormatter::SPELLOUT);
+        $amountParts = explode('.', number_format($amount, 2, '.', ''));
+        $dollars = intval($amountParts[0]);
+        $cents = intval($amountParts[1]);
+        $words = ucfirst($formatter->format($dollars)) . ' dollars américains';
+        if ($cents > 0) {
+            $words .= ' et ' . $formatter->format($cents) . ' centimes';
+        }
+        return $words;
+    }
+@endphp
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -72,9 +89,10 @@
         <tr>
             <td>
                 <p><strong>Client :</strong> {{ $globalInvoice->company->name }}</p>
-                <p><strong>Adresse :</strong> {{ $globalInvoice->company->physical_address ?? 'Aucune adresse' }}</p>
-                <p><strong>Pays :</strong> {{ $globalInvoice->company->country ?? 'Non spécifié' }}</p>
-                <p><strong>Email :</strong> {{ $globalInvoice->company->email ?? 'Non spécifié' }}</p>
+                <p><strong>Adresse :</strong> {!! nl2br(e($formattedAddress)) !!}</p>
+                <p class="text-xs text-gray-500">RCCM : {{ $globalInvoice->company->commercial_register }}</p>
+                <p class="text-xs text-gray-500">{{ $globalInvoice->company->nbc_number }}</p>
+                <p class="text-xs text-gray-500">{{ $globalInvoice->company->national_identification }}</p>
             </td>
             <td class="right">
                 <p>Lubumbashi le {{ \Carbon\Carbon::parse($globalInvoice->created_at)->format('d/m/Y') }}</p>
@@ -123,6 +141,8 @@
             <td class="right"><strong>{{ number_format($globalInvoice->total_amount, 2) }} USD</strong></td>
         </tr>
     </table>
+
+    <p><strong>Montant en lettres :</strong> {{ amountToWords($globalInvoice->total_amount ?? 0) }}</p>
 
     <p class="right" style="margin-top: 10px;">CHRISTELLE NTANGA<br><strong>RESP FACTURATION</strong></p>
 
