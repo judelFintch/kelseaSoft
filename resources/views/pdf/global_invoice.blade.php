@@ -1,6 +1,19 @@
 @php
     $physicalAddress = $globalInvoice->company->physical_address ?? 'Aucune adresse';
     $formattedAddress = wordwrap($physicalAddress, 39, "\n", true);
+
+    function amountToWords($amount)
+    {
+        $formatter = new \NumberFormatter('fr', \NumberFormatter::SPELLOUT);
+        $amountParts = explode('.', number_format($amount, 2, '.', ''));
+        $dollars = intval($amountParts[0]);
+        $cents = intval($amountParts[1]);
+        $words = ucfirst($formatter->format($dollars)) . ' dollars américains';
+        if ($cents > 0) {
+            $words .= ' et ' . $formatter->format($cents) . ' centimes';
+        }
+        return $words;
+    }
 @endphp
 <!DOCTYPE html>
 <html lang="fr">
@@ -128,6 +141,8 @@
             <td class="right"><strong>{{ number_format($globalInvoice->total_amount, 2) }} USD</strong></td>
         </tr>
     </table>
+
+    <p><strong>Montant en lettres :</strong> {{ amountToWords($globalInvoice->total_amount ?? 0) }}</p>
 
     <p class="right" style="margin-top: 10px;">CHRISTELLE NTANGA<br><strong>RESP FACTURATION</strong></p>
 
