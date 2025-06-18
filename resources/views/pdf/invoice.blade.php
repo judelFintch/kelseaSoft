@@ -162,7 +162,7 @@
 
 
 
-    <h4 style="border-top: 1px solid #000; text-align: center;">A. IMPORT DUTY & TAXES</h4>
+    <h4 style="border-top: 0px solid #000; text-align: center;">A. IMPORT DUTY & TAXES</h4>
     <table>
         <thead>
             <tr>
@@ -191,7 +191,7 @@
     </table>
 
 
-    <h4 style="border-top: 1px solid #000; text-align: center;">B. AGENCY FEES</h4>
+    <h4 style="border-top: 0px solid #000; text-align: center;">B. AGENCY FEES</h4>
     <table>
         <thead>
             <tr>
@@ -216,7 +216,7 @@
         </tbody>
     </table>
 
-    <h4 style="border-top: 1px solid #000; text-align: center;">C. AUTRES FRAIS</h4>
+    <h4 style="border-top: 0px solid #000; text-align: center;">C. AUTRES FRAIS</h4>
     <table>
         <thead>
             <tr>
@@ -235,7 +235,7 @@
                 </tr>
             @endforeach
             <tr>
-                <td colspan="2" class="right"><strong>Sous-total A</strong></td>
+                <td colspan="2" class="right"><strong>Sous-total C</strong></td>
                 <td class="right"><strong>{{ number_format($extraFeeSubtotal, 2) }}</strong></td>
             </tr>
         </tbody>
@@ -243,7 +243,7 @@
 
 
 
-    <h4 style="border-top: 1px solid #000;">TOTAL GÉNÉRAL</h4>
+    <h4 style="border-top: 0px solid #000;">TOTAL GÉNÉRAL</h4>
     <table>
         <tr>
             <td colspan="2" class="right"><strong>TOTAL (A, B et C) / USD :</strong></td>
