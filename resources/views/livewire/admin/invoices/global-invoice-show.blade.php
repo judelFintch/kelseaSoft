@@ -1,10 +1,13 @@
 <div x-data="loadingProgress({{ $globalInvoice->invoices->count() }})" x-init="start()" class="relative">
     <div x-show="loading" class="absolute inset-0 flex flex-col items-center justify-center bg-white z-50">
         <p class="mb-2 text-gray-700">Chargement des dossiers groupés...</p>
-        <div class="w-64 bg-gray-200 rounded-full h-4 overflow-hidden">
-            <div class="bg-blue-500 h-4" :style="`width: ${(progress/total)*100}%`"></div>
+        <div class="w-72 md:w-96 bg-gray-200 rounded-full h-4 overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-500 to-green-500 h-4" :style="`width: ${(progress/total)*100}%`"></div>
         </div>
-        <p class="mt-2 text-sm text-gray-600" x-text="`${progress}/${total}`"></p>
+        <p class="mt-4 text-xl font-semibold text-gray-800 flex items-center gap-2">
+            <span class="text-2xl">🔄</span>
+            <span x-text="`${progress}/${total}`"></span>
+        </p>
     </div>
 
     <div x-show="!loading" x-cloak class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
