@@ -1,7 +1,7 @@
 <div>
     @props([
         'type' => 'button',
-        'color' => 'brand',
+        'color' => 'purple',
     ])
 
     @php
