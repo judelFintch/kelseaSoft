@@ -24,6 +24,10 @@
                     </div>
                 </div>
             @endforeach
+
+            <div class="flex justify-end pt-4">
+                <x-forms.button type="button" wire:click="validateInvoice">Valider l'opération</x-forms.button>
+            </div>
         </div>
     @endif
 </div>
