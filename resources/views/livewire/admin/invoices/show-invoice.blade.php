@@ -1,4 +1,6 @@
 <div class="w-full max-w-5xl mx-auto bg-white p-6 rounded-xl shadow space-y-6">
+    <x-ui.flash-message />
+    <x-ui.error-message />
 
     {{-- En-tête de la facture --}}
     <div class="flex justify-between items-start">
@@ -99,6 +101,11 @@
             📥 Télécharger PDF
         </button>
 
+        <button wire:click="checkTotals"
+            class="mt-4 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 ml-2">
+            🔄 Vérifier montant
+        </button>
+
         {{-- Barre de progression lors de la génération du PDF --}}
         <div wire:loading wire:target="downloadPdf" class="mt-2">
             <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
@@ -107,4 +114,11 @@
             <p class="text-xs text-gray-600 mt-1">Génération du PDF...</p>
         </div>
     </div>
+
+    @if($showSyncPrompt)
+        <div class="mt-4 text-center">
+            <p class="text-red-600">Différence de {{ number_format($difference, 2) }} USD détectée.</p>
+            <x-forms.button wire:click="synchronize" class="mt-2">Synchroniser</x-forms.button>
+        </div>
+    @endif
 </div>
