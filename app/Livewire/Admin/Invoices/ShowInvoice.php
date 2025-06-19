@@ -13,6 +13,10 @@ class ShowInvoice extends Component
 {
     public Invoice $invoice;
 
+    public float $itemsTotal = 0;
+    public float $difference = 0;
+    public bool $showSyncPrompt = false;
+
     /**
      * Initialisation du composant avec chargement des relations.
      */
@@ -20,6 +24,35 @@ class ShowInvoice extends Component
     {
         // Charge les relations nécessaires, y compris 'folder'
         $this->invoice = $invoice->load(['company', 'items', 'folder']);
+        $this->calculateTotals();
+    }
+
+    public function calculateTotals(): void
+    {
+        $this->itemsTotal = $this->invoice->items->sum('amount_usd');
+        $this->difference = round($this->itemsTotal - $this->invoice->total_usd, 2);
+    }
+
+    public function checkTotals(): void
+    {
+        $this->invoice->refresh()->load('items');
+        $this->calculateTotals();
+
+        if ($this->difference != 0) {
+            $this->showSyncPrompt = true;
+        } else {
+            session()->flash('success', 'Les totaux sont déjà synchronisés.');
+        }
+    }
+
+    public function synchronize(): void
+    {
+        $this->calculateTotals();
+        $this->invoice->total_usd = $this->itemsTotal;
+        $this->invoice->save();
+        $this->showSyncPrompt = false;
+        $this->difference = 0;
+        session()->flash('success', 'Facture synchronisée avec succès.');
     }
 
     /**
