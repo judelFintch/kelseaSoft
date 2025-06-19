@@ -10,8 +10,8 @@
     $exchangeRate = $invoice->exchange_rate ?? 0;
     $cifAmountCdf = $exchangeRate > 0 ? $cifAmountUsd * $exchangeRate : 0;
 
-    $importTaxSubtotalCdf = $invoice->items->where('category', 'import_tax')->sum('amount_cdf');
-    $importTaxSubtotalUsd = $invoice->exchange_rate ? $importTaxSubtotalCdf / $invoice->exchange_rate : 0;
+    $importTaxSubtotalUsd = $invoice->items->where('category', 'import_tax')->sum('amount_usd');
+   // $importTaxSubtotalUsd = $invoice->exchange_rate ? $importTaxSubtotalCdf / $invoice->exchange_rate : 0;
     $agencySubtotal = $invoice->items->where('category', 'agency_fee')->sum('amount_usd');
     $extraFeeSubtotal = $invoice->items->where('category', 'extra_fee')->sum('amount_usd');
 
