@@ -175,7 +175,8 @@
             @foreach ($invoice->items->where('category', 'import_tax') as $item)
                 @php
                     $tax = Tax::find($item->tax_id);
-                    $amountUsd = $invoice->exchange_rate > 0 ? $item->amount_cdf / $invoice->exchange_rate : 0;
+                    //$amountUsd = $invoice->exchange_rate > 0 ? $item->amount_cdf / $invoice->exchange_rate : 0;
+                    $amountUsd = $item->amount_usd;
                 @endphp
                 <tr>
                     <td>{{ $tax?->code ?? '---' }}</td>
