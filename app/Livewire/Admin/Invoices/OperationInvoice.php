@@ -59,6 +59,21 @@ class OperationInvoice extends Component
         }
     }
 
+    public function validateInvoice(): void
+    {
+        if (!$this->invoice) {
+            session()->flash('error', 'Aucune facture chargée.');
+            return;
+        }
+
+        $this->invoice->total_usd = $this->invoice->items()->sum('amount_usd');
+        $this->invoice->status = 'approved';
+        $this->invoice->save();
+
+        session()->flash('success', 'Opération validée et total mis à jour.');
+        $this->loadInvoice();
+    }
+
     public function render()
     {
         return view('livewire.admin.invoices.operation-invoice');
