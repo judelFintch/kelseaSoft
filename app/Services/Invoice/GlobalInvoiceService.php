@@ -120,4 +120,69 @@ class GlobalInvoiceService
             return $globalInvoice;
         });
     }
+
+    /**
+     * Synchronise une facture globale en se basant sur les factures partielles actuelles.
+     * Retourne true si une mise à jour a été effectuée.
+     */
+    public function syncGlobalInvoice(GlobalInvoice $globalInvoice): bool
+    {
+        $invoices = $globalInvoice->invoices()->with('items')->get();
+
+        $aggregated = [];
+        foreach ($invoices as $invoice) {
+            foreach ($invoice->items as $item) {
+                if (is_null($item->label) || trim($item->label) === '') {
+                    continue;
+                }
+
+                $key = $item->label.'|'.$item->category;
+                if (!isset($aggregated[$key])) {
+                    $aggregated[$key] = [
+                        'category' => $item->category,
+                        'description' => $item->label,
+                        'quantity' => 0,
+                        'unit_price' => $item->amount_usd,
+                        'total_price' => 0,
+                        'original_item_ids' => [],
+                    ];
+                }
+
+                $aggregated[$key]['quantity'] += 1;
+                $aggregated[$key]['total_price'] += $item->amount_usd;
+                $aggregated[$key]['unit_price'] = $item->amount_usd;
+                $aggregated[$key]['original_item_ids'][] = $item->id;
+            }
+        }
+
+        $itemsToCopy = array_values($aggregated);
+
+        $newHash = md5(json_encode($itemsToCopy));
+        $currentItems = $globalInvoice->globalInvoiceItems->map(function ($i) {
+            return [
+                'category' => $i->category,
+                'description' => $i->description,
+                'quantity' => $i->quantity,
+                'unit_price' => $i->unit_price,
+                'total_price' => $i->total_price,
+                'original_item_ids' => $i->original_item_ids,
+            ];
+        })->toArray();
+        $currentHash = md5(json_encode($currentItems));
+
+        if ($newHash !== $currentHash) {
+            DB::transaction(function () use ($globalInvoice, $itemsToCopy) {
+                $globalInvoice->globalInvoiceItems()->delete();
+                foreach ($itemsToCopy as $data) {
+                    $globalInvoice->globalInvoiceItems()->create($data);
+                }
+                $globalInvoice->total_amount = array_sum(array_column($itemsToCopy, 'total_price'));
+                $globalInvoice->save();
+            });
+
+            return true;
+        }
+
+        return false;
+    }
 }

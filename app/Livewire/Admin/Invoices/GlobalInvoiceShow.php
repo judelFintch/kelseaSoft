@@ -10,10 +10,23 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\GlobalInvoiceSummaryExport;
 use App\Services\Enterprise\EnterpriseService;
+use App\Services\Invoice\GlobalInvoiceService;
 
 class GlobalInvoiceShow extends Component
 {
     public GlobalInvoice $globalInvoice;
+
+    /**
+     * Vérifie si les factures partielles associées ont été modifiées.
+     * Si c'est le cas, synchronise la facture globale.
+     */
+    public function checkPartialsUpdates(GlobalInvoiceService $service): void
+    {
+        if ($service->syncGlobalInvoice($this->globalInvoice)) {
+            $this->globalInvoice->refresh()->load(['globalInvoiceItems', 'company', 'invoices']);
+            session()->flash('success', 'Des mises à jour des factures partielles ont été détectées. La facture globale a été synchronisée.');
+        }
+    }
 
     public function mount(GlobalInvoice $globalInvoice): void
     {
