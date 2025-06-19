@@ -71,7 +71,7 @@
   
                   <!-- Submit -->
                   <div>
-                    <x-primary-button class="w-full justify-center px-4 py-3 text-sm font-medium rounded-lg">
+                    <x-primary-button class="w-full justify-center px-4 py-3 text-sm font-medium rounded-lg bg-brand-500 hover:bg-brand-600 dark:bg-brand-400 dark:hover:bg-brand-500">
                       {{ __('Log in') }}
                     </x-primary-button>
                   </div>
