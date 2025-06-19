@@ -333,8 +333,14 @@
                                         <a href="{{ route('invoices.index') }}" class="menu-dropdown-item group"
                                             :class="page === 'declarationCreate' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
-
                                             Liste facture
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('invoices.operations') }}" class="menu-dropdown-item group"
+                                            :class="page === 'invoiceOperations' ? 'menu-dropdown-item-active' :
+                                                'menu-dropdown-item-inactive'">
+                                            Opérations Facture
                                         </a>
                                     </li>
                                 </ul>
