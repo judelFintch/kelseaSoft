@@ -17,7 +17,7 @@
     ];
 
     $variants = [
-        'primary' => 'text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500',
+        'primary' => 'text-white bg-violet-600 hover:bg-violet-700 focus:ring-violet-500',
         'secondary' => 'text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-gray-400 dark:text-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600',
         'danger' => 'text-white bg-red-600 hover:bg-red-700 focus:ring-red-500',
         'text' => 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white underline',
