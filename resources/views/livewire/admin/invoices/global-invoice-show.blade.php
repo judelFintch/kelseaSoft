@@ -1,4 +1,4 @@
-<div x-data="loadingProgress({{ $globalInvoice->invoices->count() }})" x-init="start()" class="relative">
+<div x-data="loadingProgress({{ $globalInvoice->invoices->count() }})" x-init="start()" wire:init="checkPartialsUpdates" class="relative">
     <div x-show="loading" class="absolute inset-0 flex flex-col items-center justify-center bg-white z-50">
         <p class="mb-2 text-gray-700">Chargement des dossiers groupés...</p>
         <div class="w-72 md:w-96 bg-gray-200 rounded-full h-4 overflow-hidden">
