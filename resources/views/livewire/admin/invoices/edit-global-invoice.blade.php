@@ -30,7 +30,7 @@
     </div>
 
     <div class="mt-6 text-right">
-        <p class="font-semibold mb-2">Total: {{ number_format($totalAmount, 2) }} USD</p>
+        <p class="font-semibold mb-2">Total: {{ number_format($this->totalAmount, 2) }} USD</p>
         <button wire:click="save" class="px-6 py-2 bg-blue-600 text-white rounded">Enregistrer</button>
     </div>
 </div>
