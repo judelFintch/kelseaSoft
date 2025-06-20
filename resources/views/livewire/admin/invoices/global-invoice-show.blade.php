@@ -28,6 +28,10 @@
                         <span wire:loading wire:target="downloadPdf">Téléchargement...</span>
                     </button>
 
+                    <a href="{{ route('admin.global-invoices.edit', $globalInvoice->id) }}" class="ml-2 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
+                        Éditer
+                    </a>
+
                     <button
                         wire:click="exportSummary"
                         class="ml-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-150 ease-in-out">

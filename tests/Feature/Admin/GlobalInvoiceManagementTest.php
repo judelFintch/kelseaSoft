@@ -12,6 +12,7 @@ use App\Livewire\Admin\Invoices\InvoiceIndex;
 use App\Livewire\Admin\Invoices\GlobalInvoiceIndex as GlobalInvoiceIndexComponent; // Alias pour éviter conflit de nom
 use App\Livewire\Admin\Invoices\GlobalInvoiceShow as GlobalInvoiceShowComponent;  // Alias pour éviter conflit de nom
 use App\Livewire\Admin\Invoices\InvoiceTrash;
+use App\Livewire\Admin\Invoices\EditGlobalInvoice;
 use App\Services\Invoice\GlobalInvoiceService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -194,6 +195,7 @@ class GlobalInvoiceManagementTest extends TestCase
         $globalInvoices = GlobalInvoice::latest()->take(3)->get();
         foreach ($globalInvoices as $gi) {
             $response->assertSee($gi->global_invoice_number);
+            $response->assertSee(route('admin.global-invoices.edit', $gi));
         }
     }
 
@@ -211,6 +213,7 @@ class GlobalInvoiceManagementTest extends TestCase
         $response->assertSeeLivewire(GlobalInvoiceShowComponent::class);
         $response->assertSee($globalInvoice->global_invoice_number);
         $response->assertSee(number_format($globalInvoice->total_amount, 2));
+        $response->assertSee(route('admin.global-invoices.edit', $globalInvoice));
 
         foreach ($globalInvoice->globalInvoiceItems as $item) {
             $response->assertSee($item->description);
@@ -306,6 +309,49 @@ class GlobalInvoiceManagementTest extends TestCase
         $this->assertDatabaseHas('global_invoices', [
             'id' => $globalInvoice->id,
             'deleted_at' => null,
+        ]);
+    }
+}
+
+    /** @test */
+    public function test_can_edit_tax_item_on_global_invoice(): void
+    {
+        $globalInvoice = GlobalInvoice::factory()->for($this->company)
+            ->has(GlobalInvoiceItem::factory()->state(['category' => 'import_tax']))
+            ->create();
+
+        $item = $globalInvoice->globalInvoiceItems()->first();
+
+        Livewire::test(EditGlobalInvoice::class, ['globalInvoice' => $globalInvoice->id])
+            ->set('items.0.description', 'Taxe modifiée')
+            ->set('items.0.quantity', 2)
+            ->set('items.0.unit_price', 50)
+            ->call('save');
+
+        $this->assertDatabaseHas('global_invoice_items', [
+            'id' => $item->id,
+            'description' => 'Taxe modifiée',
+            'quantity' => 2,
+            'unit_price' => 50,
+            'total_price' => 100,
+        ]);
+    }
+
+    /** @test */
+    public function test_can_remove_tax_item_from_global_invoice(): void
+    {
+        $globalInvoice = GlobalInvoice::factory()->for($this->company)
+            ->has(GlobalInvoiceItem::factory()->state(['category' => 'import_tax']))
+            ->create();
+
+        $item = $globalInvoice->globalInvoiceItems()->first();
+
+        Livewire::test(EditGlobalInvoice::class, ['globalInvoice' => $globalInvoice->id])
+            ->call('removeItem', 0)
+            ->call('save');
+
+        $this->assertDatabaseMissing('global_invoice_items', [
+            'id' => $item->id,
         ]);
     }
 }
