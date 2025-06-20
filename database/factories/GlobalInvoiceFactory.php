@@ -19,6 +19,7 @@ class GlobalInvoiceFactory extends Factory
             'created_by_user_id' => User::factory(),
             'global_invoice_number' => $this->faker->unique()->numerify('GINV-######'),
             'global_invoice_date' => $this->faker->date(),
+            'product' => $this->faker->word(),
             'due_date' => $this->faker->optional()->date(),
             'total_amount' => $this->faker->randomFloat(2, 1000, 50000),
             'status' => $this->faker->randomElement(['draft', 'sent', 'paid', 'cancelled']),

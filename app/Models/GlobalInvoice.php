@@ -16,6 +16,7 @@ class GlobalInvoice extends Model
     protected $fillable = [
         'global_invoice_number',
         'company_id',
+        'product',
         'issue_date',
         'due_date',
         'total_amount',

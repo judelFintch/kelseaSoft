@@ -142,7 +142,7 @@
             </td>
             <td><strong>NAC:</strong> {{  number_format($nacItem?->quantity) ?? 0 }}</td>
 
-            <td><strong>PRODUIT:</strong> </td>
+            <td><strong>PRODUIT:</strong> {{ $globalInvoice->product ?? '' }}</td>
         </tr>
     </table>
 
