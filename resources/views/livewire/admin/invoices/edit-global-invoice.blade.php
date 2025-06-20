@@ -1,4 +1,6 @@
 <div class="container mx-auto px-4 py-6">
+    <x-ui.flash-message />
+    <x-ui.error-message />
     <h1 class="text-2xl font-semibold mb-4">Éditer Facture Globale {{ $globalInvoice->global_invoice_number }}</h1>
 
     <div class="space-y-4">
