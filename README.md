@@ -23,6 +23,8 @@ KelseaSoft is a powerful and intuitive **customs agency management software** de
 - Sequential numbering begins at **335** for invoices and **057** for global invoices.
 - Track payment status (**Paid, Pending, Partially Paid**).
 - Edit existing invoices directly from the generated list for quick adjustments.
+- [Synchronize invoice totals](app/Livewire/Admin/Invoices/SyncInvoice.php) with
+  the sum of line items using the `/invoices/{invoice}/sync` module.
 
 ### 🏢 Client Management
 - Pre-register **client companies** with relevant details (name, address, contact, company type).
