@@ -112,8 +112,7 @@
         </tr>
     </table>
 
-    {{-- DÉTAILS DE LA FACTURE GLOBALE --}}
-    <h4 style="border-top: 3px solid #000; margin-bottom: 12px;">DÉTAILS FACTURE GLOBALE</h4>
+   
     @php
         $folders = $globalInvoice->invoices->load('folder')->pluck('folder')->filter();
         $declarationCount = $folders->filter(fn($f) => !empty($f->truck_number))->count();
@@ -134,14 +133,16 @@
                 : $scelleItem?->quantity ?? 0;
     @endphp
 
-    <table class="no-border" style="margin-bottom: 15px;">
+    <table class="no-border" style="margin-bottom: 15px; margin-top: 10px;">
         <tr>
             <td><strong>Déclaration:</strong> {{ $declarationCount }}</td>
-            <td><strong>Truck:</strong> {{ $truckCount }}</td>
+            <td><strong>Truck:</strong> {{  number_format($truckCount) }}</td>
             <td>
                 <strong>Scellés:</strong> {{ number_format($scelleParDeclaration, 2) }}
             </td>
-            <td><strong>NAC:</strong> {{ $nacItem?->quantity ?? 0 }}</td>
+            <td><strong>NAC:</strong> {{  number_format($nacItem?->quantity) ?? 0 }}</td>
+
+            <td><strong>PRODUIT:</strong> </td>
         </tr>
     </table>
 
