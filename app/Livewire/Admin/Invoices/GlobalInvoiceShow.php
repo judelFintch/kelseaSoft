@@ -62,6 +62,20 @@ class GlobalInvoiceShow extends Component
         return Excel::download(new GlobalInvoiceSummaryExport($this->globalInvoice), $filename);
     }
 
+    /**
+     * Régénère la facture globale en se basant sur les factures partielles actives.
+     * Le numéro de facture reste inchangé.
+     */
+    public function regenerate(GlobalInvoiceService $service): void
+    {
+        if ($service->syncGlobalInvoice($this->globalInvoice)) {
+            $this->globalInvoice->refresh()->load(['globalInvoiceItems', 'company', 'invoices']);
+            session()->flash('success', 'Facture globale régénérée avec succès.');
+        } else {
+            session()->flash('success', 'Aucune mise à jour nécessaire.');
+        }
+    }
+
     public function render()
     {
         return view('livewire.admin.invoices.global-invoice-show'); // Supposant une layout admin existante
