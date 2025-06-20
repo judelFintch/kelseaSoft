@@ -41,7 +41,7 @@ class GlobalInvoiceService
         // Valide que companyId correspond à une compagnie existante (optionnel, dépend de la logique métier)
         // $company = Company::findOrFail($companyId); // Décommenter si nécessaire
 
-        $invoices = Invoice::with('items') // Eager load items pour l'agrégation
+       $invoices = Invoice::with('items') // Eager load items pour l'agrégation
                             ->whereIn('id', $invoiceIds)
                             ->where('company_id', $companyId)
                             ->get();
@@ -61,7 +61,7 @@ class GlobalInvoiceService
             // }
         }
 
-        return DB::transaction(function () use ($invoices, $companyId) {
+       return DB::transaction(function () use ($invoices, $companyId) {
             $aggregated = [];
 
             foreach ($invoices as $invoice) {
@@ -92,15 +92,18 @@ class GlobalInvoiceService
                 }
             }
 
-            $itemsToCopy = array_values($aggregated);
-            $totalGlobalAmount = array_sum(array_column($itemsToCopy, 'total_price'));
+           $itemsToCopy = array_values($aggregated);
+           $totalGlobalAmount = array_sum(array_column($itemsToCopy, 'total_price'));
 
-            $globalInvoiceNumber = $this->generateGlobalInvoiceNumber($companyId);
+            $product = $invoices->first()->product ?? null;
 
-            $globalInvoice = GlobalInvoice::create([
-                'global_invoice_number' => $globalInvoiceNumber,
-                'company_id' => $companyId,
-                'issue_date' => Carbon::today(),
+           $globalInvoiceNumber = $this->generateGlobalInvoiceNumber($companyId);
+
+           $globalInvoice = GlobalInvoice::create([
+               'global_invoice_number' => $globalInvoiceNumber,
+               'company_id' => $companyId,
+                'product' => $product,
+               'issue_date' => Carbon::today(),
                 'due_date' => null, // À définir selon la logique métier
                 'total_amount' => $totalGlobalAmount,
                 'notes' => 'Facture globale générée automatiquement.',
@@ -156,8 +159,9 @@ class GlobalInvoiceService
         }
 
         $itemsToCopy = array_values($aggregated);
+        $product = $invoices->first()->product ?? null;
 
-        $newHash = md5(json_encode($itemsToCopy));
+       $newHash = md5(json_encode($itemsToCopy));
         $currentItems = $globalInvoice->globalInvoiceItems->map(function ($i) {
             return [
                 'category' => $i->category,
@@ -171,12 +175,13 @@ class GlobalInvoiceService
         $currentHash = md5(json_encode($currentItems));
 
         if ($newHash !== $currentHash) {
-            DB::transaction(function () use ($globalInvoice, $itemsToCopy) {
+            DB::transaction(function () use ($globalInvoice, $itemsToCopy, $product) {
                 $globalInvoice->globalInvoiceItems()->delete();
                 foreach ($itemsToCopy as $data) {
                     $globalInvoice->globalInvoiceItems()->create($data);
                 }
                 $globalInvoice->total_amount = array_sum(array_column($itemsToCopy, 'total_price'));
+                $globalInvoice->product = $product;
                 $globalInvoice->save();
             });
 
