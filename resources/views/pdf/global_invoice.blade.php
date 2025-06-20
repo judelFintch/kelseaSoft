@@ -153,9 +153,8 @@
                 <thead>
                     <tr>
                         <th style="width: 15%;">RÉF.</th>
+                        <th style="width: 10%;" class="right">NOMBRE</th>
                         <th style="width: 45%;">LIBELLÉ</th>
-                        <th style="width: 10%;" class="right">QTÉ</th>
-                       
                         <th style="width: 15%;" class="right">TOTAL</th>
                     </tr>
                 </thead>
@@ -170,14 +169,15 @@
                         @endphp
                         <tr>
                             <td>{{ $item->ref_code }}</td>
-                            <td>{{ $item->description }}</td>
                             {{-- QTÉ affichée selon scellé ou non --}}
                             @if ($isScelle)
                                 <td class="right">{{ number_format($scelleParDeclaration, 2) }}</td>
                             @else
                                 <td class="right">{{ number_format($adjustedQty, 2) }}</td>
                             @endif
-                            
+                            <td>{{ $item->description }}</td>
+
+
                             {{-- TOTAL monétaire --}}
                             <td class="right">{{ number_format($item->total_price, 2) }}</td>
                         </tr>
