@@ -43,6 +43,12 @@
                         <span wire:loading wire:target="exportSummary">Export...</span>
                     </button>
 
+                    <button
+                        wire:click="regenerate"
+                        class="ml-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
+                        🔁 Régénérer
+                    </button>
+
                     {{-- Barre de progression lors de la génération du PDF --}}
                     <div wire:loading wire:target="downloadPdf" class="mt-2">
                         <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
