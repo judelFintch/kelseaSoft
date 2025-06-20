@@ -11,7 +11,7 @@
     $cifAmountCdf = $exchangeRate > 0 ? $cifAmountUsd * $exchangeRate : 0;
 
     $importTaxSubtotalUsd = $invoice->items->where('category', 'import_tax')->sum('amount_usd');
-   // $importTaxSubtotalUsd = $invoice->exchange_rate ? $importTaxSubtotalCdf / $invoice->exchange_rate : 0;
+    // $importTaxSubtotalUsd = $invoice->exchange_rate ? $importTaxSubtotalCdf / $invoice->exchange_rate : 0;
     $agencySubtotal = $invoice->items->where('category', 'agency_fee')->sum('amount_usd');
     $extraFeeSubtotal = $invoice->items->where('category', 'extra_fee')->sum('amount_usd');
 
@@ -81,28 +81,33 @@
             max-width: 280px;
             white-space: normal;
         }
+        .no-border {
+            border: none;
+        }
     </style>
 </head>
 
 <body>
 
-    <table class="no-border" style="margin-bottom: 0; padding: 0;">
+    <table class="no-border" style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
         <tr>
-            <td style="width: 18%; text-align: left; vertical-align: top; padding: 2px;">
-                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 95px;">
+            {{-- Logo à gauche (agrandi) --}}
+            <td style="width: 22%; vertical-align: middle; padding: 0;">
+                <img src="{{ public_path('images/logo.png') }}" alt="Logo"
+                    style="max-height: 105px; display: block;" />
             </td>
-            <td style="width: 82%; text-align: center; vertical-align: top; padding: 2px;">
-                <h2 style="font-size: 25px; margin: 2px 0;">LA MANNE DES BRAVES S.A.R.L</h2>
-                <p style="font-size: 20px; font-weight: bold; margin: 2px 0;">TRANSITAIRE EN DOUANE OFFICIEL</p>
-                <p style="font-size: 12px; font-weight: bold; margin: 2px 0;">VOTRE SATISFACTION, C'EST NOTRE AFFAIRE
-                </p>
-                <p style="font-size: 12px; margin: 2px 0;">N° Impôt : A1000859X RCCM: CD/LSHI/RCCM15-B3463</p>
-                <p style="font-size: 12px; margin: 2px 0;">ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
+
+            {{-- Texte à droite, centré verticalement --}}
+            <td style="width: 78%; vertical-align: middle; padding: 0; text-align: center; line-height: 1.4;">
+                <h2 style="font-size: 24px; margin: 0; padding: 0;">LA MANNE DES BRAVES S.A.R.L</h2>
+                <p style="font-size: 17px; font-weight: bold; margin: 0;">TRANSITAIRE EN DOUANE OFFICIEL</p>
+                <p style="font-size: 13px; font-weight: bold; margin: 0;">VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
+                <p style="font-size: 11px; margin: 2px 0 0 0;">N° Impôt : A1000859X &nbsp;&nbsp; RCCM :
+                    CD/LSHI/RCCM15-B3463</p>
+                <p style="font-size: 11px; margin: 0;">ID. NAT : 05-H1901-N57656K &nbsp;&nbsp; AGRÉMENT : 000188</p>
             </td>
         </tr>
     </table>
-
-
 
     <h3 class="center" style="border: 1px solid black; padding: 2px;">FACTURE N° {{ $invoice->invoice_number }}</h3>
 
