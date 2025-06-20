@@ -71,23 +71,39 @@
         th {
             page-break-inside: avoid;
         }
+
+        .no-border {
+            border: none;
+        }
     </style>
 </head>
 
 <body>
     {{-- EN-TETE HARMONISÉ --}}
-    <table class="no-border">
+    <table class="no-border" style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
+        <colgroup>
+            <col style="width: 22%;">
+            <col style="width: 78%;">
+        </colgroup>
         <tr>
-            <td style="width: 18%; text-align: left; vertical-align: middle;">
-                <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="max-height: 80px;">
+            {{-- Colonne logo --}}
+            <td style="vertical-align: middle; padding: 0;">
+                <img src="{{ public_path('images/logo.png') }}" alt="Logo"
+                    style="max-height: 105px;  margin-left: 30px;" />
             </td>
-            <td style="width: 82%; text-align: center; vertical-align: middle;">
-                <h2 style="font-size: 22px;">LA MANNE DES BRAVES S.A.R.L</h2>
-                <p style="font-size: 18px; font-weight: bold;">TRANSITAIRE EN DOUANE OFFICIEL</p>
-                <p style="font-size: 11px; font-weight: bold;">VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
-                <p style="font-size: 11px;">N° Impôt : A1000859X RCCM : CDL/SHR/RCM15-B3463</p>
-                <p style="font-size: 11px;">ID. NAT : 05-H1901-N57656K NUMÉRO AGREMENT : 000188</p>
+
+            {{-- Colonne texte entreprise --}}
+            <td style="text-align: left; vertical-align: top; padding: 0; ">
+                <h2 style="margin-left: 1px; font-size: 24px;">LA MANNE DES BRAVES S.A.R.L</h2>
+                <p style="margin-left: 20px; font-size: 17px; font-weight: bold;">TRANSITAIRE EN DOUANE OFFICIEL</p>
+                <p style="margin-left: 25px; font-size: 13px; font-weight: bold;">VOTRE SATISFACTION, C'EST NOTRE
+                    AFFAIRE</p>
+                <p style="margin-left: 30px; font-size: 11px;">N° Impôt : A1000859X &nbsp;&nbsp; RCCM :
+                    CD/LSHI/RCCM15-B3463</p>
+                <p style="margin-left: 45px; font-size: 11px;">ID. NAT : 05-H1901-N57656K &nbsp;&nbsp; AGRÉMENT : 000188
+                </p>
             </td>
+
         </tr>
     </table>
 
@@ -112,7 +128,7 @@
         </tr>
     </table>
 
-   
+
     @php
         $folders = $globalInvoice->invoices->load('folder')->pluck('folder')->filter();
         $declarationCount = $folders->filter(fn($f) => !empty($f->truck_number))->count();
@@ -136,11 +152,11 @@
     <table class="no-border" style="margin-bottom: 15px; margin-top: 10px;">
         <tr>
             <td><strong>Déclaration:</strong> {{ $declarationCount }}</td>
-            <td><strong>Truck:</strong> {{  number_format($truckCount) }}</td>
+            <td><strong>Truck:</strong> {{ number_format($truckCount) }}</td>
             <td>
                 <strong>Scellés:</strong> {{ number_format($scelleParDeclaration, 2) }}
             </td>
-            <td><strong>NAC:</strong> {{  number_format($nacItem?->quantity) ?? 0 }}</td>
+            <td><strong>NAC:</strong> {{ number_format($nacItem?->quantity) ?? 0 }}</td>
 
             <td><strong>PRODUIT:</strong> {{ $globalInvoice->product ?? '' }}</td>
         </tr>

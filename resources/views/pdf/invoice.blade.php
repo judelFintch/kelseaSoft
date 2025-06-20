@@ -81,6 +81,7 @@
             max-width: 280px;
             white-space: normal;
         }
+
         .no-border {
             border: none;
         }
@@ -90,24 +91,32 @@
 <body>
 
     <table class="no-border" style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
+        <colgroup>
+            <col style="width: 22%;">
+            <col style="width: 78%;">
+        </colgroup>
         <tr>
-            {{-- Logo à gauche (agrandi) --}}
-            <td style="width: 22%; vertical-align: middle; padding: 0;">
+            {{-- Colonne logo --}}
+            <td style="vertical-align: middle; padding: 0;">
                 <img src="{{ public_path('images/logo.png') }}" alt="Logo"
-                    style="max-height: 105px; display: block;" />
+                    style="max-height: 105px;  margin-left: 30px;" />
             </td>
 
-            {{-- Texte à droite, centré verticalement --}}
-            <td style="width: 78%; vertical-align: middle; padding: 0; text-align: center; line-height: 1.4;">
-                <h2 style="font-size: 24px; margin: 0; padding: 0;">LA MANNE DES BRAVES S.A.R.L</h2>
-                <p style="font-size: 17px; font-weight: bold; margin: 0;">TRANSITAIRE EN DOUANE OFFICIEL</p>
-                <p style="font-size: 13px; font-weight: bold; margin: 0;">VOTRE SATISFACTION, C'EST NOTRE AFFAIRE</p>
-                <p style="font-size: 11px; margin: 2px 0 0 0;">N° Impôt : A1000859X &nbsp;&nbsp; RCCM :
+            {{-- Colonne texte entreprise --}}
+            <td style="text-align: left; vertical-align: top; padding: 0; ">
+                <h2 style="margin-left: 1px; font-size: 24px;">LA MANNE DES BRAVES S.A.R.L</h2>
+                <p style="margin-left: 20px; font-size: 17px; font-weight: bold;">TRANSITAIRE EN DOUANE OFFICIEL</p>
+                <p style="margin-left: 25px; font-size: 13px; font-weight: bold;">VOTRE SATISFACTION, C'EST NOTRE
+                    AFFAIRE</p>
+                <p style="margin-left: 30px; font-size: 11px;">N° Impôt : A1000859X &nbsp;&nbsp; RCCM :
                     CD/LSHI/RCCM15-B3463</p>
-                <p style="font-size: 11px; margin: 0;">ID. NAT : 05-H1901-N57656K &nbsp;&nbsp; AGRÉMENT : 000188</p>
+                <p style="margin-left: 45px; font-size: 11px;">ID. NAT : 05-H1901-N57656K &nbsp;&nbsp; AGRÉMENT : 000188
+                </p>
             </td>
+
         </tr>
     </table>
+
 
     <h3 class="center" style="border: 1px solid black; padding: 2px;">FACTURE N° {{ $invoice->invoice_number }}</h3>
 
