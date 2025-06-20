@@ -86,11 +86,11 @@
         </h2>
 
         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            Tapez \"SUPPRIMER\" pour confirmer la suppression.
+            Tapez le numéro de la facture globale pour confirmer la suppression.
         </p>
 
         <div class="mt-6">
-            <x-text-input id="confirm-delete-global" type="text" wire:model.defer="deleteConfirmText" class="mt-1 block w-3/4" placeholder="SUPPRIMER" />
+            <x-text-input id="confirm-delete-global" type="text" wire:model.defer="deleteConfirmText" class="mt-1 block w-3/4" placeholder="{{ $this->globalInvoiceToDelete?->global_invoice_number }}" />
             <x-input-error :messages="$errors->get('deleteConfirmText')" class="mt-2" />
         </div>
 

@@ -37,8 +37,10 @@ class GlobalInvoiceIndex extends Component
 
     public function deleteGlobalInvoice(): void
     {
-        if ($this->deleteConfirmText !== 'SUPPRIMER') {
-            $this->addError('deleteConfirmText', 'Veuillez taper \"SUPPRIMER\" pour confirmer.');
+        $expected = $this->globalInvoiceToDelete?->global_invoice_number;
+
+        if ($this->deleteConfirmText !== (string) $expected) {
+            $this->addError('deleteConfirmText', 'Veuillez saisir le numéro de la facture globale pour confirmer.');
             $this->dispatch('open-modal', 'confirm-global-invoice-deletion');
             return;
         }
