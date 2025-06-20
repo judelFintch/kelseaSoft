@@ -27,6 +27,15 @@ class EditGlobalInvoice extends Component
             ])
             ->toArray();
     }
+    public function updateProduct(): void
+    {
+        $this->globalInvoice->update([
+            'product' => $this->product,
+        ]);
+
+        session()->flash('success', 'Le produit a été mis à jour avec succès.');
+    }
+
 
     public function updateItem(int $index): void
     {
