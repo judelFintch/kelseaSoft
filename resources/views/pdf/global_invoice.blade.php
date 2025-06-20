@@ -26,12 +26,9 @@
         body {
             font-family: Arial, Helvetica, sans-serif;
             font-size: 12px;
-            /* Réduction de la police */
             margin: 5px;
             line-height: 1.1;
-            /* Réduction de l’interligne */
             font-size-adjust: 0.5;
-            /* Ajustement de la lisibilité */
         }
 
         h2,
@@ -40,23 +37,19 @@
         h5,
         p {
             margin: 2px 0;
-            /* Marges réduites */
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 2px;
-            /* Espacement réduit entre tableaux */
         }
 
         th,
         td {
             border: 1px solid #000;
             padding: 2px;
-            /* Padding réduit */
             word-wrap: break-word;
-            /* Retour à la ligne pour éviter débordements */
         }
 
         .no-border td,
@@ -72,7 +65,6 @@
             text-align: right;
         }
 
-        /* Empêche les sauts de page intempestifs dans les tableaux */
         table,
         tr,
         td,
@@ -132,13 +124,23 @@
         $nacItem = $globalInvoice->globalInvoiceItems->first(
             fn($i) => str_contains(strtolower($i->description), 'nac'),
         );
+
+        $scelleParDeclaration =
+            $declarationCount > 0 && $scelleItem ? round($scelleItem->total_price / $declarationCount, 2) : 0;
+
+        $scelleNewQty =
+            $scelleParDeclaration > 0 && $scelleItem
+                ? round($scelleItem->total_price / $scelleParDeclaration, 2)
+                : $scelleItem?->quantity ?? 0;
     @endphp
 
     <table class="no-border" style="margin-bottom: 15px;">
         <tr>
             <td><strong>Déclaration:</strong> {{ $declarationCount }}</td>
             <td><strong>Truck:</strong> {{ $truckCount }}</td>
-            <td><strong>Scellés:</strong> {{ $scelleItem?->quantity ?? 0 }}</td>
+            <td>
+                <strong>Scellés:</strong> {{ number_format($scelleParDeclaration, 2) }}
+            </td>
             <td><strong>NAC:</strong> {{ $nacItem?->quantity ?? 0 }}</td>
         </tr>
     </table>
@@ -153,22 +155,35 @@
                         <th style="width: 15%;">RÉF.</th>
                         <th style="width: 45%;">LIBELLÉ</th>
                         <th style="width: 10%;" class="right">QTÉ</th>
-
+                       
                         <th style="width: 15%;" class="right">TOTAL</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($items as $item)
+                        @php
+                            $isScelle = str_contains(strtolower($item->ref_code), 'scelle');
+                            $adjustedQty =
+                                $isScelle && $scelleParDeclaration > 0
+                                    ? round($item->total_price / $scelleParDeclaration, 2)
+                                    : $item->quantity;
+                        @endphp
                         <tr>
                             <td>{{ $item->ref_code }}</td>
                             <td>{{ $item->description }}</td>
-                            <td class="right">{{ number_format($item->quantity, 2) }}</td>
-
+                            {{-- QTÉ affichée selon scellé ou non --}}
+                            @if ($isScelle)
+                                <td class="right">{{ number_format($scelleParDeclaration, 2) }}</td>
+                            @else
+                                <td class="right">{{ number_format($adjustedQty, 2) }}</td>
+                            @endif
+                            
+                            {{-- TOTAL monétaire --}}
                             <td class="right">{{ number_format($item->total_price, 2) }}</td>
                         </tr>
                     @endforeach
                     <tr>
-                        <td colspan="3" class="right"><strong>Sous-total</strong></td>
+                        <td colspan="3" class="right"><strong>Sous total</strong></td>
                         <td class="right"><strong>{{ number_format($items->sum('total_price'), 2) }}</strong></td>
                     </tr>
                 </tbody>
@@ -188,7 +203,7 @@
     <p>Mode de paiement : Provision</p>
 
     <p class="right" style="margin-top: 10px; margin-bottom: 20px;">
-        CHRISTELLE NTANGA <br><!-- Ajout d'un saut de ligne pour signature -->
+        CHRISTELLE NTANGA <br>
         <strong>RESP FACTURATION</strong>
         <br><br><br><br><br><br>
     </p>
