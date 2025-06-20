@@ -11,10 +11,12 @@ class EditGlobalInvoice extends Component
 {
     public GlobalInvoice $globalInvoice;
     public array $items = [];
+    public string $product = '';
 
     public function mount(GlobalInvoice $globalInvoice): void
     {
         $this->globalInvoice = $globalInvoice;
+        $this->product = $globalInvoice->product ?? '';
         $this->items = $globalInvoice->globalInvoiceItems
             ->map(fn($item) => [
                 'id' => $item->id,
@@ -91,6 +93,10 @@ class EditGlobalInvoice extends Component
         foreach ($this->items as $index => $item) {
             $this->updateItem($index);
         }
+
+        $this->globalInvoice->update([
+            'product' => $this->product,
+        ]);
 
         session()->flash('success', 'Toutes les lignes ont été mises à jour avec ajustement du total.');
         redirect()->route('admin.global-invoices.show', $this->globalInvoice->id);

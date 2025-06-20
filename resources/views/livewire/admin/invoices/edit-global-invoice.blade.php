@@ -6,6 +6,11 @@
         Éditer Facture Globale {{ $globalInvoice->global_invoice_number }}
     </h1>
 
+    <div class="mb-4 max-w-sm">
+        <label class="block mb-1 text-sm font-medium">Produit</label>
+        <input type="text" wire:model.defer="product" class="w-full border rounded p-1" />
+    </div>
+
     <div class="space-y-4">
         @foreach ($items as $index => $item)
             <div class="border p-4 rounded-lg shadow-sm">
