@@ -84,7 +84,7 @@ class EditGlobalInvoice extends Component
         });
 
         session()->flash('success', 'Facture globale mise à jour.');
-        redirect()->route('admin.global-invoices.show', $this->globalInvoice->id);
+        return redirect()->route('admin.global-invoices.show', $this->globalInvoice->id);
     }
 
     public function render()
