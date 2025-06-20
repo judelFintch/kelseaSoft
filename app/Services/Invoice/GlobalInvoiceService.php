@@ -5,7 +5,8 @@ namespace App\Services\Invoice;
 use App\Models\GlobalInvoice;
 use App\Models\GlobalInvoiceItem;
 use App\Models\Invoice;
-use App\Models\Company; 
+use App\Models\Company;
+use App\Models\MerchandiseType;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -95,7 +96,18 @@ class GlobalInvoiceService
            $itemsToCopy = array_values($aggregated);
            $totalGlobalAmount = array_sum(array_column($itemsToCopy, 'total_price'));
 
-            $product = $invoices->first()->product ?? null;
+            $product = $invoices->first()->product;
+            if (!$product) {
+                $firstFolder = $invoices->first()->folder;
+                if ($firstFolder) {
+                    $goodsType = $firstFolder->goods_type;
+                    if (is_numeric($goodsType)) {
+                        $product = MerchandiseType::find($goodsType)?->name;
+                    } else {
+                        $product = $goodsType;
+                    }
+                }
+            }
 
            $globalInvoiceNumber = $this->generateGlobalInvoiceNumber($companyId);
 
@@ -159,7 +171,18 @@ class GlobalInvoiceService
         }
 
         $itemsToCopy = array_values($aggregated);
-        $product = $invoices->first()->product ?? null;
+        $product = $invoices->first()->product;
+        if (!$product) {
+            $firstFolder = $invoices->first()->folder;
+            if ($firstFolder) {
+                $goodsType = $firstFolder->goods_type;
+                if (is_numeric($goodsType)) {
+                    $product = MerchandiseType::find($goodsType)?->name;
+                } else {
+                    $product = $goodsType;
+                }
+            }
+        }
 
        $newHash = md5(json_encode($itemsToCopy));
         $currentItems = $globalInvoice->globalInvoiceItems->map(function ($i) {
