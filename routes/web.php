@@ -176,6 +176,7 @@ Route::get('/notifications/latest', [NotificationController::class, 'latest'])->
         Route::get('/', GlobalInvoiceIndex::class)->name('index');
         Route::get('/{globalInvoice}', GlobalInvoiceShow::class)->name('show');
         Route::get('/{globalInvoice}/download', [GlobalInvoiceShow::class, 'downloadPdf'])->name('download');
+        Route::get('/{globalInvoice}/edit', \App\Livewire\Admin\Invoices\EditGlobalInvoice::class)->name('edit');
     });
 
     Route::prefix('taxes')->name('taxes.')->group(function () {

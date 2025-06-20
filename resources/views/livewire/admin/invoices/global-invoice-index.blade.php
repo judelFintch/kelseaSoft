@@ -50,6 +50,9 @@
                                 <a href="{{ route('admin.global-invoices.show', $globalInvoice->id) }}" class="text-blue-600 hover:text-blue-900 font-medium">
                                     Voir Détails
                                 </a>
+                                <a href="{{ route('admin.global-invoices.edit', $globalInvoice->id) }}" class="ml-2 text-gray-600 hover:text-gray-900 font-medium">
+                                    Éditer
+                                </a>
                                 <button wire:click="confirmDeleteGlobalInvoice({{ $globalInvoice->id }})"
                                         class="text-red-600 hover:underline text-sm cursor-pointer">
                                     🗑 Supprimer
