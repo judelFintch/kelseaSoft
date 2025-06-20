@@ -153,7 +153,7 @@
                         <th style="width: 15%;">RÉF.</th>
                         <th style="width: 45%;">LIBELLÉ</th>
                         <th style="width: 10%;" class="right">QTÉ</th>
-                        <th style="width: 15%;" class="right">P.U</th>
+
                         <th style="width: 15%;" class="right">TOTAL</th>
                     </tr>
                 </thead>
@@ -163,12 +163,12 @@
                             <td>{{ $item->ref_code }}</td>
                             <td>{{ $item->description }}</td>
                             <td class="right">{{ number_format($item->quantity, 2) }}</td>
-                            <td class="right">{{ number_format($item->unit_price, 2) }}</td>
+
                             <td class="right">{{ number_format($item->total_price, 2) }}</td>
                         </tr>
                     @endforeach
                     <tr>
-                        <td colspan="4" class="right"><strong>Sous‑total</strong></td>
+                        <td colspan="3" class="right"><strong>Sous-total</strong></td>
                         <td class="right"><strong>{{ number_format($items->sum('total_price'), 2) }}</strong></td>
                     </tr>
                 </tbody>
