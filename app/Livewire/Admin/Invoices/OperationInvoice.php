@@ -5,12 +5,14 @@ namespace App\Livewire\Admin\Invoices;
 use Livewire\Component;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use App\Models\Tax;
 
 class OperationInvoice extends Component
 {
     public string $invoiceNumber = '';
     public ?Invoice $invoice = null;
     public array $items = [];
+    public array $taxes = [];
 
     public function loadInvoice(): void
     {
@@ -21,6 +23,8 @@ class OperationInvoice extends Component
         $this->invoice = Invoice::where('invoice_number', $this->invoiceNumber)
             ->with('items')
             ->first();
+
+        $this->taxes = Tax::orderBy('label')->get();
 
         if (!$this->invoice) {
             $this->items = [];
@@ -33,6 +37,7 @@ class OperationInvoice extends Component
                 'id' => $item->id,
                 'label' => $item->label,
                 'amount_usd' => $item->amount_usd,
+                'tax_id' => $item->tax_id,
             ];
         })->toArray();
     }
@@ -42,6 +47,7 @@ class OperationInvoice extends Component
         $this->validate([
             'items.' . $index . '.label' => 'required|string',
             'items.' . $index . '.amount_usd' => 'required|numeric',
+            'items.' . $index . '.tax_id' => 'nullable|exists:taxes,id',
         ]);
 
         $data = $this->items[$index];
@@ -50,6 +56,7 @@ class OperationInvoice extends Component
             $item->update([
                 'label' => $data['label'],
                 'amount_usd' => $data['amount_usd'],
+                'tax_id' => $data['tax_id'] ?? null,
             ]);
 
             $this->invoice->total_usd = $this->invoice->items()->sum('amount_usd');

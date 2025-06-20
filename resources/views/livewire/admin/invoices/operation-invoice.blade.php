@@ -13,13 +13,16 @@
 
             @foreach($items as $i => $item)
                 <div class="grid grid-cols-12 gap-2 items-end">
-                    <div class="col-span-6">
+                    <div class="col-span-5">
                         <x-forms.input label="Libellé" :model="'items.' . $i . '.label'" />
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-3">
                         <x-forms.input label="Montant USD" type="number" step="0.01" :model="'items.' . $i . '.amount_usd'" />
                     </div>
-                    <div class="col-span-2 flex justify-end">
+                    <div class="col-span-3">
+                        <x-forms.select label="Taxe" :model="'items.' . $i . '.tax_id'" :options="$taxes" optionLabel="label" optionValue="id" />
+                    </div>
+                    <div class="col-span-1 flex justify-end">
                         <x-forms.button type="button" wire:click="updateItem({{ $i }})">Valider</x-forms.button>
                     </div>
                 </div>
