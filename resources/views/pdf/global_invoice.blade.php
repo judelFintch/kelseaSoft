@@ -141,12 +141,10 @@
         );
 
         $scelleParDeclaration =
-            $declarationCount > 0 && $scelleItem ? round($scelleItem->total_price / $declarationCount, 2) : 0;
+            $declarationCount > 0 && $scelleItem;
 
         $scelleNewQty =
-            $scelleParDeclaration > 0 && $scelleItem
-                ? round($scelleItem->total_price / $scelleParDeclaration, 2)
-                : $scelleItem?->quantity ?? 0;
+            $scelleParDeclaration ;
     @endphp
 
     <table class="no-border" style="margin-bottom: 15px; margin-top: 10px;">
@@ -154,7 +152,7 @@
             <td><strong>Déclaration:</strong> {{ $declarationCount }}</td>
             <td><strong>Truck:</strong> {{ number_format($truckCount) }}</td>
             <td>
-                <strong>Scellés:</strong> {{ number_format($scelleParDeclaration, 2) }}
+                <strong>Scellés:</strong> {{ $scelleItem?->quantity ?? 0 }} 
             </td>
             <td><strong>NAC:</strong> {{ number_format($nacItem?->quantity) ?? 0 }}</td>
 
@@ -188,7 +186,7 @@
                             <td>{{ $item->ref_code }}</td>
                             {{-- QTÉ affichée selon scellé ou non --}}
                             @if ($isScelle)
-                                <td class="right">{{ number_format($scelleParDeclaration, 2) }}</td>
+                                <td class="right">{{  number_format($scelleItem?->quantity,2) ?? 0 }} </td>
                             @else
                                 <td class="right">{{ number_format($adjustedQty, 2) }}</td>
                             @endif
