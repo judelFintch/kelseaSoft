@@ -29,6 +29,10 @@ class FolderList extends Component
 
     public $filterType = null;
 
+    public $filterInvoiceStatus = null;
+
+    public $invoiceStatusOptions = [];
+
     public $transporters;
 
     public $companies;
@@ -95,6 +99,10 @@ class FolderList extends Component
         $this->transporters = Transporter::all();
         $this->companies = Company::notDeleted()->orderBy('name')->get(['id','name']);
         $this->dossierTypeOptions = DossierType::options();
+        $this->invoiceStatusOptions = [
+            ['id' => 'invoiced', 'name' => 'Déjà facturé'],
+            ['id' => 'not_invoiced', 'name' => 'Non facturé'],
+        ];
         // Initialize visibleColumns with a default set if not already set by Livewire's mechanisms
         if (empty($this->visibleColumns)) {
             $this->visibleColumns = [
@@ -149,6 +157,8 @@ class FolderList extends Component
             ->when($this->filterType, fn($q) => $q->where('dossier_type', $this->filterType))
             ->when($this->filterDateFrom, fn($q) => $q->whereDate('arrival_border_date', '>=', $this->filterDateFrom))
             ->when($this->filterDateTo, fn($q) => $q->whereDate('arrival_border_date', '<=', $this->filterDateTo))
+            ->when($this->filterInvoiceStatus === 'invoiced', fn($q) => $q->whereHas('invoice'))
+            ->when($this->filterInvoiceStatus === 'not_invoiced', fn($q) => $q->whereDoesntHave('invoice'))
             ->orderByDesc('created_at')
             ->paginate($this->perPage);
 
@@ -157,6 +167,7 @@ class FolderList extends Component
             'totalFolders' => $folders->total(),
             'companies' => $this->companies,
             'dossierTypeOptions' => $this->dossierTypeOptions,
+            'invoiceStatusOptions' => $this->invoiceStatusOptions,
         ]);
     }
 }

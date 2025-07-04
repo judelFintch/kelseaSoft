@@ -35,11 +35,12 @@
 
         <div class="mb-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900">
             <h4 class="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-200">Filtres</h4>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-2">
                 <x-forms.input model="search" placeholder="🔍 Rechercher..." class="w-full" />
                 <x-forms.select model="filterCompany" :options="$companies" option-label="name" option-value="id" placeholder="-- Compagnie --" class="w-full" />
                 <x-forms.select model="filterType" :options="$dossierTypeOptions" option-label="label" option-value="value" placeholder="-- Type --" class="w-full" />
                 <x-forms.select model="filterTransporter" :options="$transporters" option-label="name" option-value="id" placeholder="-- Transporteur --" class="w-full" />
+                <x-forms.select model="filterInvoiceStatus" :options="$invoiceStatusOptions" option-label="name" option-value="id" placeholder="-- Facturation --" class="w-full" />
                 <x-forms.input model="filterDateFrom" type="date" placeholder="De" class="w-full" />
                 <x-forms.input model="filterDateTo" type="date" placeholder="À" class="w-full" />
             </div>
