@@ -12,7 +12,14 @@ class OperationInvoice extends Component
     public string $invoiceNumber = '';
     public ?Invoice $invoice = null;
     public array $items = [];
-    public array $taxes = [];
+    /**
+     * List of available taxes for the select options.
+     *
+     * Livewire components often keep Eloquent collections in public
+     * properties, so this property is intentionally untyped to avoid
+     * type errors when assigning a collection.
+     */
+    public $taxes = [];
 
     public function loadInvoice(): void
     {
