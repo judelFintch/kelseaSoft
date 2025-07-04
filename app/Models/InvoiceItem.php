@@ -14,6 +14,7 @@ class InvoiceItem extends Model
         'invoice_id',
         'label',
         'category',
+        'quantity',
         'amount_usd',
         'currency_id',
         'exchange_rate',
@@ -21,6 +22,10 @@ class InvoiceItem extends Model
         'tax_id',
         'agency_fee_id',
         'extra_fee_id',
+    ];
+
+    protected $casts = [
+        'quantity' => 'integer',
     ];
 
     // 🔁 Relations

@@ -86,9 +86,9 @@ class GlobalInvoiceService
                         ];
                     }
 
-                    $aggregated[$key]['quantity'] += 1;
+                    $aggregated[$key]['quantity'] += $item->quantity ?? 1;
                     $aggregated[$key]['total_price'] += $item->amount_usd;
-                    $aggregated[$key]['unit_price'] = $item->amount_usd; // in case amounts vary
+                    $aggregated[$key]['unit_price'] = $item->quantity ? $item->amount_usd / $item->quantity : $item->amount_usd; // in case amounts vary
                     $aggregated[$key]['original_item_ids'][] = $item->id;
                 }
             }
@@ -163,9 +163,9 @@ class GlobalInvoiceService
                     ];
                 }
 
-                $aggregated[$key]['quantity'] += 1;
+                $aggregated[$key]['quantity'] += $item->quantity ?? 1;
                 $aggregated[$key]['total_price'] += $item->amount_usd;
-                $aggregated[$key]['unit_price'] = $item->amount_usd;
+                $aggregated[$key]['unit_price'] = $item->quantity ? $item->amount_usd / $item->quantity : $item->amount_usd;
                 $aggregated[$key]['original_item_ids'][] = $item->id;
             }
         }
