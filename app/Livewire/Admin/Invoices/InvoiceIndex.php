@@ -145,9 +145,6 @@ class InvoiceIndex extends Component
 
         $this->reset(['deleteInvoiceId', 'deleteConfirmText']);
     }
-
-
-
     public function exportPdf($invoiceId)
     {
         $invoice = Invoice::with([
@@ -164,7 +161,6 @@ class InvoiceIndex extends Component
             'Facture_' . $invoice->invoice_number . '.pdf'
         );
     }
-
 
     public function render()
     {

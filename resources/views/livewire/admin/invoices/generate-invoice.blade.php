@@ -61,77 +61,116 @@
                     </div>
                 </div>
                 <div class="space-y-1">
-                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Date de Facture</label>
-                    <input type="date" wire:model.live="invoice_date" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                    @error('invoice_date')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Date de
+                        Facture</label>
+                    <input type="date" wire:model.live="invoice_date"
+                        class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('invoice_date')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
 
             <div class="grid grid-cols-3 gap-4">
                 <div class="space-y-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Produit</label>
-                    <input type="text" wire:model.live="product" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                    @error('product')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                    <input type="text" wire:model="product"
+                        class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('product')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="space-y-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Poids (kg)</label>
-                    <input type="number" step="0.01" wire:model.live="weight" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                    @error('weight')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                    <input type="number" step="0.01" wire:model.live="weight"
+                        class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('weight')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="space-y-1">
-                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Code Opération</label>
-                    <input type="text" wire:model.live="operation_code" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                    @error('operation_code')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Code
+                        Opération</label>
+                    <input type="text" wire:model="operation_code"
+                        class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('operation_code')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
 
             <div class="grid grid-cols-4 gap-4">
                 <div class="space-y-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">FOB ($)</label>
-                    <input type="number" step="0.01" wire:model.live="default_fob_amount" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                    @error('default_fob_amount')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                    <input type="number" step="0.01" wire:model="default_fob_amount"
+                        class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('default_fob_amount')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="space-y-1">
-                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Assurance ($)</label>
-                    <input type="number" step="0.01" wire:model.live="insurance_amount" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                    @error('insurance_amount')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Assurance
+                        ($)</label>
+                    <input type="number" step="0.01" wire:model="insurance_amount"
+                        class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('insurance_amount')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="space-y-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Fret ($)</label>
-                    <input type="number" step="0.01" wire:model.live="freight_amount" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                    @error('freight_amount')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                    <input type="number" step="0.01" wire:model="freight_amount"
+                        class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('freight_amount')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="space-y-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">CIF ($)</label>
-                    <input type="number" step="0.01" wire:model.live="cif_amount" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                    @error('cif_amount')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                    <input type="number" step="0.01" wire:model.live="cif_amount"
+                        class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('cif_amount')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
 
             <div class="grid grid-cols-3 gap-4">
                 <div class="space-y-1">
-                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Devise principale</label>
-                    <select wire:model.live="currency_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Devise
+                        principale</label>
+                    <select wire:model="currency_id"
+                        class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
                         <option value="">-- Select --</option>
                         @foreach ($currencies as $currency)
                             <option value="{{ $currency->id }}">{{ $currency->code }}</option>
                         @endforeach
                     </select>
-                    @error('currency_id')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                    @error('currency_id')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="space-y-1">
-                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Taux de change</label>
-                    <input type="text" wire:model.live="exchange_rate" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                    @error('exchange_rate')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Taux de
+                        change</label>
+                    <input type="text" wire:model="exchange_rate"
+                        class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('exchange_rate')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="space-y-1">
-                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Mode de paiement</label>
-                    <select wire:model.live="payment_mode" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Mode de
+                        paiement</label>
+                    <select wire:model="payment_mode"
+                        class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
                         <option value="">-- Select --</option>
                         <option value="provision">Provision</option>
                         <option value="comptant">Comptant</option>
                     </select>
-                    @error('payment_mode')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                    @error('payment_mode')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
 
@@ -156,78 +195,116 @@
                         <div class="grid grid-cols-7 gap-4 items-end mb-3">
                             @if ($category === 'import_tax')
                                 <div class="space-y-1 col-span-1">
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Taxe</label>
-                                    <select wire:model.live="items.{{ $i }}.tax_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                                    <label
+                                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Taxe</label>
+                                    <select wire:model="items.{{ $i }}.tax_id"
+                                        class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
                                         <option value="">-- Select --</option>
                                         @foreach ($taxes as $t)
                                             <option value="{{ $t->id }}">{{ $t->label }}</option>
                                         @endforeach
                                     </select>
-                                    @error('items.' . $i . '.tax_id')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                                    @error('items.' . $i . '.tax_id')
+                                        <span class="text-sm text-red-600">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             @elseif ($category === 'agency_fee')
                                 <div class="space-y-1 col-span-1">
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Frais agence</label>
-                                    <select wire:model.live="items.{{ $i }}.agency_fee_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                                    <label
+                                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Frais
+                                        agence</label>
+                                    <select wire:model="items.{{ $i }}.agency_fee_id"
+                                        class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
                                         <option value="">-- Select --</option>
                                         @foreach ($agencyFees as $f)
                                             <option value="{{ $f->id }}">{{ $f->label }}</option>
                                         @endforeach
                                     </select>
-                                    @error('items.' . $i . '.agency_fee_id')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                                    @error('items.' . $i . '.agency_fee_id')
+                                        <span class="text-sm text-red-600">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             @elseif ($category === 'extra_fee')
                                 <div class="space-y-1 col-span-1">
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Frais divers</label>
-                                    <select wire:model.live="items.{{ $i }}.extra_fee_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                                    <label
+                                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Frais
+                                        divers</label>
+                                    <select wire:model="items.{{ $i }}.extra_fee_id"
+                                        class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
                                         <option value="">-- Select --</option>
                                         @foreach ($extraFees as $e)
                                             <option value="{{ $e->id }}">{{ $e->label }}</option>
                                         @endforeach
                                     </select>
-                                    @error('items.' . $i . '.extra_fee_id')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                                    @error('items.' . $i . '.extra_fee_id')
+                                        <span class="text-sm text-red-600">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             @endif
 
                             <div class="space-y-1 col-span-1">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Devise</label>
-                                <select wire:model.live="items.{{ $i }}.currency_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                                <label
+                                    class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Devise</label>
+                                <select wire:model.live="items.{{ $i }}.currency_id"
+                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
                                     <option value="">-- Select --</option>
                                     @foreach ($currencies as $c)
                                         <option value="{{ $c->id }}">{{ $c->code }}</option>
                                     @endforeach
                                 </select>
-                                @error('items.' . $i . '.currency_id')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                                @error('items.' . $i . '.currency_id')
+                                    <span class="text-sm text-red-600">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="space-y-1 col-span-1">
+                                <label
+                                    class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Quantité</label>
+                                <input type="number" step="1"
+                                    wire:model.live="items.{{ $i }}.quantity"
+                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                @error('items.' . $i . '.quantity')
+                                    <span class="text-sm text-red-600">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="space-y-1 col-span-1">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Quantité</label>
-                                <input type="number" step="1" wire:model.live="items.{{ $i }}.quantity" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                @error('items.' . $i . '.quantity')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                                <label
+                                    class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Montant
+                                    (devise locale)</label>
+                                <input type="number" step="0.01"
+                                    wire:model.live="items.{{ $i }}.amount_local"
+                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                @error('items.' . $i . '.amount_local')
+                                    <span class="text-sm text-red-600">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="space-y-1 col-span-1">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Montant (devise locale)</label>
-                                <input type="number" step="0.01" wire:model.live="items.{{ $i }}.amount_local" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                @error('items.' . $i . '.amount_local')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                                <label
+                                    class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Montant
+                                    USD</label>
+                                <input type="number" step="0.01"
+                                    wire:model.live="items.{{ $i }}.amount_usd" disabled
+                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                             </div>
 
                             <div class="space-y-1 col-span-1">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Montant USD</label>
-                                <input type="number" step="0.01" wire:model.live="items.{{ $i }}.amount_usd" disabled class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                <label
+                                    class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Montant
+                                    CDF</label>
+                                <input type="number" step="0.01"
+                                    wire:model.live="items.{{ $i }}.amount_cdf" disabled
+                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                             </div>
 
-                            <div class="space-y-1 col-span-1">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Montant CDF</label>
-                                <input type="number" step="0.01" wire:model.live="items.{{ $i }}.amount_cdf" disabled class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                            </div>
-
-                            <button wire:click.prevent="removeItem({{ $i }})" class="text-red-600 text-sm">❌</button>
+                            <button wire:click.prevent="removeItem({{ $i }})"
+                                class="text-red-600 text-sm">❌</button>
                         </div>
                     @endif
                 @endforeach
 
-                <button wire:click.prevent="addItem('{{ $category }}')" class="text-sm text-blue-600 hover:underline">
+                <button wire:click.prevent="addItem('{{ $category }}')"
+                    class="text-sm text-blue-600 hover:underline">
                     ➕ Ajouter une ligne à
                     {{ $category === 'import_tax' ? 'Taxes' : ($category === 'agency_fee' ? 'Frais agence' : 'Frais divers') }}
                 </button>
