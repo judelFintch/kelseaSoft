@@ -127,6 +127,7 @@ class GenerateInvoice extends Component
         $this->items[] = [
             'label' => '',
             'category' => $category,
+            'quantity' => 1,
             'currency_id' => $this->currency_id ?? 1,
             'exchange_rate' => $this->exchange_rate,
             'amount_local' => 0,
@@ -175,6 +176,7 @@ class GenerateInvoice extends Component
                 'currency_id' => 'required|integer|exists:currencies,id',
                 'exchange_rate' => 'required|numeric|min:0',
                 'items' => 'present|array|min:1',
+                'items.*.quantity' => 'required|integer|min:1',
                 'items.*.amount_local' => 'required|numeric|min:0',
                 'items.*.currency_id' => 'required|integer|exists:currencies,id',
                 'folder_id' => [
@@ -284,6 +286,7 @@ class GenerateInvoice extends Component
                     $invoice->items()->create([
                         'label' => $itemData['label'],
                         'category' => $itemData['category'],
+                        'quantity' => $itemData['quantity'] ?? 1,
                         'amount_usd' => $itemData['amount_usd'],
                         'amount_cdf' => $itemData['amount_cdf'],
                         'currency_id' => $itemData['currency_id'],

@@ -111,7 +111,7 @@
 
                 @foreach ($items as $i => $item)
                     @if ($item['category'] === $category)
-                        <div class="grid grid-cols-6 gap-4 items-end mb-3">
+                        <div class="grid grid-cols-7 gap-4 items-end mb-3">
                             @if ($category === 'import_tax')
                                 <x-forms.select label="Taxe" :model="'items.' . $i . '.tax_id'" :options="$taxes" optionLabel="label"
                                     optionValue="id" />
@@ -125,6 +125,8 @@
 
                             <x-forms.select label="Devise" :model="'items.' . $i . '.currency_id'" :options="$currencies" optionLabel="code"
                                 optionValue="id" />
+
+                            <x-forms.input label="Quantité" :model="'items.' . $i . '.quantity'" type="number" step="1" />
 
                             <x-forms.input label="Montant (devise locale)" :model="'items.' . $i . '.amount_local'" type="number"
                                 step="0.01" />
