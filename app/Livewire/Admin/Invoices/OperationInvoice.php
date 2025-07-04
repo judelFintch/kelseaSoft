@@ -39,6 +39,13 @@ class OperationInvoice extends Component
             return;
         }
 
+        if ($this->invoice->global_invoice_id) {
+            session()->flash('error', "La facture {$this->invoice->invoice_number} est déjà incluse dans une facture globale. Impossible de la modifier.");
+            $this->invoice = null;
+            $this->items = [];
+            return;
+        }
+
         $this->items = $this->invoice->items->map(function ($item) {
             return [
                 'id' => $item->id,
@@ -58,6 +65,11 @@ class OperationInvoice extends Component
             'items.' . $index . '.amount_usd' => 'required|numeric',
             'items.' . $index . '.tax_id' => 'nullable|exists:taxes,id',
         ]);
+
+        if ($this->invoice?->global_invoice_id) {
+            session()->flash('error', 'Impossible de modifier une facture déjà incluse dans une facture globale.');
+            return;
+        }
 
         $data = $this->items[$index];
         $item = InvoiceItem::find($data['id']);
@@ -80,6 +92,11 @@ class OperationInvoice extends Component
     {
         if (!$this->invoice) {
             session()->flash('error', 'Aucune facture chargée.');
+            return;
+        }
+
+        if ($this->invoice->global_invoice_id) {
+            session()->flash('error', 'Cette facture est déjà incluse dans une facture globale.');
             return;
         }
 
