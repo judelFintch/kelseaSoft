@@ -33,6 +33,15 @@
             </div>
         @endif
 
+        <div class="flex flex-wrap gap-2 mb-4">
+            <x-forms.input model="search" placeholder="🔍 Rechercher..." class="w-full sm:w-1/4" />
+            <x-forms.select model="filterCompany" :options="$companies" option-label="name" option-value="id" placeholder="-- Compagnie --" class="w-full sm:w-1/5" />
+            <x-forms.select model="filterType" :options="$dossierTypeOptions" option-label="label" option-value="value" placeholder="-- Type --" class="w-full sm:w-1/5" />
+            <x-forms.select model="filterTransporter" :options="$transporters" option-label="name" option-value="id" placeholder="-- Transporteur --" class="w-full sm:w-1/5" />
+            <x-forms.input model="filterDateFrom" type="date" placeholder="De" class="w-full sm:w-1/6" />
+            <x-forms.input model="filterDateTo" type="date" placeholder="À" class="w-full sm:w-1/6" />
+        </div>
+
         <div class="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
                 <thead class="bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-white sticky top-0 z-10">

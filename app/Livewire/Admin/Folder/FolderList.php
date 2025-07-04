@@ -4,6 +4,8 @@ namespace App\Livewire\Admin\Folder;
 
 use App\Exports\FolderExport;
 use App\Models\Folder;
+use App\Enums\DossierType;
+use App\Models\Company;
 use App\Models\Transporter;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -23,7 +25,15 @@ class FolderList extends Component
 
     public $filterDateTo = null;
 
+    public $filterCompany = null;
+
+    public $filterType = null;
+
     public $transporters;
+
+    public $companies;
+
+    public $dossierTypeOptions;
 
     public $allColumns = [
         'folder_number' => 'Folder',
@@ -81,6 +91,8 @@ class FolderList extends Component
     public function mount()
     {
         $this->transporters = Transporter::all();
+        $this->companies = Company::notDeleted()->orderBy('name')->get(['id','name']);
+        $this->dossierTypeOptions = DossierType::options();
         // Initialize visibleColumns with a default set if not already set by Livewire's mechanisms
         if (empty($this->visibleColumns)) {
             $this->visibleColumns = [
@@ -131,6 +143,8 @@ class FolderList extends Component
                     ->orWhere('client', 'like', '%' . $this->search . '%');
             })
             ->when($this->filterTransporter, fn($q) => $q->where('transporter_id', $this->filterTransporter))
+            ->when($this->filterCompany, fn($q) => $q->where('company_id', $this->filterCompany))
+            ->when($this->filterType, fn($q) => $q->where('dossier_type', $this->filterType))
             ->when($this->filterDateFrom, fn($q) => $q->whereDate('arrival_border_date', '>=', $this->filterDateFrom))
             ->when($this->filterDateTo, fn($q) => $q->whereDate('arrival_border_date', '<=', $this->filterDateTo))
             ->orderBy('created_at')
@@ -139,6 +153,8 @@ class FolderList extends Component
         return view('livewire.admin.folder.folder-list', [
             'folders' => $folders,
             'totalFolders' => $folders->total(),
+            'companies' => $this->companies,
+            'dossierTypeOptions' => $this->dossierTypeOptions,
         ]);
     }
 }
