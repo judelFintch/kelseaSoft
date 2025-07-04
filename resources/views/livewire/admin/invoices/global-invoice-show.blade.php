@@ -113,12 +113,12 @@
                     $folders = $globalInvoice->invoices->load('folder')->pluck('folder')->filter();
                     $declarationCount = $folders->filter(fn($f) => !empty($f->truck_number))->count();
                     $truckCount = $folders->filter(fn($f) => !empty($f->truck_number))->unique('truck_number')->count();
-                    $scelleItem = $globalInvoice->globalInvoiceItems->first(
-                        fn($i) => str_contains(strtolower($i->description), 'scelle'),
-                    );
-                    $nacItem = $globalInvoice->globalInvoiceItems->first(
-                        fn($i) => str_contains(strtolower($i->description), 'nac'),
-                    );
+                    $scelleQty = $globalInvoice->globalInvoiceItems
+                        ->filter(fn($i) => str_contains(strtolower($i->description), 'scelle'))
+                        ->sum('quantity');
+                    $nacQty = $globalInvoice->globalInvoiceItems
+                        ->filter(fn($i) => str_contains(strtolower($i->description), 'nac'))
+                        ->sum('quantity');
                 @endphp
                 <table class="min-w-full text-sm border border-gray-200 mb-4">
                     <tr class="bg-gray-50">
@@ -130,8 +130,8 @@
                     <tr>
                         <td class="border px-2 py-1 text-center">{{ $declarationCount }}</td>
                         <td class="border px-2 py-1 text-center">{{ $truckCount }}</td>
-                        <td class="border px-2 py-1 text-center">{{ $scelleItem?->quantity ?? 0 }} </td>
-                        <td class="border px-2 py-1 text-center">{{ $nacItem?->quantity ?? 0 }} </td>
+                        <td class="border px-2 py-1 text-center">{{ $scelleQty }} </td>
+                        <td class="border px-2 py-1 text-center">{{ $nacQty }} </td>
                     </tr>
                 </table>
                 @foreach (['import_tax' => 'A. IMPORT DUTY & TAXES', 'agency_fee' => 'B. AGENCY FEES', 'extra_fee' => 'C. AUTRES FRAIS'] as $cat => $label)
