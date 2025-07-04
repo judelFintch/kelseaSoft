@@ -15,8 +15,6 @@
         </div>
     </div>
 
-  
-
     {{-- Étape 1 – Informations générales --}}
     @if ($step === 1)
         <div class="space-y-6">
@@ -39,8 +37,6 @@
                     @endif
                 </div>
             @elseif($folder_id && !$selectedFolder)
-                {{-- Ce cas se produit si folder_id était dans l'URL mais invalide (déjà facturé / non trouvé). --}}
-                {{-- Le message flash d'erreur est géré par la session plus haut, mais on peut ajouter un indicateur. --}}
                 <div class="p-4 my-2 bg-yellow-50 border border-yellow-300 text-yellow-800 rounded-lg shadow">
                     <p>Le dossier avec l'ID {{ $folder_id }} n'a pas pu être chargé pour la facturation. Vérifiez les
                         messages d'erreur ou saisissez manuellement.</p>
@@ -49,7 +45,6 @@
             {{-- Fin Affichage Informations Dossier --}}
 
             <div class="grid grid-cols-2 gap-4">
-                {{-- Le company_id sera pré-rempli si un dossier est sélectionné --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="space-y-1">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Société
@@ -65,32 +60,79 @@
                             readonly>
                     </div>
                 </div>
-                <x-forms.input label="Date de Facture" model="invoice_date" type="date" />
+                <div class="space-y-1">
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Date de Facture</label>
+                    <input type="date" wire:model.live="invoice_date" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('invoice_date')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                </div>
             </div>
 
             <div class="grid grid-cols-3 gap-4">
-                <x-forms.input label="Produit" model="product" />
-                <x-forms.input label="Poids (kg)" model="weight" type="number" step="0.01" />
-                <x-forms.input label="Code Opération" model="operation_code" />
+                <div class="space-y-1">
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Produit</label>
+                    <input type="text" wire:model.live="product" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('product')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                </div>
+                <div class="space-y-1">
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Poids (kg)</label>
+                    <input type="number" step="0.01" wire:model.live="weight" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('weight')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                </div>
+                <div class="space-y-1">
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Code Opération</label>
+                    <input type="text" wire:model.live="operation_code" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('operation_code')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                </div>
             </div>
 
             <div class="grid grid-cols-4 gap-4">
-                <x-forms.input label="FOB ($)" model="default_fob_amount" type="number" step="0.01" />
-                <x-forms.input label="Assurance ($)" model="insurance_amount" type="number" step="0.01" />
-                <x-forms.input label="Fret ($)" model="freight_amount" type="number" step="0.01" />
-                <x-forms.input label="CIF ($)" model="cif_amount" type="number" step="0.01" />
+                <div class="space-y-1">
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">FOB ($)</label>
+                    <input type="number" step="0.01" wire:model.live="default_fob_amount" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('default_fob_amount')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                </div>
+                <div class="space-y-1">
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Assurance ($)</label>
+                    <input type="number" step="0.01" wire:model.live="insurance_amount" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('insurance_amount')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                </div>
+                <div class="space-y-1">
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Fret ($)</label>
+                    <input type="number" step="0.01" wire:model.live="freight_amount" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('freight_amount')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                </div>
+                <div class="space-y-1">
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">CIF ($)</label>
+                    <input type="number" step="0.01" wire:model.live="cif_amount" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('cif_amount')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                </div>
             </div>
 
             <div class="grid grid-cols-3 gap-4">
-                <x-forms.select label="Devise principale" model="currency_id" :options="$currencies" optionLabel="code"
-                    optionValue="id" />
-                    <input type="text" wire:model.live="exchange_rate"
-                        class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:outline-none focus:ring-0 dark:bg-gray-700 dark:text-white dark:border-gray-600"
-                       >
-
-              
-                <x-forms.select label="Mode de paiement" model="payment_mode" :options="[['id' => 'provision', 'name' => 'Provision'], ['id' => 'comptant', 'name' => 'Comptant']]" optionLabel="name"
-                    optionValue="id" />
+                <div class="space-y-1">
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Devise principale</label>
+                    <select wire:model.live="currency_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                        <option value="">-- Select --</option>
+                        @foreach ($currencies as $currency)
+                            <option value="{{ $currency->id }}">{{ $currency->code }}</option>
+                        @endforeach
+                    </select>
+                    @error('currency_id')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                </div>
+                <div class="space-y-1">
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Taux de change</label>
+                    <input type="text" wire:model.live="exchange_rate" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    @error('exchange_rate')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                </div>
+                <div class="space-y-1">
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Mode de paiement</label>
+                    <select wire:model.live="payment_mode" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                        <option value="">-- Select --</option>
+                        <option value="provision">Provision</option>
+                        <option value="comptant">Comptant</option>
+                    </select>
+                    @error('payment_mode')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                </div>
             </div>
 
             <div class="pt-4 flex justify-end">
@@ -106,45 +148,86 @@
         @if ($step === $index + 2)
             <div class="space-y-6">
                 <h3 class="text-lg font-semibold mb-4">
-                    {{ strtoupper($category === 'import_tax' ? '🧾 Taxes d’import' : ($category === 'agency_fee' ? '🏢 Frais agence' : '🔧 Autres frais')) }}
+                    {{ strtoupper($category === 'import_tax' ? '🧾 Taxes d\'import' : ($category === 'agency_fee' ? '🏢 Frais agence' : '🔧 Autres frais')) }}
                 </h3>
 
                 @foreach ($items as $i => $item)
                     @if ($item['category'] === $category)
                         <div class="grid grid-cols-7 gap-4 items-end mb-3">
                             @if ($category === 'import_tax')
-                                <x-forms.select label="Taxe" :model="'items.' . $i . '.tax_id'" :options="$taxes" optionLabel="label"
-                                    optionValue="id" />
+                                <div class="space-y-1 col-span-1">
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Taxe</label>
+                                    <select wire:model.live="items.{{ $i }}.tax_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                                        <option value="">-- Select --</option>
+                                        @foreach ($taxes as $t)
+                                            <option value="{{ $t->id }}">{{ $t->label }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('items.' . $i . '.tax_id')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                                </div>
                             @elseif ($category === 'agency_fee')
-                                <x-forms.select label="Frais agence" :model="'items.' . $i . '.agency_fee_id'" :options="$agencyFees"
-                                    optionLabel="label" optionValue="id" />
+                                <div class="space-y-1 col-span-1">
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Frais agence</label>
+                                    <select wire:model.live="items.{{ $i }}.agency_fee_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                                        <option value="">-- Select --</option>
+                                        @foreach ($agencyFees as $f)
+                                            <option value="{{ $f->id }}">{{ $f->label }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('items.' . $i . '.agency_fee_id')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                                </div>
                             @elseif ($category === 'extra_fee')
-                                <x-forms.select label="Frais divers" :model="'items.' . $i . '.extra_fee_id'" :options="$extraFees"
-                                    optionLabel="label" optionValue="id" />
+                                <div class="space-y-1 col-span-1">
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Frais divers</label>
+                                    <select wire:model.live="items.{{ $i }}.extra_fee_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                                        <option value="">-- Select --</option>
+                                        @foreach ($extraFees as $e)
+                                            <option value="{{ $e->id }}">{{ $e->label }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('items.' . $i . '.extra_fee_id')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                                </div>
                             @endif
 
-                            <x-forms.select label="Devise" :model="'items.' . $i . '.currency_id'" :options="$currencies" optionLabel="code"
-                                optionValue="id" />
+                            <div class="space-y-1 col-span-1">
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Devise</label>
+                                <select wire:model.live="items.{{ $i }}.currency_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 w-full h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                                    <option value="">-- Select --</option>
+                                    @foreach ($currencies as $c)
+                                        <option value="{{ $c->id }}">{{ $c->code }}</option>
+                                    @endforeach
+                                </select>
+                                @error('items.' . $i . '.currency_id')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                            </div>
 
-                            <x-forms.input label="Quantité" :model="'items.' . $i . '.quantity'" type="number" step="1" />
+                            <div class="space-y-1 col-span-1">
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Quantité</label>
+                                <input type="number" step="1" wire:model.live="items.{{ $i }}.quantity" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                @error('items.' . $i . '.quantity')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                            </div>
 
-                            <x-forms.input label="Montant (devise locale)" :model="'items.' . $i . '.amount_local'" type="number"
-                                step="0.01" />
+                            <div class="space-y-1 col-span-1">
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Montant (devise locale)</label>
+                                <input type="number" step="0.01" wire:model.live="items.{{ $i }}.amount_local" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                @error('items.' . $i . '.amount_local')<span class="text-sm text-red-600">{{ $message }}</span>@enderror
+                            </div>
 
-                            <x-forms.input label="Montant USD" :model="'items.' . $i . '.amount_usd'" type="number" step="0.01"
-                                disabled />
+                            <div class="space-y-1 col-span-1">
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Montant USD</label>
+                                <input type="number" step="0.01" wire:model.live="items.{{ $i }}.amount_usd" disabled class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                            </div>
 
-                            <x-forms.input label="Montant CDF" :model="'items.' . $i . '.amount_cdf'" type="number" step="0.01"
-                                disabled />
+                            <div class="space-y-1 col-span-1">
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Montant CDF</label>
+                                <input type="number" step="0.01" wire:model.live="items.{{ $i }}.amount_cdf" disabled class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                            </div>
 
-                            <button wire:click.prevent="removeItem({{ $i }})"
-                                class="text-red-600 text-sm">❌</button>
+                            <button wire:click.prevent="removeItem({{ $i }})" class="text-red-600 text-sm">❌</button>
                         </div>
                     @endif
                 @endforeach
 
-                <button wire:click.prevent="addItem('{{ $category }}')"
-                    class="text-sm text-blue-600 hover:underline">
+                <button wire:click.prevent="addItem('{{ $category }}')" class="text-sm text-blue-600 hover:underline">
                     ➕ Ajouter une ligne à
                     {{ $category === 'import_tax' ? 'Taxes' : ($category === 'agency_fee' ? 'Frais agence' : 'Frais divers') }}
                 </button>
