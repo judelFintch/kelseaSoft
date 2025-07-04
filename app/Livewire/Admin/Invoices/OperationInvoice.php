@@ -43,6 +43,7 @@ class OperationInvoice extends Component
             return [
                 'id' => $item->id,
                 'label' => $item->label,
+                'quantity' => $item->quantity ?? 1,
                 'amount_usd' => $item->amount_usd,
                 'tax_id' => $item->tax_id,
             ];
@@ -53,6 +54,7 @@ class OperationInvoice extends Component
     {
         $this->validate([
             'items.' . $index . '.label' => 'required|string',
+            'items.' . $index . '.quantity' => 'required|integer|min:1',
             'items.' . $index . '.amount_usd' => 'required|numeric',
             'items.' . $index . '.tax_id' => 'nullable|exists:taxes,id',
         ]);
@@ -62,6 +64,7 @@ class OperationInvoice extends Component
         if ($item) {
             $item->update([
                 'label' => $data['label'],
+                'quantity' => $data['quantity'],
                 'amount_usd' => $data['amount_usd'],
                 'tax_id' => $data['tax_id'] ?? null,
             ]);
