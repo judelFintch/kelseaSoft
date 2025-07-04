@@ -110,6 +110,13 @@
                                             @case('description')
                                                 {{ Str::limit($folder->description, 25) }}
                                                 @break
+                                            @case('has_invoice')
+                                                @if($folder->invoice)
+                                                    <span class="text-green-600 font-semibold">Oui</span>
+                                                @else
+                                                    <span class="text-red-600 font-semibold">Non</span>
+                                                @endif
+                                                @break
                                         @default
                                             {{ $folder->$key }}
                                         @endswitch

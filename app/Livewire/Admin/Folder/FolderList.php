@@ -74,6 +74,7 @@ class FolderList extends Component
         'license_code' => 'License Code',
         'bivac_code' => 'Bivac',
         'license_number' => 'License', // Assuming 'license->license_number'
+        'has_invoice' => 'Facturé ?',
         'description' => 'Desc.',
         'created_at' => 'Created',
     ];
@@ -83,6 +84,7 @@ class FolderList extends Component
         'truck_number',
         'company_name', // Or 'company_name' if that's the correct key for client
         'arrival_border_date',
+        'has_invoice',
         // 'status', // Assuming there's a status field, or we can derive one.
     ];
 
@@ -97,8 +99,8 @@ class FolderList extends Component
         if (empty($this->visibleColumns)) {
             $this->visibleColumns = [
                 'folder_number', 'truck_number', 'company_name',
-                'arrival_border_date', 'goods_type', 'transporter_name', 'declaration_number',
-                'created_at'
+                'arrival_border_date', 'has_invoice', 'goods_type',
+                'transporter_name', 'declaration_number', 'created_at'
             ];
         }
     }
@@ -147,7 +149,7 @@ class FolderList extends Component
             ->when($this->filterType, fn($q) => $q->where('dossier_type', $this->filterType))
             ->when($this->filterDateFrom, fn($q) => $q->whereDate('arrival_border_date', '>=', $this->filterDateFrom))
             ->when($this->filterDateTo, fn($q) => $q->whereDate('arrival_border_date', '<=', $this->filterDateTo))
-            ->orderBy('created_at')
+            ->orderByDesc('created_at')
             ->paginate($this->perPage);
 
         return view('livewire.admin.folder.folder-list', [
