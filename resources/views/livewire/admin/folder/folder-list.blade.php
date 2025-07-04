@@ -33,13 +33,16 @@
             </div>
         @endif
 
-        <div class="flex flex-wrap gap-2 mb-4">
-            <x-forms.input model="search" placeholder="🔍 Rechercher..." class="w-full sm:w-1/4" />
-            <x-forms.select model="filterCompany" :options="$companies" option-label="name" option-value="id" placeholder="-- Compagnie --" class="w-full sm:w-1/5" />
-            <x-forms.select model="filterType" :options="$dossierTypeOptions" option-label="label" option-value="value" placeholder="-- Type --" class="w-full sm:w-1/5" />
-            <x-forms.select model="filterTransporter" :options="$transporters" option-label="name" option-value="id" placeholder="-- Transporteur --" class="w-full sm:w-1/5" />
-            <x-forms.input model="filterDateFrom" type="date" placeholder="De" class="w-full sm:w-1/6" />
-            <x-forms.input model="filterDateTo" type="date" placeholder="À" class="w-full sm:w-1/6" />
+        <div class="mb-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900">
+            <h4 class="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-200">Filtres</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-2">
+                <x-forms.input model="search" placeholder="🔍 Rechercher..." class="w-full" />
+                <x-forms.select model="filterCompany" :options="$companies" option-label="name" option-value="id" placeholder="-- Compagnie --" class="w-full" />
+                <x-forms.select model="filterType" :options="$dossierTypeOptions" option-label="label" option-value="value" placeholder="-- Type --" class="w-full" />
+                <x-forms.select model="filterTransporter" :options="$transporters" option-label="name" option-value="id" placeholder="-- Transporteur --" class="w-full" />
+                <x-forms.input model="filterDateFrom" type="date" placeholder="De" class="w-full" />
+                <x-forms.input model="filterDateTo" type="date" placeholder="À" class="w-full" />
+            </div>
         </div>
 
         <div class="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm">
