@@ -133,18 +133,15 @@
         $folders = $globalInvoice->invoices->load('folder')->pluck('folder')->filter();
         $declarationCount = $folders->filter(fn($f) => !empty($f->truck_number))->count();
         $truckCount = $folders->filter(fn($f) => !empty($f->truck_number))->unique('truck_number')->count();
-        $scelleItem = $globalInvoice->globalInvoiceItems->first(
-            fn($i) => str_contains(strtolower($i->description), 'scelle'),
-        );
-        $nacItem = $globalInvoice->globalInvoiceItems->first(
-            fn($i) => str_contains(strtolower($i->description), 'nac'),
-        );
+        $scelleQty = $globalInvoice->globalInvoiceItems
+            ->filter(fn($i) => str_contains(strtolower($i->description), 'scelle'))
+            ->sum('quantity');
+        $nacQty = $globalInvoice->globalInvoiceItems
+            ->filter(fn($i) => str_contains(strtolower($i->description), 'nac'))
+            ->sum('quantity');
 
-        $scelleParDeclaration =
-            $declarationCount > 0 && $scelleItem;
-
-        $scelleNewQty =
-            $scelleParDeclaration ;
+        $scelleParDeclaration = $scelleQty;
+        $scelleNewQty = $scelleParDeclaration;
     @endphp
 
     <table class="no-border" style="margin-bottom: 15px; margin-top: 10px;">
@@ -152,9 +149,9 @@
             <td><strong>Déclaration:</strong> {{ $declarationCount }}</td>
             <td><strong>Truck:</strong> {{ number_format($truckCount) }}</td>
             <td>
-                <strong>Scellés:</strong> {{ $scelleItem?->quantity ?? 0 }} 
+                <strong>Scellés:</strong> {{ number_format($scelleQty) }}
             </td>
-            <td><strong>NAC:</strong> {{ number_format($nacItem?->quantity) ?? 0 }}</td>
+            <td><strong>NAC:</strong> {{ number_format($nacQty) }}</td>
 
             <td><strong>PRODUIT:</strong> {{ $globalInvoice->product ?? '' }}</td>
         </tr>
@@ -186,7 +183,7 @@
                             <td>{{ $item->ref_code }}</td>
                             {{-- QTÉ affichée selon scellé ou non --}}
                             @if ($isScelle)
-                                <td class="right">{{  number_format($scelleItem?->quantity,2) ?? 0 }} </td>
+                                <td class="right">{{ number_format($scelleQty, 2) }}</td>
                             @else
                                 <td class="right">{{ number_format($adjustedQty, 2) }}</td>
                             @endif
