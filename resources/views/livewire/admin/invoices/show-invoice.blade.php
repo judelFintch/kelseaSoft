@@ -50,6 +50,17 @@
         <div><strong>Taux de change :</strong> {{ number_format($invoice->exchange_rate, 2) }}</div>
     </div>
 
+    @php
+        $scelleQty = $invoice->items
+            ->filter(fn($i) => str_contains(strtolower($i->label), 'scelle'))
+            ->sum('quantity');
+    @endphp
+    @if($scelleQty > 0)
+        <div class="mt-4 text-sm text-gray-700">
+            <strong>Quantité de scellés :</strong> {{ number_format($scelleQty) }}
+        </div>
+    @endif
+
     {{-- Lignes de facture groupées par catégorie --}}
     @foreach(['import_tax' => 'A. IMPORT DUTY & TAXES', 'agency_fee' => 'B. AGENCY FEES', 'extra_fee' => 'C. AUTRES FRAIS'] as $category => $label)
         @php $items = $invoice->items->where('category', $category); @endphp
@@ -60,6 +71,7 @@
                     <thead class="bg-gray-100">
                         <tr>
                             <th class="border px-2 py-1">Libellé</th>
+                            <th class="border px-2 py-1 text-right">Qté</th>
                             <th class="border px-2 py-1 text-right">Montant (USD)</th>
                         </tr>
                     </thead>
@@ -67,6 +79,7 @@
                         @foreach($items as $item)
                             <tr>
                                 <td class="border px-2 py-1">{{ $item->label }}</td>
+                                <td class="border px-2 py-1 text-right">{{ number_format($item->quantity ?? 1, 2) }}</td>
                                 <td class="border px-2 py-1 text-right">{{ number_format($item->amount_usd, 2) }}</td>
                             </tr>
                         @endforeach
