@@ -550,7 +550,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/devises" class="menu-dropdown-item group"
+                                        <a href="{{ route('currency.list') }}" class="menu-dropdown-item group"
                                             :class="page === 'Devises' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
                                             Devises
