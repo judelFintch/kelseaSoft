@@ -115,7 +115,8 @@ class FolderTransactions extends Component
             'balance' => $this->balance,
         ]);
 
-        $filename = 'Transactions_Dossier_' . $this->folder->folder_number . '.pdf';
+        $sanitizedNumber = str_replace(['/', '\\'], '-', $this->folder->folder_number);
+        $filename = 'Transactions_Dossier_' . $sanitizedNumber . '.pdf';
 
         return response()->streamDownload(
             fn () => print($pdf->output()),
