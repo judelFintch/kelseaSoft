@@ -8,6 +8,12 @@
     <div class="flex gap-4">
         <x-forms.input label="Nom" model="name" class="flex-1" />
         <x-forms.input label="Solde initial" type="number" model="balance" class="w-40" />
+        <x-forms.select label="Devise" model="currency_id" class="w-40">
+            <option value="">-- Choisir --</option>
+            @foreach ($currencies as $currency)
+                <option value="{{ $currency->id }}">{{ $currency->code }}</option>
+            @endforeach
+        </x-forms.select>
         <button wire:click="create" class="bg-brand-500 text-white px-4 py-2 rounded">Ajouter</button>
     </div>
 
@@ -15,6 +21,7 @@
         <thead class="bg-gray-100">
             <tr>
                 <th class="border px-2 py-1 text-left">Nom</th>
+                <th class="border px-2 py-1">Devise</th>
                 <th class="border px-2 py-1 text-right">Solde</th>
             </tr>
         </thead>
@@ -22,6 +29,7 @@
             @foreach ($cashRegisters as $register)
                 <tr>
                     <td class="border px-2 py-1">{{ $register->name }}</td>
+                    <td class="border px-2 py-1 text-center">{{ $register->currency->code ?? '' }}</td>
                     <td class="border px-2 py-1 text-right">{{ number_format($register->balance, 2, ',', ' ') }}</td>
                 </tr>
             @endforeach

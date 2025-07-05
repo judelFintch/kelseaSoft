@@ -557,6 +557,13 @@
                                         </a>
                                     </li>
                                     <li>
+                                        <a href="{{ route('cash-register.list') }}" class="menu-dropdown-item group"
+                                            :class="page === 'Caisses' ? 'menu-dropdown-item-active' :
+                                                'menu-dropdown-item-inactive'">
+                                            Caisses
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="/methodes-de-paiement" class="menu-dropdown-item group"
                                             :class="page === 'MethodesDePaiement' ? 'menu-dropdown-item-active' :
                                                 'menu-dropdown-item-inactive'">
