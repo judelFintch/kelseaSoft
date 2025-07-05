@@ -1,4 +1,22 @@
 <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow">
+    <div class="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <p class="text-xs text-gray-500">N° Dossier</p>
+            <p class="text-lg font-semibold text-gray-700 dark:text-gray-100">{{ $folder->folder_number }}</p>
+        </div>
+        <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <p class="text-xs text-gray-500">Client</p>
+            <p class="text-lg font-semibold text-gray-700 dark:text-gray-100">{{ $folder->client ?? '—' }}</p>
+        </div>
+        <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <p class="text-xs text-gray-500">Date</p>
+            <p class="text-lg font-semibold text-gray-700 dark:text-gray-100">{{ optional($folder->folder_date)->format('d/m/Y') ?? '—' }}</p>
+        </div>
+        <div class="p-4 bg-violet-600 text-white rounded-lg">
+            <p class="text-xs uppercase">Solde</p>
+            <p class="text-2xl font-bold">{{ number_format($balance, 2, ',', ' ') }} {{ $folder->currency->code ?? '' }}</p>
+        </div>
+    </div>
     <h2 class="text-lg font-semibold mb-4">Comptabilité du dossier</h2>
 
     <form wire:submit.prevent="saveTransaction" class="space-y-4 mb-6">
