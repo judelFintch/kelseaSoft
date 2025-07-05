@@ -16,7 +16,7 @@
             optionLabel="1"
             placeholder="Sélectionner une devise"
             class="w-40" />
-        <button wire:click="create" class="bg-brand-500 text-white px-4 py-2 rounded">Ajouter</button>
+        <button wire:click="create" class="bg-violet-600 text-white px-4 py-2 rounded hover:bg-violet-700">Ajouter</button>
     </div>
 
     <table class="w-full mt-4 border text-sm">
