@@ -14,7 +14,7 @@
         </div>
         <div class="p-4 bg-violet-600 text-white rounded-lg">
             <p class="text-xs uppercase">Solde</p>
-            <p class="text-2xl font-bold">{{ number_format($balance, 2, ',', ' ') }} {{ $folder->currency->code ?? '' }}</p>
+            <p class="text-2xl font-bold">{{ $balance >= 0 ? '+' : '-' }}{{ number_format(abs($balance), 2, ',', ' ') }} {{ $folder->currency->code ?? '' }}</p>
         </div>
     </div>
     <h2 class="text-lg font-semibold mb-4">Comptabilité du dossier</h2>
@@ -60,7 +60,13 @@
                 <tr>
                     <td class="px-3 py-2">{{ optional($transaction->transaction_date)->format('d/m/Y') }}</td>
                     <td class="px-3 py-2">{{ $transaction->label }}</td>
-                    <td class="px-3 py-2 text-right">{{ number_format($transaction->amount, 2, ',', ' ') }}</td>
+                    <td class="px-3 py-2 text-right">
+                        @if($transaction->type === 'income')
+                            <span class="text-green-600">+{{ number_format($transaction->amount, 2, ',', ' ') }}</span>
+                        @else
+                            <span class="text-red-600">-{{ number_format($transaction->amount, 2, ',', ' ') }}</span>
+                        @endif
+                    </td>
                     <td class="px-3 py-2">{{ $transaction->currency->code ?? '' }}</td>
                     <td class="px-3 py-2">{{ $transaction->cashRegister->name ?? '-' }}</td>
                     <td class="px-3 py-2">{{ $transaction->type === 'income' ? 'Perçu' : 'Dépense' }}</td>
@@ -77,19 +83,19 @@
         <tfoot>
             <tr class="font-semibold">
                 <td colspan="2" class="px-3 py-2 text-right">Total perçu</td>
-                <td class="px-3 py-2 text-right">{{ number_format($income, 2, ',', ' ') }}</td>
+                <td class="px-3 py-2 text-right">+{{ number_format($income, 2, ',', ' ') }}</td>
                 <td>{{ $folder->currency->code ?? '' }}</td>
                 <td colspan="3"></td>
             </tr>
             <tr class="font-semibold">
                 <td colspan="2" class="px-3 py-2 text-right">Total sortie</td>
-                <td class="px-3 py-2 text-right">{{ number_format($expense, 2, ',', ' ') }}</td>
+                <td class="px-3 py-2 text-right">-{{ number_format($expense, 2, ',', ' ') }}</td>
                 <td>{{ $folder->currency->code ?? '' }}</td>
                 <td colspan="3"></td>
             </tr>
             <tr class="font-semibold">
                 <td colspan="2" class="px-3 py-2 text-right">Solde</td>
-                <td class="px-3 py-2 text-right">{{ number_format($balance, 2, ',', ' ') }}</td>
+                <td class="px-3 py-2 text-right">{{ $balance >= 0 ? '+' : '-' }}{{ number_format(abs($balance), 2, ',', ' ') }}</td>
                 <td>{{ $folder->currency->code ?? '' }}</td>
                 <td colspan="3"></td>
             </tr>
