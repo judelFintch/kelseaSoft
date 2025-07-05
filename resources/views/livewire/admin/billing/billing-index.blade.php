@@ -15,7 +15,7 @@
                     <td class="px-3 py-2">{{ $folder->folder_number }}</td>
                     <td class="px-3 py-2 text-right">{{ number_format($folder->balance, 2, ',', ' ') }}</td>
                     <td class="px-3 py-2 text-right">
-                        <a href="{{ route('folder.transactions', $folder->id) }}" class="text-blue-600 hover:underline">Ouvrir</a>
+                        <a href="{{ route('folder.transactions', $folder->id) }}" class="text-blue-600 hover:underline">Détails</a>
                     </td>
                 </tr>
             @empty
