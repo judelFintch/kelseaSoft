@@ -9,9 +9,7 @@ class BillingIndex extends Component
 {
     public function render()
     {
-        $folders = Folder::with('transactions')
-            ->has('transactions')
-            ->get();
+        $folders = Folder::with('transactions')->get();
 
         return view('livewire.admin.billing.billing-index', [
             'folders' => $folders,
