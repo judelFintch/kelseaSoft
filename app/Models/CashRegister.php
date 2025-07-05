@@ -12,10 +12,16 @@ class CashRegister extends Model
     protected $fillable = [
         'name',
         'balance',
+        'currency_id',
     ];
 
     public function transactions()
     {
         return $this->hasMany(FolderTransaction::class);
+    }
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
     }
 }

@@ -21,7 +21,10 @@ class FolderTransactionCashRegisterTest extends TestCase
         $this->actingAs($user);
 
         $currency = Currency::factory()->create(['code' => 'USD']);
-        $cashRegister = CashRegister::factory()->create(['balance' => 0]);
+        $cashRegister = CashRegister::factory()->create([
+            'balance' => 0,
+            'currency_id' => $currency->id,
+        ]);
         $folder = Folder::factory()->create(['currency_id' => $currency->id]);
 
         Livewire::test(FolderTransactions::class, ['folder' => $folder])
