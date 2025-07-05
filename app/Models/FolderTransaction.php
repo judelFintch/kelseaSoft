@@ -13,6 +13,7 @@ class FolderTransaction extends Model
         'folder_id',
         'type',
         'amount',
+        'currency_id',
         'label',
         'transaction_date',
     ];
@@ -20,5 +21,10 @@ class FolderTransaction extends Model
     public function folder()
     {
         return $this->belongsTo(Folder::class);
+    }
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
     }
 }
