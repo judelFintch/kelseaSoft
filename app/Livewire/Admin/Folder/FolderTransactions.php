@@ -8,6 +8,8 @@ use App\Models\FolderTransaction;
 use App\Models\Currency;
 use App\Models\CashRegister;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class FolderTransactions extends Component
 {
@@ -96,6 +98,29 @@ class FolderTransactions extends Component
     public function getBalanceProperty()
     {
         return $this->income - $this->expense;
+    }
+
+    public function downloadPdf(): StreamedResponse
+    {
+        $transactions = $this->folder->transactions()
+            ->with(['currency', 'cashRegister'])
+            ->orderBy('transaction_date')
+            ->get();
+
+        $pdf = Pdf::loadView('pdf.folder_transactions', [
+            'folder' => $this->folder,
+            'transactions' => $transactions,
+            'income' => $this->income,
+            'expense' => $this->expense,
+            'balance' => $this->balance,
+        ]);
+
+        $filename = 'Transactions_Dossier_' . $this->folder->folder_number . '.pdf';
+
+        return response()->streamDownload(
+            fn () => print($pdf->output()),
+            $filename
+        );
     }
 
     public function render()

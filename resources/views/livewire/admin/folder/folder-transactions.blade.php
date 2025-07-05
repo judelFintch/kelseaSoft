@@ -43,6 +43,18 @@
         @error('label') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
     </form>
 
+    <div class="mb-4">
+        <button wire:click="downloadPdf" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+            📥 Télécharger PDF
+        </button>
+        <div wire:loading wire:target="downloadPdf" class="mt-2">
+            <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                <div class="bg-indigo-600 h-2.5 rounded-full animate-pulse w-full"></div>
+            </div>
+            <p class="text-xs text-gray-600 mt-1">Génération du PDF...</p>
+        </div>
+    </div>
+
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
         <thead class="bg-gray-50 dark:bg-gray-800">
             <tr>
