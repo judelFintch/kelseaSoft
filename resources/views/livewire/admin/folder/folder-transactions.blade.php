@@ -60,35 +60,43 @@
             <tr>
                 <th class="px-3 py-2 text-left">Date</th>
                 <th class="px-3 py-2 text-left">Libellé</th>
-                <th class="px-3 py-2 text-right">Montant</th>
+                <th class="px-3 py-2 text-right">Débit</th>
+                <th class="px-3 py-2 text-right">Crédit</th>
+                <th class="px-3 py-2 text-right">Solde</th>
                 <th class="px-3 py-2 text-left">Devise</th>
                 <th class="px-3 py-2 text-left">Caisse</th>
-                <th class="px-3 py-2 text-left">Type</th>
                 <th class="px-3 py-2"></th>
             </tr>
         </thead>
+        @php $runningBalance = 0; @endphp
         <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
             @forelse($transactions as $transaction)
+                @php
+                    if ($transaction->type === 'income') {
+                        $runningBalance += $transaction->amount;
+                        $debit = '';
+                        $credit = number_format($transaction->amount, 2, ',', ' ');
+                    } else {
+                        $runningBalance -= $transaction->amount;
+                        $debit = number_format($transaction->amount, 2, ',', ' ');
+                        $credit = '';
+                    }
+                @endphp
                 <tr>
                     <td class="px-3 py-2">{{ optional($transaction->transaction_date)->format('d/m/Y') }}</td>
                     <td class="px-3 py-2">{{ $transaction->label }}</td>
-                    <td class="px-3 py-2 text-right">
-                        @if($transaction->type === 'income')
-                            <span class="text-green-600">+{{ number_format($transaction->amount, 2, ',', ' ') }}</span>
-                        @else
-                            <span class="text-red-600">-{{ number_format($transaction->amount, 2, ',', ' ') }}</span>
-                        @endif
-                    </td>
+                    <td class="px-3 py-2 text-right">{{ $debit }}</td>
+                    <td class="px-3 py-2 text-right">{{ $credit }}</td>
+                    <td class="px-3 py-2 text-right">{{ number_format($runningBalance, 2, ',', ' ') }}</td>
                     <td class="px-3 py-2">{{ $transaction->currency->code ?? '' }}</td>
                     <td class="px-3 py-2">{{ $transaction->cashRegister->name ?? '-' }}</td>
-                    <td class="px-3 py-2">{{ $transaction->type === 'income' ? 'Perçu' : 'Dépense' }}</td>
                     <td class="px-3 py-2 text-right">
                         <button wire:click="deleteTransaction({{ $transaction->id }})" class="text-red-500">Supprimer</button>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7" class="px-3 py-4 text-center text-gray-500">Aucune transaction</td>
+                    <td colspan="8" class="px-3 py-4 text-center text-gray-500">Aucune transaction</td>
                 </tr>
             @endforelse
         </tbody>
