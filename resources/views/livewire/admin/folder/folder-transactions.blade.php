@@ -12,6 +12,11 @@
                     <option value="{{ $c->id }}">{{ $c->code }}</option>
                 @endforeach
             </select>
+            <select wire:model.defer="cash_register_id" class="border rounded p-2">
+                @foreach($cashRegisters as $cr)
+                    <option value="{{ $cr->id }}">{{ $cr->name }}</option>
+                @endforeach
+            </select>
             <input type="text" wire:model.defer="label" placeholder="Libellé" class="border rounded p-2 flex-1">
             <input type="number" step="0.01" wire:model.defer="amount" placeholder="Montant" class="border rounded p-2 w-32">
             <input type="date" wire:model.defer="transaction_date" class="border rounded p-2">
@@ -27,6 +32,7 @@
                 <th class="px-3 py-2 text-left">Libellé</th>
                 <th class="px-3 py-2 text-right">Montant</th>
                 <th class="px-3 py-2 text-left">Devise</th>
+                <th class="px-3 py-2 text-left">Caisse</th>
                 <th class="px-3 py-2 text-left">Type</th>
                 <th class="px-3 py-2"></th>
             </tr>
@@ -38,6 +44,7 @@
                     <td class="px-3 py-2">{{ $transaction->label }}</td>
                     <td class="px-3 py-2 text-right">{{ number_format($transaction->amount, 2, ',', ' ') }}</td>
                     <td class="px-3 py-2">{{ $transaction->currency->code ?? '' }}</td>
+                    <td class="px-3 py-2">{{ $transaction->cashRegister->name ?? '-' }}</td>
                     <td class="px-3 py-2">{{ $transaction->type === 'income' ? 'Perçu' : 'Dépense' }}</td>
                     <td class="px-3 py-2 text-right">
                         <button wire:click="deleteTransaction({{ $transaction->id }})" class="text-red-500">Supprimer</button>
@@ -45,16 +52,28 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" class="px-3 py-4 text-center text-gray-500">Aucune transaction</td>
+                    <td colspan="7" class="px-3 py-4 text-center text-gray-500">Aucune transaction</td>
                 </tr>
             @endforelse
         </tbody>
         <tfoot>
             <tr class="font-semibold">
+                <td colspan="2" class="px-3 py-2 text-right">Total perçu</td>
+                <td class="px-3 py-2 text-right">{{ number_format($income, 2, ',', ' ') }}</td>
+                <td>{{ $folder->currency->code ?? '' }}</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr class="font-semibold">
+                <td colspan="2" class="px-3 py-2 text-right">Total sortie</td>
+                <td class="px-3 py-2 text-right">{{ number_format($expense, 2, ',', ' ') }}</td>
+                <td>{{ $folder->currency->code ?? '' }}</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr class="font-semibold">
                 <td colspan="2" class="px-3 py-2 text-right">Solde</td>
                 <td class="px-3 py-2 text-right">{{ number_format($balance, 2, ',', ' ') }}</td>
                 <td>{{ $folder->currency->code ?? '' }}</td>
-                <td></td>
+                <td colspan="3"></td>
             </tr>
         </tfoot>
     </table>

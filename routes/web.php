@@ -171,6 +171,10 @@ Route::get('/notifications/latest', [NotificationController::class, 'latest'])->
         Route::get('/restore/{id}', CurrencyUpdate::class)->name('restore');
     });
 
+    Route::prefix('cash-register')->name('cash-register.')->group(function () {
+        Route::get('/list', \App\Livewire\Admin\CashRegister\CashRegisterIndex::class)->name('list');
+    });
+
     // Routes pour la facturation globale
     Route::prefix('admin/global-invoices')->name('admin.global-invoices.')->group(function () {
         Route::get('/', GlobalInvoiceIndex::class)->name('index');

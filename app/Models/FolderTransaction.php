@@ -11,6 +11,8 @@ class FolderTransaction extends Model
 
     protected $fillable = [
         'folder_id',
+        'cash_register_id',
+        'user_id',
         'type',
         'amount',
         'currency_id',
@@ -26,5 +28,15 @@ class FolderTransaction extends Model
     public function currency()
     {
         return $this->belongsTo(Currency::class);
+    }
+
+    public function cashRegister()
+    {
+        return $this->belongsTo(CashRegister::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
