@@ -4805,3 +4805,5 @@ span.flatpickr-weekday,
   inherits: false;
 }
 
+
+button[type="submit"]:not(.login-button){background-color:#7c3aed!important;color:#fff!important}button[type="submit"]:not(.login-button):hover{background-color:#6d28d9!important}
