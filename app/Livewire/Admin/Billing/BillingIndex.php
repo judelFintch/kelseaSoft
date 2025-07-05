@@ -3,11 +3,18 @@
 namespace App\Livewire\Admin\Billing;
 
 use Livewire\Component;
+use App\Models\Folder;
 
 class BillingIndex extends Component
 {
     public function render()
     {
-        return view('livewire.admin.billing.billing-index');
+        $folders = Folder::with('transactions')
+            ->has('transactions')
+            ->get();
+
+        return view('livewire.admin.billing.billing-index', [
+            'folders' => $folders,
+        ]);
     }
 }

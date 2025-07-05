@@ -171,6 +171,18 @@ class Folder extends Model
         return $this->hasMany(FolderTransaction::class);
     }
 
+    /**
+     * Compute the balance of all transactions for the folder.
+     */
+    public function balance(): Attribute
+    {
+        return Attribute::get(function (): float {
+            $income = $this->transactions()->where('type', 'income')->sum('amount');
+            $expense = $this->transactions()->where('type', 'expense')->sum('amount');
+            return $income - $expense;
+        });
+    }
+
     public $sortable = [
         'id', 'folder_number', 'truck_number', 'trailer_number',
         'invoice_number', 'goods_type', 'agency', 'pre_alert_place',

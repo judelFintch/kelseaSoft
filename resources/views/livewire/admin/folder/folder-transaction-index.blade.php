@@ -15,7 +15,7 @@
             @foreach($transactions as $transaction)
                 <tr>
                     <td class="px-3 py-2">
-                        <a href="{{ route('folder.show', $transaction->folder_id) }}" class="text-indigo-600 hover:underline">
+                        <a href="{{ route('folder.transactions', $transaction->folder_id) }}" class="text-indigo-600 hover:underline">
                             {{ $transaction->folder->folder_number ?? '#' . $transaction->folder_id }}
                         </a>
                     </td>
