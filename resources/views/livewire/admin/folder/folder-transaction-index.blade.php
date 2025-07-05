@@ -8,6 +8,7 @@
                 <th class="px-3 py-2 text-left">Date</th>
                 <th class="px-3 py-2 text-left">Libellé</th>
                 <th class="px-3 py-2 text-right">Montant</th>
+                <th class="px-3 py-2 text-left">Devise</th>
                 <th class="px-3 py-2 text-left">Type</th>
             </tr>
         </thead>
@@ -22,6 +23,7 @@
                     <td class="px-3 py-2">{{ optional($transaction->transaction_date)->format('d/m/Y') }}</td>
                     <td class="px-3 py-2">{{ $transaction->label }}</td>
                     <td class="px-3 py-2 text-right">{{ number_format($transaction->amount, 2, ',', ' ') }}</td>
+                    <td class="px-3 py-2">{{ $transaction->currency->code ?? '' }}</td>
                     <td class="px-3 py-2">{{ $transaction->type === 'income' ? 'Perçu' : 'Dépense' }}</td>
                 </tr>
             @endforeach

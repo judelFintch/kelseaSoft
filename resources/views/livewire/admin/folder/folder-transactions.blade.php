@@ -7,6 +7,11 @@
                 <option value="income">Montant perçu</option>
                 <option value="expense">Dépense</option>
             </select>
+            <select wire:model.defer="currency_id" class="border rounded p-2">
+                @foreach($currencies as $c)
+                    <option value="{{ $c->id }}">{{ $c->code }}</option>
+                @endforeach
+            </select>
             <input type="text" wire:model.defer="label" placeholder="Libellé" class="border rounded p-2 flex-1">
             <input type="number" step="0.01" wire:model.defer="amount" placeholder="Montant" class="border rounded p-2 w-32">
             <input type="date" wire:model.defer="transaction_date" class="border rounded p-2">
@@ -21,6 +26,7 @@
                 <th class="px-3 py-2 text-left">Date</th>
                 <th class="px-3 py-2 text-left">Libellé</th>
                 <th class="px-3 py-2 text-right">Montant</th>
+                <th class="px-3 py-2 text-left">Devise</th>
                 <th class="px-3 py-2 text-left">Type</th>
                 <th class="px-3 py-2"></th>
             </tr>
@@ -31,6 +37,7 @@
                     <td class="px-3 py-2">{{ optional($transaction->transaction_date)->format('d/m/Y') }}</td>
                     <td class="px-3 py-2">{{ $transaction->label }}</td>
                     <td class="px-3 py-2 text-right">{{ number_format($transaction->amount, 2, ',', ' ') }}</td>
+                    <td class="px-3 py-2">{{ $transaction->currency->code ?? '' }}</td>
                     <td class="px-3 py-2">{{ $transaction->type === 'income' ? 'Perçu' : 'Dépense' }}</td>
                     <td class="px-3 py-2 text-right">
                         <button wire:click="deleteTransaction({{ $transaction->id }})" class="text-red-500">Supprimer</button>
@@ -46,7 +53,8 @@
             <tr class="font-semibold">
                 <td colspan="2" class="px-3 py-2 text-right">Solde</td>
                 <td class="px-3 py-2 text-right">{{ number_format($balance, 2, ',', ' ') }}</td>
-                <td colspan="2"></td>
+                <td>{{ $folder->currency->code ?? '' }}</td>
+                <td></td>
             </tr>
         </tfoot>
     </table>
