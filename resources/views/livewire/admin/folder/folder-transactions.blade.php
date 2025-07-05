@@ -20,7 +20,7 @@
             <input type="text" wire:model.defer="label" placeholder="Libellé" class="border rounded p-2 flex-1">
             <input type="number" step="0.01" wire:model.defer="amount" placeholder="Montant" class="border rounded p-2 w-32">
             <input type="date" wire:model.defer="transaction_date" class="border rounded p-2">
-            <button type="submit" class="bg-brand-500 text-white px-4 py-2 rounded">Ajouter</button>
+            <button type="submit" class="bg-violet-600 text-white px-4 py-2 rounded hover:bg-violet-700">Ajouter</button>
         </div>
         @error('label') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
     </form>
