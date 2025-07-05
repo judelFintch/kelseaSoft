@@ -19,6 +19,7 @@
             <x-forms.input label="Code" model="code" placeholder="USD, CDF..." />
             <x-forms.input label="Nom" model="name" placeholder="Dollar américain" />
             <x-forms.input label="Symbole" model="symbol" placeholder="$, FC..." />
+            <x-forms.input label="Taux de change" model="exchange_rate" placeholder="1" />
         </div>
 
         <div class="flex gap-2">
@@ -38,6 +39,7 @@
                 <th class="border px-2 py-1">Code</th>
                 <th class="border px-2 py-1">Nom</th>
                 <th class="border px-2 py-1">Symbole</th>
+                <th class="border px-2 py-1">Taux</th>
                 <th class="border px-2 py-1 text-center">Par défaut</th>
                 <th class="border px-2 py-1 text-center">Actions</th>
             </tr>
@@ -48,6 +50,7 @@
                     <td class="border px-2 py-1">{{ $currency->code }}</td>
                     <td class="border px-2 py-1">{{ $currency->name }}</td>
                     <td class="border px-2 py-1">{{ $currency->symbol }}</td>
+                    <td class="border px-2 py-1">{{ number_format($currency->exchange_rate, 2) }}</td>
                     <td class="border px-2 py-1 text-center">
                         @if ($currency->is_default)
                             ✅

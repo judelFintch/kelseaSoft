@@ -8,7 +8,7 @@ use App\Models\Currency;
 class CurrencyIndex extends Component
 {
 
-    public $code, $name, $symbol;
+    public $code, $name, $symbol, $exchange_rate;
     public $currencyIdBeingUpdated = null;
 
     protected function rules()
@@ -17,6 +17,7 @@ class CurrencyIndex extends Component
             'code' => 'required|string|max:10|unique:currencies,code,' . $this->currencyIdBeingUpdated,
             'name' => 'required|string|max:255',
             'symbol' => 'nullable|string|max:10',
+            'exchange_rate' => 'required|numeric|min:0',
         ];
     }
 
@@ -28,6 +29,7 @@ class CurrencyIndex extends Component
             'code' => strtoupper($this->code),
             'name' => $this->name,
             'symbol' => $this->symbol,
+            'exchange_rate' => $this->exchange_rate,
         ]);
 
         $this->resetForm();
@@ -41,6 +43,7 @@ class CurrencyIndex extends Component
         $this->code = $currency->code;
         $this->name = $currency->name;
         $this->symbol = $currency->symbol;
+        $this->exchange_rate = $currency->exchange_rate;
     }
 
     public function update()
@@ -52,6 +55,7 @@ class CurrencyIndex extends Component
             'code' => strtoupper($this->code),
             'name' => $this->name,
             'symbol' => $this->symbol,
+            'exchange_rate' => $this->exchange_rate,
         ]);
 
         $this->resetForm();
@@ -76,6 +80,7 @@ class CurrencyIndex extends Component
         $this->code = '';
         $this->name = '';
         $this->symbol = '';
+        $this->exchange_rate = '';
         $this->currencyIdBeingUpdated = null;
     }
 
