@@ -54,37 +54,53 @@
             <tr>
                 <th style="width: 80px;">Date</th>
                 <th style="width: 200px;">Libellé</th>
-                <th style="width: 60px;">Type</th>
-                <th style="width: 100px;" class="right">Montant</th>
+                <th style="width: 100px;" class="right">Débit</th>
+                <th style="width: 100px;" class="right">Crédit</th>
+                <th style="width: 100px;" class="right">Solde</th>
                 <th style="width: 60px;">Devise</th>
                 <th style="width: 100px;">Caisse</th>
             </tr>
         </thead>
         <tbody>
+            @php $runningBalance = 0; @endphp
             @foreach($transactions as $t)
+                @php
+                    if ($t->type === 'income') {
+                        $runningBalance += $t->amount;
+                    } else {
+                        $runningBalance -= $t->amount;
+                    }
+                @endphp
                 <tr>
                     <td>{{ optional($t->transaction_date)->format('d/m/Y') }}</td>
                     <td>{{ $t->label }}</td>
-                    <td>{{ $t->type === 'income' ? 'Perçu' : 'Dépense' }}</td>
-                    <td class="right">{{ $t->type === 'income' ? '+' : '-' }}{{ number_format($t->amount, 2, ',', ' ') }}</td>
+                    <td class="right">{{ $t->type === 'expense' ? number_format($t->amount, 2, ',', ' ') : '' }}</td>
+                    <td class="right">{{ $t->type === 'income' ? number_format($t->amount, 2, ',', ' ') : '' }}</td>
+                    <td class="right">{{ number_format($runningBalance, 2, ',', ' ') }}</td>
                     <td>{{ $t->currency->code ?? '' }}</td>
                     <td>{{ $t->cashRegister->name ?? '-' }}</td>
                 </tr>
             @endforeach
             <tr>
-                <td colspan="3" class="right"><strong>Total perçu</strong></td>
+                <td colspan="2" class="right"><strong>Total perçu</strong></td>
+                <td></td>
                 <td class="right">{{ number_format($income, 2, ',', ' ') }}</td>
+                <td></td>
                 <td>{{ $folder->currency->code ?? '' }}</td>
                 <td></td>
             </tr>
             <tr>
-                <td colspan="3" class="right"><strong>Total sortie</strong></td>
+                <td colspan="2" class="right"><strong>Total sortie</strong></td>
                 <td class="right">{{ number_format($expense, 2, ',', ' ') }}</td>
+                <td></td>
+                <td></td>
                 <td>{{ $folder->currency->code ?? '' }}</td>
                 <td></td>
             </tr>
             <tr>
-                <td colspan="3" class="right"><strong>Solde</strong></td>
+                <td colspan="2" class="right"><strong>Solde</strong></td>
+                <td></td>
+                <td></td>
                 <td class="right">{{ $balance >= 0 ? '+' : '-' }}{{ number_format(abs($balance), 2, ',', ' ') }}</td>
                 <td>{{ $folder->currency->code ?? '' }}</td>
                 <td></td>
