@@ -8,12 +8,14 @@
     <div class="flex gap-4">
         <x-forms.input label="Nom" model="name" class="flex-1" />
         <x-forms.input label="Solde initial" type="number" model="balance" class="w-40" />
-        <x-forms.select label="Devise" model="currency_id" class="w-40">
-            <option value="">-- Choisir --</option>
-            @foreach ($currencies as $currency)
-                <option value="{{ $currency->id }}">{{ $currency->code }}</option>
-            @endforeach
-        </x-forms.select>
+        <x-forms.select
+            label="Devise"
+            model="currency_id"
+            :options="$currencies->map(fn($c) => [$c->id, $c->code])->toArray()"
+            optionValue="0"
+            optionLabel="1"
+            placeholder="Sélectionner une devise"
+            class="w-40" />
         <button wire:click="create" class="bg-brand-500 text-white px-4 py-2 rounded">Ajouter</button>
     </div>
 
