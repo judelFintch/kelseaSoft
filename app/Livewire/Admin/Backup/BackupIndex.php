@@ -42,7 +42,7 @@ class BackupIndex extends Component
     public function render()
     {
         $files = collect(Storage::disk('local')->files('backups'))
-            ->filter(fn ($f) => str_ends_with($f, '.sql'))
+            ->filter(fn ($f) => str_ends_with($f, '.sql') || str_ends_with($f, '.sqlite'))
             ->map(fn ($f) => basename($f))
             ->sortDesc();
 

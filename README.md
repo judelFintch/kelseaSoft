@@ -79,7 +79,7 @@ KelseaSoft is a powerful and intuitive **customs agency management software** de
 - **Attach Documents**: Upload supporting files for each dossier.
 - **Generate Invoices**: Process invoices and export them as PDFs.
 - **Track Payments**: Monitor payment statuses of each invoice.
-- **Manual Backup**: Run `php artisan database:backup` to create a database dump in `storage/app/backups`. Restore with `php artisan database:restore <file>`.
+- **Manual Backup**: Run `php artisan database:backup` to create a database dump in `storage/app/backups`. Restore with `php artisan database:restore <file>`. Works with MySQL, PostgreSQL, and SQLite.
 
 ## Contributing
 We welcome contributions to enhance KelseaSoft. Feel free to submit pull requests or report issues.

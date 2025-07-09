@@ -13,10 +13,11 @@ class BackupService
         $db = config("database.connections.$connection");
 
         $timestamp = now()->format('Ymd_His');
-        $fileName = "backup_{$timestamp}.sql";
-        $path = storage_path('app/backups/' . $fileName);
+        $fileName = "backup_{$timestamp}";
 
         if ($db['driver'] === 'mysql') {
+            $fileName .= '.sql';
+            $path = storage_path('app/backups/' . $fileName);
             $command = sprintf(
                 'mysqldump -h %s -u %s -p"%s" %s > %s',
                 $db['host'],
@@ -26,6 +27,8 @@ class BackupService
                 $path
             );
         } elseif ($db['driver'] === 'pgsql') {
+            $fileName .= '.sql';
+            $path = storage_path('app/backups/' . $fileName);
             $command = sprintf(
                 'PGPASSWORD="%s" pg_dump -h %s -U %s %s > %s',
                 $db['password'],
@@ -34,6 +37,16 @@ class BackupService
                 $db['database'],
                 $path
             );
+        } elseif ($db['driver'] === 'sqlite') {
+            $fileName .= '.sqlite';
+            $path = storage_path('app/backups/' . $fileName);
+            if (!file_exists($db['database'])) {
+                throw new Exception('SQLite database file not found.');
+            }
+            if (!copy($db['database'], $path)) {
+                throw new Exception('Failed to copy SQLite database.');
+            }
+            return $fileName;
         } else {
             throw new Exception('Unsupported database driver for backup.');
         }
@@ -71,6 +84,11 @@ class BackupService
                 $db['database'],
                 $path
             );
+        } elseif ($db['driver'] === 'sqlite') {
+            if (!copy($path, $db['database'])) {
+                throw new Exception('Failed to restore SQLite database.');
+            }
+            return;
         } else {
             throw new Exception('Unsupported database driver for restore.');
         }
