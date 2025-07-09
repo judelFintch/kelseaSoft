@@ -15,9 +15,14 @@ class BackupService
         $timestamp = now()->format('Ymd_His');
         $fileName = "backup_{$timestamp}";
 
+        $dir = config('backup.path');
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
+
         if ($db['driver'] === 'mysql') {
             $fileName .= '.sql';
-            $path = storage_path('app/backups/' . $fileName);
+            $path = $dir . DIRECTORY_SEPARATOR . $fileName;
             $command = sprintf(
                 'mysqldump -h %s -u %s -p"%s" %s > %s',
                 $db['host'],
@@ -26,9 +31,10 @@ class BackupService
                 $db['database'],
                 $path
             );
+            system($command);
         } elseif ($db['driver'] === 'pgsql') {
             $fileName .= '.sql';
-            $path = storage_path('app/backups/' . $fileName);
+            $path = $dir . DIRECTORY_SEPARATOR . $fileName;
             $command = sprintf(
                 'PGPASSWORD="%s" pg_dump -h %s -U %s %s > %s',
                 $db['password'],
@@ -37,21 +43,32 @@ class BackupService
                 $db['database'],
                 $path
             );
+            system($command);
         } elseif ($db['driver'] === 'sqlite') {
             $fileName .= '.sqlite';
-            $path = storage_path('app/backups/' . $fileName);
+            $path = $dir . DIRECTORY_SEPARATOR . $fileName;
             if (!file_exists($db['database'])) {
                 throw new Exception('SQLite database file not found.');
             }
             if (!copy($db['database'], $path)) {
                 throw new Exception('Failed to copy SQLite database.');
             }
-            return $fileName;
         } else {
             throw new Exception('Unsupported database driver for backup.');
         }
 
-        system($command);
+        if (config('backup.compress')) {
+            $compressed = $path . '.gz';
+            $fp = fopen($path, 'rb');
+            $gz = gzopen($compressed, 'wb9');
+            while (!feof($fp)) {
+                gzwrite($gz, fread($fp, 1024 * 512));
+            }
+            fclose($fp);
+            gzclose($gz);
+            unlink($path);
+            $fileName .= '.gz';
+        }
 
         return $fileName;
     }
@@ -60,10 +77,25 @@ class BackupService
     {
         $connection = config('database.default');
         $db = config("database.connections.$connection");
-        $path = storage_path('app/backups/' . $file);
+        $dir = config('backup.path');
+        $path = $dir . DIRECTORY_SEPARATOR . $file;
 
         if (!file_exists($path)) {
             throw new Exception('Backup file not found.');
+        }
+
+        $isCompressed = Str::endsWith($file, '.gz');
+        if ($isCompressed) {
+            $tempPath = substr($path, 0, -3);
+            $gz = gzopen($path, 'rb');
+            $out = fopen($tempPath, 'wb');
+            while (!gzeof($gz)) {
+                fwrite($out, gzread($gz, 1024 * 512));
+            }
+            fclose($out);
+            gzclose($gz);
+        } else {
+            $tempPath = $path;
         }
 
         if ($db['driver'] === 'mysql') {
@@ -73,7 +105,7 @@ class BackupService
                 $db['username'],
                 $db['password'],
                 $db['database'],
-                $path
+                $tempPath
             );
         } elseif ($db['driver'] === 'pgsql') {
             $command = sprintf(
@@ -82,11 +114,14 @@ class BackupService
                 $db['host'],
                 $db['username'],
                 $db['database'],
-                $path
+                $tempPath
             );
         } elseif ($db['driver'] === 'sqlite') {
-            if (!copy($path, $db['database'])) {
+            if (!copy($tempPath, $db['database'])) {
                 throw new Exception('Failed to restore SQLite database.');
+            }
+            if ($isCompressed) {
+                unlink($tempPath);
             }
             return;
         } else {
@@ -94,5 +129,9 @@ class BackupService
         }
 
         system($command);
+
+        if ($isCompressed) {
+            unlink($tempPath);
+        }
     }
 }

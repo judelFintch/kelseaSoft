@@ -29,20 +29,22 @@ class BackupIndex extends Component
 
     public function deleteBackup(string $file): void
     {
-        Storage::disk('local')->delete('backups/' . $file);
+        $dir = str_replace(storage_path('app') . DIRECTORY_SEPARATOR, '', config('backup.path'));
+        Storage::disk('local')->delete($dir . '/' . $file);
         session()->flash('success', 'Sauvegarde supprimée.');
     }
 
     public function download(string $file): StreamedResponse
     {
-        $path = storage_path('app/backups/' . $file);
+        $path = config('backup.path') . DIRECTORY_SEPARATOR . $file;
         return response()->download($path);
     }
 
     public function render()
     {
-        $files = collect(Storage::disk('local')->files('backups'))
-            ->filter(fn ($f) => str_ends_with($f, '.sql') || str_ends_with($f, '.sqlite'))
+        $dir = str_replace(storage_path('app') . DIRECTORY_SEPARATOR, '', config('backup.path'));
+        $files = collect(Storage::disk('local')->files($dir))
+            ->filter(fn ($f) => str_ends_with($f, '.sql') || str_ends_with($f, '.sqlite') || str_ends_with($f, '.sql.gz') || str_ends_with($f, '.sqlite.gz'))
             ->map(fn ($f) => basename($f))
             ->sortDesc();
 
