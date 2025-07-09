@@ -651,6 +651,11 @@
                                             Archivages
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="{{ route('backups.index') }}" class="menu-dropdown-item group">
+                                            Sauvegardes
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                             <!-- Dropdown Menu End -->

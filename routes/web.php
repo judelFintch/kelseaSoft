@@ -36,6 +36,7 @@ use App\Livewire\Admin\Invoices\InvoiceTrash;
 use App\Livewire\Admin\Invoices\GlobalInvoiceIndex; // Ajout pour GlobalInvoiceIndex
 use App\Livewire\Admin\Invoices\GlobalInvoiceShow;  // Ajout pour GlobalInvoiceShow
 use App\Livewire\Admin\Archive\ArchiveIndex;
+use App\Livewire\Admin\Backup\BackupIndex;
 
 use App\Livewire\Admin\Currency\CurrencyIndex;
 use App\Livewire\Admin\Currency\CurrencyUpdate;
@@ -204,6 +205,11 @@ Route::get('/notifications/latest', [NotificationController::class, 'latest'])->
     });
 
     Route::get('/archives', ArchiveIndex::class)->name('archives.index');
+
+    Route::prefix('backups')->name('backups.')->group(function () {
+        Route::get('/', BackupIndex::class)->name('index');
+        Route::get('/download/{file}', [BackupIndex::class, 'download'])->name('download');
+    });
 
     // Admin Routes for User, Role, Permission Management
     Route::prefix('admin')->name('admin.')->group(function () {
