@@ -47,6 +47,25 @@ class FolderLinesForm extends Component
     public function addLine(): void
     {
         $data = $this->validate()['line'];
+
+        $exists = $this->folder->lines()
+            ->where('position_code', $data['position_code'])
+            ->where('description', $data['description'])
+            ->where('invoice_number', $data['invoice_number'])
+            ->where('colis', $data['colis'])
+            ->where('emballage', $data['emballage'])
+            ->where('gross_weight', $data['gross_weight'])
+            ->where('net_weight', $data['net_weight'])
+            ->where('fob_amount', $data['fob_amount'])
+            ->where('license_code', $data['license_code'])
+            ->where('fxi', $data['fxi'])
+            ->exists();
+
+        if ($exists) {
+            session()->flash('error', 'Cette ligne existe déjà');
+            return;
+        }
+
         $this->folder->lines()->create($data);
         $this->folder->refresh();
         $this->reset('line');
