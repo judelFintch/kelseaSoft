@@ -93,6 +93,14 @@
                     ['label' => 'Arrival Border Date', 'value' => optional($folder->arrival_border_date)->format('d/m/Y') ?? '—'],
                     ['label' => 'License Code', 'value' => $folder->license_code ?? '—'],
                     ['label' => 'BIVAC Code', 'value' => $folder->bivac_code ?? '—'],
+                    ['label' => 'Scellé', 'value' => $folder->scelle_number ?? '—'],
+                    ['label' => 'Manifeste', 'value' => $folder->manifest_number ?? '—'],
+                    ['label' => 'Incoterm', 'value' => $folder->incoterm ?? '—'],
+                    ['label' => 'Régime', 'value' => $folder->customs_regime ?? '—'],
+                    ['label' => 'Code additionnel', 'value' => $folder->additional_code ?? '—'],
+                    ['label' => 'Date cotation', 'value' => optional($folder->quotation_date)->format('d/m/Y') ?? '—'],
+                    ['label' => 'Date ouverture', 'value' => optional($folder->opening_date)->format('d/m/Y') ?? '—'],
+                    ['label' => "Point d'entrée", 'value' => $folder->entry_point ?? '—'],
                     ['label' => 'TR8 Number', 'value' => $folder->tr8_number ?? '—'],
                     ['label' => 'TR8 Date', 'value' => optional($folder->tr8_date)->format('d/m/Y') ?? '—'],
                     ['label' => 'T1 Number', 'value' => $folder->t1_number ?? '—'],
@@ -155,6 +163,14 @@
             <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">
                 {{ $folder->progress_percentage }}% terminé
             </p>
+        </div>
+
+        <div class="mt-6">
+            @livewire('admin.folder.folder-extra-fields', ['folder' => $folder], key('extra-fields-' . $folder->id))
+        </div>
+
+        <div class="mt-6">
+            @livewire('admin.folder.folder-lines-form', ['folder' => $folder], key('lines-form-' . $folder->id))
         </div>
     </div>
 </div>
