@@ -37,6 +37,7 @@ use App\Livewire\Admin\Currency\CurrencyUpdate;
 use App\Livewire\Admin\Taxes\Taxe;
 use App\Livewire\Admin\ManageExtraFees\ExtraFee;
 use App\Livewire\Admin\ManageAgencyFees\ManageAgencyFee;
+use App\Livewire\Pages\Folder\PrintableCalculationSheet;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -156,6 +157,9 @@ Route::middleware('auth')->group(function () {
     Route::prefix('agency-fees')->name('agency-fees.')->group(function () {
         Route::get('/index', ManageAgencyFee::class)->name('index');
     });
+
+    Route::get('/folders/{folder}/feuille-de-calcul', PrintableCalculationSheet::class)
+        ->name('folders.calculation');
 
 });
 

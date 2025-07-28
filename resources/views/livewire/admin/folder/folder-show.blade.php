@@ -99,6 +99,14 @@
                     ['label' => 'Liquidation Date', 'value' => $folder->liquidation_date],
                     ['label' => 'Quitance Number', 'value' => $folder->quitance_number],
                     ['label' => 'Quitance Date', 'value' => $folder->quitance_date],
+                    ['label' => 'Scellé Number', 'value' => $folder->scelle_number],
+                    ['label' => 'Manifest Number', 'value' => $folder->manifest_number],
+                    ['label' => 'Incoterm', 'value' => $folder->incoterm],
+                    ['label' => 'Customs Regime', 'value' => $folder->customs_regime],
+                    ['label' => 'Additional Code', 'value' => $folder->additional_code],
+                    ['label' => 'Quotation Date', 'value' => $folder->quotation_date],
+                    ['label' => 'Opening Date', 'value' => $folder->opening_date],
+                    ['label' => 'Entry Point', 'value' => $folder->entry_point],
                 ];
             @endphp
 
@@ -152,4 +160,10 @@
             </p>
         </div>
     </div>
+</div>
+<div class="mt-6">
+    @livewire('admin.folder.folder-extra-fields-form', ['folder' => $folder], key('extra-fields-' . $folder->id))
+</div>
+<div class="mt-6">
+    @livewire('admin.folder.folder-lines-form', ['folder' => $folder], key('folder-lines-' . $folder->id))
 </div>

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Kyslik\ColumnSortable\Sortable;
+use App\Models\FolderLine;
 
 class Folder extends Model
 {
@@ -46,7 +47,15 @@ class Folder extends Model
         'bivac_code',
         'license_id',
         'company_id',
-        
+        'scelle_number',
+        'manifest_number',
+        'incoterm',
+        'customs_regime',
+        'additional_code',
+        'quotation_date',
+        'opening_date',
+        'entry_point',
+
     ];
 
     protected $casts = [
@@ -57,6 +66,8 @@ class Folder extends Model
         'insurance_amount' => 'float',
         'cif_amount' => 'float',
         'dossier_type' => DossierType::class,
+        'quotation_date' => 'date',
+        'opening_date' => 'date',
     ];
 
     /*
@@ -121,6 +132,11 @@ class Folder extends Model
     public function invoice()
     {
         return $this->hasOne(\App\Models\Invoice::class);
+    }
+
+    public function lines()
+    {
+        return $this->hasMany(FolderLine::class);
     }
 
     public $sortable = [
