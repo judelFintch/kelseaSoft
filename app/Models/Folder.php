@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\Currency;
 use App\Models\DocumentType;
 use App\Models\FolderTransaction;
+use App\Models\FolderLine;
 use App\Traits\Auditable;
 use Kyslik\ColumnSortable\Sortable;
 
@@ -54,11 +55,21 @@ class Folder extends Model
         'bivac_code',
         'license_id',
         'company_id',
-        
+        'scelle_number',
+        'manifest_number',
+        'incoterm',
+        'customs_regime',
+        'additional_code',
+        'quotation_date',
+        'opening_date',
+        'entry_point',
+
     ];
 
     protected $casts = [
         'arrival_border_date' => 'date',
+        'quotation_date' => 'date',
+        'opening_date' => 'date',
         'weight' => 'float',
         'quantity' => 'float',
         'fob_amount' => 'float',
@@ -161,6 +172,11 @@ class Folder extends Model
     public function invoice()
     {
         return $this->hasOne(\App\Models\Invoice::class);
+    }
+
+    public function lines()
+    {
+        return $this->hasMany(FolderLine::class);
     }
 
     /**
