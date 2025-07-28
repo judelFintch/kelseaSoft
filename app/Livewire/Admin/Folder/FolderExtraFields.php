@@ -21,16 +21,17 @@ class FolderExtraFields extends Component
     public function mount(Folder $folder): void
     {
         $this->folder = $folder;
-        $this->fill($folder->only([
-            'scelle_number',
-            'manifest_number',
-            'incoterm',
-            'customs_regime',
-            'additional_code',
-            'quotation_date',
-            'opening_date',
-            'entry_point',
-        ]));
+
+        $this->fill([
+            'scelle_number' => $folder->scelle_number,
+            'manifest_number' => $folder->manifest_number,
+            'incoterm' => $folder->incoterm,
+            'customs_regime' => $folder->customs_regime,
+            'additional_code' => $folder->additional_code,
+            'quotation_date' => optional($folder->quotation_date)->toDateString(),
+            'opening_date' => optional($folder->opening_date)->toDateString(),
+            'entry_point' => $folder->entry_point,
+        ]);
     }
 
     protected function rules(): array
