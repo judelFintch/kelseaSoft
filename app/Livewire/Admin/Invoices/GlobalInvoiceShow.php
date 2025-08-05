@@ -44,6 +44,9 @@ class GlobalInvoiceShow extends Component
 
         $pdf = Pdf::loadView('pdf.global_invoice', [
             'globalInvoice' => $this->globalInvoice,
+            'categories' => [
+                'import_tax' => 'A. IMPORT DUTY & TAXES',
+            ],
         ]);
 
         return response()->streamDownload(
@@ -58,6 +61,10 @@ class GlobalInvoiceShow extends Component
 
         $pdf = Pdf::loadView('pdf.global_invoice', [
             'globalInvoice' => $this->globalInvoice,
+            'categories' => [
+                'agency_fee' => 'B. AGENCY FEES',
+                'extra_fee' => 'C. AUTRES FRAIS',
+            ],
         ]);
 
         return response()->streamDownload(
