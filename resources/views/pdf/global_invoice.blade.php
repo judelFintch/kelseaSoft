@@ -14,6 +14,16 @@
         }
         return $words;
     }
+
+    $categories = $categories ?? [
+        'import_tax' => 'A. IMPORT DUTY & TAXES',
+        'agency_fee' => 'B. AGENCY FEES',
+        'extra_fee' => 'C. AUTRES FRAIS',
+    ];
+
+    $selectedTotal = $globalInvoice->globalInvoiceItems
+        ->whereIn('category', array_keys($categories))
+        ->sum('total_price');
 @endphp
 
 <!DOCTYPE html>
@@ -157,7 +167,7 @@
         </tr>
     </table>
 
-    @foreach (['import_tax' => 'A. IMPORT DUTY & TAXES', 'agency_fee' => 'B. AGENCY FEES', 'extra_fee' => 'C. AUTRES FRAIS'] as $cat => $label)
+    @foreach ($categories as $cat => $label)
         @php $items = $globalInvoice->globalInvoiceItems->where('category', $cat); @endphp
         @if ($items->count())
             <h5 style="margin-top: 8px;">{{ $label }}</h5>
@@ -206,11 +216,11 @@
     <table>
         <tr>
             <td colspan="4" class="right"><strong>Total général</strong></td>
-            <td class="right"><strong>{{ number_format($globalInvoice->total_amount, 2) }} USD</strong></td>
+            <td class="right"><strong>{{ number_format($selectedTotal, 2) }} USD</strong></td>
         </tr>
     </table>
 
-    <p><strong>Montant en lettres :</strong> {{ amountToWords($globalInvoice->total_amount ?? 0) }}</p>
+    <p><strong>Montant en lettres :</strong> {{ amountToWords($selectedTotal ?? 0) }}</p>
     <p>Numéro compte : TMB 00017-25000-00232100001-85 USD</p>
     <p>Mode de paiement : Provision</p>
 
