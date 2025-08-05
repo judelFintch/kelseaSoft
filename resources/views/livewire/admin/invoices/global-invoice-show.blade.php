@@ -7,9 +7,9 @@
                         class="text-blue-600">{{ $globalInvoice->global_invoice_number }}</span>
                 </h1>
                 <div class="text-right">
-                    <button wire:click="downloadPdf"
+                    <button wire:click="downloadPdf1"
                         class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
-                        <svg wire:loading wire:target="downloadPdf" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        <svg wire:loading wire:target="downloadPdf1" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
                                 stroke-width="4"></circle>
@@ -17,8 +17,22 @@
                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                             </path>
                         </svg>
-                        <span wire:loading.remove wire:target="downloadPdf">Télécharger PDF</span>
-                        <span wire:loading wire:target="downloadPdf">Téléchargement...</span>
+                        <span wire:loading.remove wire:target="downloadPdf1">Téléchargement 1</span>
+                        <span wire:loading wire:target="downloadPdf1">Téléchargement...</span>
+                    </button>
+
+                    <button wire:click="downloadPdf2"
+                        class="ml-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
+                        <svg wire:loading wire:target="downloadPdf2" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        <span wire:loading.remove wire:target="downloadPdf2">Téléchargement 2</span>
+                        <span wire:loading wire:target="downloadPdf2">Téléchargement...</span>
                     </button>
 
                     <a href="{{ route('admin.global-invoices.edit', $globalInvoice->id) }}"
@@ -27,7 +41,7 @@
                     </a>
 
                     <button wire:click="exportSummary"
-                        class="ml-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
+                        class="ml-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition durée-150 ease-in-out">
                         <svg wire:loading wire:target="exportSummary" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
@@ -40,9 +54,16 @@
                         <span wire:loading wire:target="exportSummary">Export...</span>
                     </button>
 
-                
-                    {{-- Barre de progression lors de la génération du PDF --}}
-                    <div wire:loading wire:target="downloadPdf" class="mt-2">
+                    {{-- Barre de progression lors de la génération du PDF 1 --}}
+                    <div wire:loading wire:target="downloadPdf1" class="mt-2">
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                            <div class="bg-green-500 h-2.5 rounded-full animate-pulse w-full"></div>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">Génération du PDF...</p>
+                    </div>
+
+                    {{-- Barre de progression lors de la génération du PDF 2 --}}
+                    <div wire:loading wire:target="downloadPdf2" class="mt-2">
                         <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
                             <div class="bg-green-500 h-2.5 rounded-full animate-pulse w-full"></div>
                         </div>
