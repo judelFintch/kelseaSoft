@@ -17,7 +17,7 @@
                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                             </path>
                         </svg>
-                        <span wire:loading.remove wire:target="downloadPdf1">Téléchargement 1</span>
+                        <span wire:loading.remove wire:target="downloadPdf1">Frais et Taxes</span>
                         <span wire:loading wire:target="downloadPdf1">Téléchargement...</span>
                     </button>
 
@@ -31,7 +31,7 @@
                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                             </path>
                         </svg>
-                        <span wire:loading.remove wire:target="downloadPdf2">Téléchargement 2</span>
+                        <span wire:loading.remove wire:target="downloadPdf2">Honoraire</span>
                         <span wire:loading wire:target="downloadPdf2">Téléchargement...</span>
                     </button>
 
