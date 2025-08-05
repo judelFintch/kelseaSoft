@@ -322,7 +322,6 @@ class GlobalInvoiceManagementTest extends TestCase
             'deleted_at' => null,
         ]);
     }
-}
 
     /** @test */
     public function test_can_edit_tax_item_on_global_invoice(): void
@@ -364,5 +363,20 @@ class GlobalInvoiceManagementTest extends TestCase
         $this->assertDatabaseMissing('global_invoice_items', [
             'id' => $item->id,
         ]);
+    }
+
+    /** @test */
+    public function test_global_invoice_show_page_displays_complete_pdf_link(): void
+    {
+        $globalInvoice = GlobalInvoice::factory()->for($this->company)
+            ->has(GlobalInvoiceItem::factory()->state(['category' => 'import_tax']))
+            ->has(GlobalInvoiceItem::factory()->state(['category' => 'agency_fee']))
+            ->has(GlobalInvoiceItem::factory()->state(['category' => 'extra_fee']))
+            ->create();
+
+        $response = $this->get(route('admin.global-invoices.show', $globalInvoice));
+
+        $response->assertStatus(200);
+        $response->assertSee('Facture complète');
     }
 }
