@@ -183,7 +183,8 @@ Route::get('/notifications/latest', [NotificationController::class, 'latest'])->
     Route::prefix('admin/global-invoices')->name('admin.global-invoices.')->group(function () {
         Route::get('/', GlobalInvoiceIndex::class)->name('index');
         Route::get('/{globalInvoice}', GlobalInvoiceShow::class)->name('show');
-        Route::get('/{globalInvoice}/download', [GlobalInvoiceShow::class, 'downloadPdf'])->name('download');
+        Route::get('/{globalInvoice}/download1', [GlobalInvoiceShow::class, 'downloadPdf1'])->name('download1');
+        Route::get('/{globalInvoice}/download2', [GlobalInvoiceShow::class, 'downloadPdf2'])->name('download2');
         Route::get('/{globalInvoice}/edit', \App\Livewire\Admin\Invoices\EditGlobalInvoice::class)->name('edit');
     });
 

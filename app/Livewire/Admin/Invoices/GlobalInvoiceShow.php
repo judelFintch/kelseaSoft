@@ -38,16 +38,27 @@ class GlobalInvoiceShow extends Component
         $this->globalInvoice->load(['globalInvoiceItems', 'company', 'invoices']);
     }
 
-    public function downloadPdf(): StreamedResponse
+    public function downloadPdf1(): StreamedResponse
     {
-        $filename = 'Facture_Globale_' . $this->globalInvoice->global_invoice_number . '.pdf';
-
+        $filename = 'Facture_Globale_' . $this->globalInvoice->global_invoice_number . '_1.pdf';
 
         $pdf = Pdf::loadView('pdf.global_invoice', [
             'globalInvoice' => $this->globalInvoice,
         ]);
-        // La vue 'pdf.global_invoice' doit être créée.
-        // Elle recevra la variable $globalInvoice contenant l'objet GlobalInvoice avec ses relations chargées.
+
+        return response()->streamDownload(
+            fn() => print($pdf->output()),
+            $filename
+        );
+    }
+
+    public function downloadPdf2(): StreamedResponse
+    {
+        $filename = 'Facture_Globale_' . $this->globalInvoice->global_invoice_number . '_2.pdf';
+
+        $pdf = Pdf::loadView('pdf.global_invoice', [
+            'globalInvoice' => $this->globalInvoice,
+        ]);
 
         return response()->streamDownload(
             fn() => print($pdf->output()),

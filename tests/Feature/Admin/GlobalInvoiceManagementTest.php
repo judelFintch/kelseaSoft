@@ -223,15 +223,26 @@ class GlobalInvoiceManagementTest extends TestCase
     }
 
     /** @test */
-    public function test_can_download_global_invoice_pdf(): void
+    public function test_can_download_global_invoice_pdf_1(): void
     {
         $globalInvoice = GlobalInvoice::factory()->for($this->company)->create();
 
-        $response = $this->get(route('admin.global-invoices.download', $globalInvoice));
+        $response = $this->get(route('admin.global-invoices.download1', $globalInvoice));
 
         $response->assertStatus(200);
         $response->assertHeader('Content-Type', 'application/pdf');
-        $response->assertHeader('Content-Disposition', 'attachment; filename="Facture_Globale_' . $globalInvoice->global_invoice_number . '.pdf"');
+        $response->assertHeader('Content-Disposition', 'attachment; filename="Facture_Globale_' . $globalInvoice->global_invoice_number . '_1.pdf"');
+    }
+
+    public function test_can_download_global_invoice_pdf_2(): void
+    {
+        $globalInvoice = GlobalInvoice::factory()->for($this->company)->create();
+
+        $response = $this->get(route('admin.global-invoices.download2', $globalInvoice));
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'application/pdf');
+        $response->assertHeader('Content-Disposition', 'attachment; filename="Facture_Globale_' . $globalInvoice->global_invoice_number . '_2.pdf"');
     }
 
     /** @test */
