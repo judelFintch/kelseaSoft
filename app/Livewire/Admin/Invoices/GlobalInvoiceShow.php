@@ -73,6 +73,25 @@ class GlobalInvoiceShow extends Component
         );
     }
 
+    public function downloadPdf3(): StreamedResponse
+    {
+        $filename = 'Facture_Globale_' . $this->globalInvoice->global_invoice_number . '_3.pdf';
+
+        $pdf = Pdf::loadView('pdf.global_invoice', [
+            'globalInvoice' => $this->globalInvoice,
+            'categories' => [
+                'import_tax' => 'A. IMPORT DUTY & TAXES',
+                'agency_fee' => 'B. AGENCY FEES',
+                'extra_fee' => 'C. AUTRES FRAIS',
+            ],
+        ]);
+
+        return response()->streamDownload(
+            fn() => print($pdf->output()),
+            $filename
+        );
+    }
+
     public function exportSummary(): BinaryFileResponse
     {
         $filename = 'Global_Invoice_Summary_' . $this->globalInvoice->global_invoice_number . '.xlsx';
