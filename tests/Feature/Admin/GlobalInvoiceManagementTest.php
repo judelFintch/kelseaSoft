@@ -8,6 +8,8 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\GlobalInvoice;
 use App\Models\GlobalInvoiceItem;
+use App\Models\Permission;
+use App\Models\Role;
 use App\Livewire\Admin\Invoices\InvoiceIndex;
 use App\Livewire\Admin\Invoices\GlobalInvoiceIndex as GlobalInvoiceIndexComponent; // Alias pour éviter conflit de nom
 use App\Livewire\Admin\Invoices\GlobalInvoiceShow as GlobalInvoiceShowComponent;  // Alias pour éviter conflit de nom
@@ -34,6 +36,14 @@ class GlobalInvoiceManagementTest extends TestCase
         $this->user = User::factory()->create();
         $this->actingAs($this->user);
         $this->company = Company::factory()->create();
+
+        $role = Role::factory()->create(['name' => 'downloader']);
+        $permission = Permission::firstOrCreate([
+            'name' => 'download files',
+            'display_name' => 'Download Files',
+        ]);
+        $role->permissions()->attach($permission);
+        $this->user->roles()->attach($role);
     }
 
     /** @test */
