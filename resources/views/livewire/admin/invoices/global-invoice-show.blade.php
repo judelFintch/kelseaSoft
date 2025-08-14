@@ -1,11 +1,11 @@
 <div class="relative">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="bg-white shadow-xl rounded-lg overflow-hidden">
-            <div class="p-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+            <div class="p-6 bg-brand-500 text-white">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <h1 class="text-3xl font-bold">
                         Détails de la Facture Globale :
-                        <span class="text-yellow-300">{{ $globalInvoice->global_invoice_number }}</span>
+                        <span class="text-brand-400">{{ $globalInvoice->global_invoice_number }}</span>
                         @if ($globalInvoice->status === 'paid')
                             <span class="ml-2 px-3 py-1 bg-green-200 text-green-800 rounded-full text-sm">Payée</span>
                         @else
@@ -13,7 +13,7 @@
                         @endif
                     </h1>
                     <div class="flex flex-wrap justify-end gap-3">
-                        <button wire:click="downloadPdf1" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
+                        <button wire:click="downloadPdf1" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
                             <svg wire:loading wire:target="downloadPdf1" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.82 4 7.938l3-2.647z"></path>
@@ -22,7 +22,7 @@
                             <span wire:loading wire:target="downloadPdf1">Téléchargement...</span>
                         </button>
 
-                        <button wire:click="downloadPdf2" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
+                        <button wire:click="downloadPdf2" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
                             <svg wire:loading wire:target="downloadPdf2" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.82 4 7.938l3-2.647z"></path>
@@ -31,7 +31,7 @@
                             <span wire:loading wire:target="downloadPdf2">Téléchargement...</span>
                         </button>
 
-                        <button wire:click="downloadPdf3" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
+                        <button wire:click="downloadPdf3" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
                             <svg wire:loading wire:target="downloadPdf3" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.82 4 7.938l3-2.647z"></path>
@@ -40,11 +40,11 @@
                             <span wire:loading wire:target="downloadPdf3">Téléchargement...</span>
                         </button>
 
-                        <a href="{{ route('admin.global-invoices.edit', $globalInvoice->id) }}" class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
+                        <a href="{{ route('admin.global-invoices.edit', $globalInvoice->id) }}" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
                             Éditer
                         </a>
 
-                        <button wire:click="exportSummary" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
+                        <button wire:click="exportSummary" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
                             <svg wire:loading wire:target="exportSummary" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.82 4 7.938l3-2.647z"></path>
@@ -54,11 +54,11 @@
                         </button>
 
                         @if ($globalInvoice->status === 'paid')
-                            <button wire:click="markAsPending" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
+                            <button wire:click="markAsPending" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
                                 Marquer comme en attente
                             </button>
                         @else
-                            <button wire:click="markAsPaid" class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
+                            <button wire:click="markAsPaid" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
                                 Marquer comme payée
                             </button>
                         @endif
@@ -69,7 +69,7 @@
                     {{-- Barre de progression lors de la génération du PDF 1 --}}
                     <div wire:loading wire:target="downloadPdf1">
                         <div class="w-full bg-white/20 rounded-full h-2.5 overflow-hidden">
-                            <div class="bg-green-400 h-2.5 rounded-full animate-pulse w-full"></div>
+                            <div class="bg-brand-400 h-2.5 rounded-full animate-pulse w-full"></div>
                         </div>
                         <p class="text-xs text-white mt-1">Génération du PDF...</p>
                     </div>
@@ -77,7 +77,7 @@
                     {{-- Barre de progression lors de la génération du PDF 2 --}}
                     <div wire:loading wire:target="downloadPdf2">
                         <div class="w-full bg-white/20 rounded-full h-2.5 overflow-hidden">
-                            <div class="bg-green-400 h-2.5 rounded-full animate-pulse w-full"></div>
+                            <div class="bg-brand-400 h-2.5 rounded-full animate-pulse w-full"></div>
                         </div>
                         <p class="text-xs text-white mt-1">Génération du PDF...</p>
                     </div>
@@ -85,7 +85,7 @@
                     {{-- Barre de progression lors de la génération du PDF 3 --}}
                     <div wire:loading wire:target="downloadPdf3">
                         <div class="w-full bg-white/20 rounded-full h-2.5 overflow-hidden">
-                            <div class="bg-green-400 h-2.5 rounded-full animate-pulse w-full"></div>
+                            <div class="bg-brand-400 h-2.5 rounded-full animate-pulse w-full"></div>
                         </div>
                         <p class="text-xs text-white mt-1">Génération du PDF...</p>
                     </div>
@@ -93,7 +93,7 @@
                     {{-- Barre de progression lors de l'export Excel --}}
                     <div wire:loading wire:target="exportSummary">
                         <div class="w-full bg-white/20 rounded-full h-2.5 overflow-hidden">
-                            <div class="bg-blue-400 h-2.5 rounded-full animate-pulse w-full"></div>
+                            <div class="bg-brand-400 h-2.5 rounded-full animate-pulse w-full"></div>
                         </div>
                         <p class="text-xs text-white mt-1">Génération de l'Excel...</p>
                     </div>
@@ -258,7 +258,7 @@
                                             {{ number_format($invoice->total_usd, 2) }}</td>
                                         <td class="px-4 py-4 whitespace-nowrap text-sm text-center">
                                             <a href="{{ route('invoices.show', $invoice->id) }}" target="_blank"
-                                                class="text-blue-600 hover:text-blue-900 font-medium">
+                                                class="text-brand-500 hover:text-brand-600 font-medium">
                                                 Voir Originale
                                             </a>
                                         </td>
@@ -272,7 +272,7 @@
         </div>
         <div class="mt-6">
             <a href="{{ route('admin.global-invoices.index') }}"
-                class="text-blue-600 hover:text-blue-800 font-medium">
+                class="text-brand-500 hover:text-brand-600 font-medium">
                 &larr; Retour à la liste des factures globales
             </a>
         </div>
