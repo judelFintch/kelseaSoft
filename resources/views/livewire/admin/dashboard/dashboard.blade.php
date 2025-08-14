@@ -233,6 +233,7 @@
                                                         <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 dark:text-slate-300">Client/Compagnie</th>
                                                         <th class="px-4 py-3 text-right text-sm font-semibold text-slate-600 dark:text-slate-300">Montant Total</th>
                                                         <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 dark:text-slate-300">Date Création</th>
+                                                        <th class="px-4 py-3 text-center text-sm font-semibold text-slate-600 dark:text-slate-300">Statut</th>
                                                         <th class="px-4 py-3 text-center text-sm font-semibold text-slate-600 dark:text-slate-300">Actions</th>
                                                     </tr>
                                                 </thead>
@@ -243,6 +244,7 @@
                                                             <td class="px-4 py-3 text-sm text-slate-500 dark:text-slate-400">{{ $globalInvoice->company?->name ?? 'N/A' }}</td>
                                                             <td class="px-4 py-3 text-right text-sm font-medium text-slate-700 dark:text-slate-200">{{ number_format($globalInvoice->total_amount, 2, ',', ' ') }} {{-- Devise --}}</td>
                                                             <td class="px-4 py-3 text-sm text-slate-500 dark:text-slate-400">{{ $globalInvoice->created_at->format('d/m/Y') }}</td>
+                                                            <td class="px-4 py-3 text-center text-sm text-slate-500 dark:text-slate-400">{{ $globalInvoice->is_paid ? 'Payée' : 'En attente' }}</td>
                                                             <td class="px-4 py-3 text-center">
                                                                 <a href="{{ route('admin.global-invoices.show', $globalInvoice->id) }}" class="text-sm font-medium text-primary hover:underline">Voir</a>
                                                             </td>

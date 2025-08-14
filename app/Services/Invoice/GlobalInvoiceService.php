@@ -166,6 +166,7 @@ class GlobalInvoiceService
                 'due_date' => null, // À définir selon la logique métier, ex: issue_date + 30 jours
                 'total_amount' => $totalGlobalAmount,
                 'notes' => 'Facture globale générée automatiquement.', // Optionnel
+                'is_paid' => false,
             ]);
 
             foreach ($aggregatedItems as $aggItemData) {

@@ -18,6 +18,13 @@ class GlobalInvoice extends Model
         'due_date',
         'total_amount',
         'notes',
+        'is_paid',
+    ];
+
+    protected $casts = [
+        'issue_date' => 'date',
+        'due_date' => 'date',
+        'is_paid' => 'boolean',
     ];
 
     /**
