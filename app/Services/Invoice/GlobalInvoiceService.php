@@ -118,6 +118,7 @@ class GlobalInvoiceService
                'issue_date' => Carbon::today(),
                 'due_date' => null, // À définir selon la logique métier
                 'total_amount' => $totalGlobalAmount,
+                'status' => 'pending',
                 'notes' => 'Facture globale générée automatiquement.',
             ]);
 

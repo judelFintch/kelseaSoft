@@ -26,6 +26,9 @@
                         <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Montant Total
                         </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Statut
+                        </th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Actions
                         </th>
@@ -46,6 +49,9 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
                                 {{ number_format($globalInvoice->total_amount, 2) }} {{-- Supposant que la devise est cohérente ou gérée ailleurs --}}
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ ucfirst($globalInvoice->status) }}
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
                                 <a href="{{ route('admin.global-invoices.show', $globalInvoice->id) }}" class="text-blue-600 hover:text-blue-900 font-medium">
                                     Voir Détails
@@ -62,7 +68,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-12 text-center text-sm text-gray-500">
+                            <td colspan="6" class="px-6 py-12 text-center text-sm text-gray-500">
                                 Aucune facture globale trouvée.
                             </td>
                         </tr>
