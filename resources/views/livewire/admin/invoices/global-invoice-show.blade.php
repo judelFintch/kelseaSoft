@@ -6,6 +6,11 @@
                     <h1 class="text-3xl font-bold">
                         Détails de la Facture Globale :
                         <span class="text-yellow-300">{{ $globalInvoice->global_invoice_number }}</span>
+                        @if ($globalInvoice->status === 'paid')
+                            <span class="ml-2 px-3 py-1 bg-green-200 text-green-800 rounded-full text-sm">Payée</span>
+                        @else
+                            <span class="ml-2 px-3 py-1 bg-yellow-200 text-yellow-800 rounded-full text-sm">En attente</span>
+                        @endif
                     </h1>
                     <div class="flex flex-wrap justify-end gap-3">
                         <button wire:click="downloadPdf1" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
@@ -129,8 +134,14 @@
                                 <dd class="mt-1 text-sm text-gray-900 font-semibold">{{ number_format($globalInvoice->total_amount, 2) }} {{-- Devise --}}</dd>
                             </div>
                             <div>
-                                <dt class="text-sm font-medium text-gray-500">Statut :</dt>
-                                <dd class="mt-1 text-sm text-gray-900">{{ ucfirst($globalInvoice->status) }}</dd>
+                                <dt class="text-sm font-medium text-gray-500">Statut de Paiement :</dt>
+                                <dd class="mt-1 text-sm text-gray-900">
+                                    @if ($globalInvoice->status === 'paid')
+                                        <span class="px-2 py-1 bg-green-200 text-green-800 rounded-full text-xs">Payée</span>
+                                    @else
+                                        <span class="px-2 py-1 bg-yellow-200 text-yellow-800 rounded-full text-xs">En attente</span>
+                                    @endif
+                                </dd>
                             </div>
                         </dl>
                     </div>
