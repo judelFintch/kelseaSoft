@@ -226,6 +226,7 @@ class GlobalInvoiceManagementTest extends TestCase
         $response->assertSee($globalInvoice->global_invoice_number);
         $response->assertSee(number_format($globalInvoice->total_amount, 2));
         $response->assertSee(route('admin.global-invoices.edit', $globalInvoice));
+        $response->assertSee(route('admin.global-invoices.index'));
 
         foreach ($globalInvoice->globalInvoiceItems as $item) {
             $response->assertSee($item->description);

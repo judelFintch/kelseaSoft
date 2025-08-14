@@ -1,5 +1,10 @@
 <div class="relative">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-6">
+            <a href="{{ route('admin.global-invoices.index') }}" class="text-brand-500 hover:text-brand-600 font-medium">
+                &larr; Retour
+            </a>
+        </div>
         <div class="bg-white shadow-xl rounded-lg overflow-hidden">
             <div class="p-6 bg-brand-500 text-white">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
