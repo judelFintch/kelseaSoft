@@ -13,6 +13,7 @@ class GlobalInvoiceIndex extends Component
 
     public string $search = '';
     public bool $showTrashed = false;
+    public string $status = '';
     protected $paginationTheme = 'bootstrap'; // Ou le thème de votre choix si configuré
 
     public function getGlobalInvoiceToDeleteProperty()
@@ -24,6 +25,11 @@ class GlobalInvoiceIndex extends Component
     public string $deleteConfirmText = '';
 
     public function updatingSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingStatus(): void
     {
         $this->resetPage();
     }
@@ -73,6 +79,7 @@ class GlobalInvoiceIndex extends Component
                         $companyQuery->where('name', 'like', '%' . $this->search . '%');
                     });
             })
+            ->when($this->status !== '', fn($q) => $q->where('status', $this->status))
             ->when($this->showTrashed, fn($q) => $q->onlyTrashed())
             ->latest() // Ou orderBy('issue_date', 'desc')
             ->paginate(15);

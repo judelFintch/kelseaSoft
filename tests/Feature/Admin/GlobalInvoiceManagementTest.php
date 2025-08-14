@@ -200,6 +200,18 @@ class GlobalInvoiceManagementTest extends TestCase
     }
 
     /** @test */
+    public function test_global_invoice_list_can_be_filtered_by_status(): void
+    {
+        $paid = GlobalInvoice::factory()->for($this->company)->create(['status' => 'paid']);
+        $pending = GlobalInvoice::factory()->for($this->company)->create(['status' => 'pending']);
+
+        Livewire::test(GlobalInvoiceIndexComponent::class)
+            ->set('status', 'paid')
+            ->assertSee($paid->global_invoice_number)
+            ->assertDontSee($pending->global_invoice_number);
+    }
+
+    /** @test */
     public function test_can_view_specific_global_invoice_page(): void
     {
         $globalInvoice = GlobalInvoice::factory()
