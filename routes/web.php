@@ -93,7 +93,7 @@ Route::get('/notifications/latest', [NotificationController::class, 'latest'])->
         Route::get('/{folder}/feuille-de-calcul', \App\Livewire\Pages\Folder\PrintableCalculationSheet::class)
             ->name('calculation');
         Route::get('/{folder}/transactions', \App\Livewire\Admin\Folder\FolderTransactions::class)->name('transactions');
-        Route::get('/{folder}/transactions/download', [\App\Livewire\Admin\Folder\FolderTransactions::class, 'downloadPdf'])->name('transactions.download');
+        Route::get('/{folder}/transactions/download', [\App\Livewire\Admin\Folder\FolderTransactions::class, 'downloadPdf'])->name('transactions.download')->middleware('download.auth');
         Route::get('/transactions', \App\Livewire\Admin\Folder\FolderTransactionIndex::class)->name('transactions.index');
         Route::get('/delete/{id}', FolderCreate::class)->name('delete');
         Route::get('/restore/{id}', FolderCreate::class)->name('restore');
@@ -156,7 +156,7 @@ Route::get('/notifications/latest', [NotificationController::class, 'latest'])->
     Route::prefix('invoices')->name('invoices.')->group(function () {
         Route::get('/{invoice}/show', ShowInvoice::class)->name('show');
         Route::get('/generate/{folder}', GenerateInvoice::class)->name('generate');
-        Route::get('/download/{invoice}', [ShowInvoice::class, 'downloadPdf'])->name('download');
+        Route::get('/download/{invoice}', [ShowInvoice::class, 'downloadPdf'])->name('download')->middleware('download.auth');
         Route::get('/index', InvoiceIndex::class)->name('index');
         Route::get('/{invoice}/edit', UpdateInvoice::class)->name('invoices.edit');
         Route::get('/{invoice}/items', \App\Livewire\Admin\Invoices\AddInvoiceItems::class)->name('items.add');
@@ -183,9 +183,9 @@ Route::get('/notifications/latest', [NotificationController::class, 'latest'])->
     Route::prefix('admin/global-invoices')->name('admin.global-invoices.')->group(function () {
         Route::get('/', GlobalInvoiceIndex::class)->name('index');
         Route::get('/{globalInvoice}', GlobalInvoiceShow::class)->name('show');
-        Route::get('/{globalInvoice}/download1', [GlobalInvoiceShow::class, 'downloadPdf1'])->name('download1');
-        Route::get('/{globalInvoice}/download2', [GlobalInvoiceShow::class, 'downloadPdf2'])->name('download2');
-        Route::get('/{globalInvoice}/download3', [GlobalInvoiceShow::class, 'downloadPdf3'])->name('download3');
+        Route::get('/{globalInvoice}/download1', [GlobalInvoiceShow::class, 'downloadPdf1'])->name('download1')->middleware('download.auth');
+        Route::get('/{globalInvoice}/download2', [GlobalInvoiceShow::class, 'downloadPdf2'])->name('download2')->middleware('download.auth');
+        Route::get('/{globalInvoice}/download3', [GlobalInvoiceShow::class, 'downloadPdf3'])->name('download3')->middleware('download.auth');
         Route::get('/{globalInvoice}/edit', \App\Livewire\Admin\Invoices\EditGlobalInvoice::class)->name('edit');
     });
 
@@ -212,7 +212,7 @@ Route::get('/notifications/latest', [NotificationController::class, 'latest'])->
 
     Route::prefix('backups')->name('backups.')->group(function () {
         Route::get('/', BackupIndex::class)->name('index');
-        Route::get('/download/{file}', [BackupIndex::class, 'download'])->name('download');
+        Route::get('/download/{file}', [BackupIndex::class, 'download'])->name('download')->middleware('download.auth');
     });
 
     // Admin Routes for User, Role, Permission Management
