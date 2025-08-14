@@ -27,7 +27,7 @@
                             Montant Total
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Statut
+                            Statut de Paiement
                         </th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Actions
@@ -49,8 +49,12 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
                                 {{ number_format($globalInvoice->total_amount, 2) }} {{-- Supposant que la devise est cohérente ou gérée ailleurs --}}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ ucfirst($globalInvoice->status) }}
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                @if ($globalInvoice->status === 'paid')
+                                    <span class="px-2 py-1 bg-green-200 text-green-800 rounded-full text-xs">Payée</span>
+                                @else
+                                    <span class="px-2 py-1 bg-yellow-200 text-yellow-800 rounded-full text-xs">En attente</span>
+                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
                                 <a href="{{ route('admin.global-invoices.show', $globalInvoice->id) }}" class="text-blue-600 hover:text-blue-900 font-medium">
