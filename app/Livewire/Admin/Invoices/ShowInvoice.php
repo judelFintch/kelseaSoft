@@ -5,8 +5,9 @@ namespace App\Livewire\Admin\Invoices;
 use Livewire\Component;
 use App\Models\Invoice;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Facades\Auth;
+use App\Models\DownloadLog;
 use App\Services\Enterprise\EnterpriseService;
 
 class ShowInvoice extends Component
@@ -67,6 +68,13 @@ class ShowInvoice extends Component
         $pdf = Pdf::loadView('pdf.invoice', [
             'invoice' => $this->invoice,
             'enterprise' => $enterprise,
+        ]);
+
+        DownloadLog::create([
+            'user_id' => Auth::id(),
+            'file_type' => 'invoice',
+            'file_id' => $this->invoice->id,
+            'ip' => request()->ip(),
         ]);
 
         return response()->streamDownload(
