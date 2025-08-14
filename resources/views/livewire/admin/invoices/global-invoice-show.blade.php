@@ -44,6 +44,10 @@
                                 <dt class="text-sm font-medium text-gray-500">Montant Total :</dt>
                                 <dd class="mt-1 text-sm text-gray-900 font-semibold">{{ number_format($globalInvoice->total_amount, 2) }} {{-- Devise --}}</dd>
                             </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Statut de paiement :</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ $globalInvoice->is_paid ? 'Payée' : 'En attente' }}</dd>
+                            </div>
                         </dl>
                     </div>
                     @if($globalInvoice->notes)
