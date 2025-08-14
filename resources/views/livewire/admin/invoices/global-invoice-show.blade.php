@@ -68,6 +68,18 @@
                         <span wire:loading wire:target="exportSummary">Export...</span>
                     </button>
 
+                    @if ($globalInvoice->status === 'paid')
+                        <button wire:click="markAsPending"
+                            class="ml-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
+                            Marquer comme en attente
+                        </button>
+                    @else
+                        <button wire:click="markAsPaid"
+                            class="ml-2 px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75 transition duration-150 ease-in-out">
+                            Marquer comme payée
+                        </button>
+                    @endif
+
                     {{-- Barre de progression lors de la génération du PDF 1 --}}
                     <div wire:loading wire:target="downloadPdf1" class="mt-2">
                         <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
@@ -138,6 +150,10 @@
                                 <dt class="text-sm font-medium text-gray-500">Montant Total :</dt>
                                 <dd class="mt-1 text-sm text-gray-900 font-semibold">
                                     {{ number_format($globalInvoice->total_amount, 2) }} {{-- Devise --}}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Statut :</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ ucfirst($globalInvoice->status) }}</dd>
                             </div>
                         </dl>
                     </div>

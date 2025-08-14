@@ -99,6 +99,20 @@ class GlobalInvoiceShow extends Component
         return Excel::download(new GlobalInvoiceSummaryExport($this->globalInvoice), $filename);
     }
 
+    public function markAsPaid(): void
+    {
+        $this->globalInvoice->update(['status' => 'paid']);
+        $this->globalInvoice->invoices()->update(['status' => 'paid']);
+        session()->flash('success', 'Facture globale marquée comme payée.');
+    }
+
+    public function markAsPending(): void
+    {
+        $this->globalInvoice->update(['status' => 'pending']);
+        $this->globalInvoice->invoices()->update(['status' => 'pending']);
+        session()->flash('success', 'Facture globale marquée comme en attente.');
+    }
+
     /**
      * Régénère la facture globale en se basant sur les factures partielles actives.
      * Le numéro de facture reste inchangé.

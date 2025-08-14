@@ -20,6 +20,7 @@ class GlobalInvoice extends Model
         'issue_date',
         'due_date',
         'total_amount',
+        'status',
         'notes',
     ];
 
