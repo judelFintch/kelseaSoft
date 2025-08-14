@@ -2,12 +2,22 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-semibold text-gray-700">Factures Globales</h1>
-            <input
-                type="text"
-                wire:model.live.debounce.300ms="search"
-                placeholder="Rechercher (N°, Compagnie...)"
-                class="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+            <div class="flex items-center gap-2">
+                <input
+                    type="text"
+                    wire:model.live.debounce.300ms="search"
+                    placeholder="Rechercher (N°, Compagnie...)"
+                    class="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <select
+                    wire:model.live="status"
+                    class="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                    <option value="">Tous</option>
+                    <option value="paid">Payée</option>
+                    <option value="pending">En attente</option>
+                </select>
+            </div>
         </div>
 
         <div class="bg-white shadow-lg rounded-lg overflow-hidden">
@@ -57,17 +67,19 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
-                                <a href="{{ route('admin.global-invoices.show', $globalInvoice->id) }}" class="text-blue-600 hover:text-blue-900 font-medium">
-                                    Voir Détails
-                                </a>
-                                <a href="{{ route('admin.global-invoices.edit', $globalInvoice->id) }}" class="ml-2 text-gray-600 hover:text-gray-900 font-medium">
-                                    Éditer
-                                </a>
-                                <button wire:click="confirmDeleteGlobalInvoice({{ $globalInvoice->id }})"
-                                        class="text-red-600 hover:underline text-sm cursor-pointer">
-                                    🗑 Supprimer
-                                </button>
-                                {{-- Possibilité d'ajouter d'autres actions comme "Télécharger PDF" directement ici --}}
+                                <div x-data="{ open: false }" class="relative inline-block text-left">
+                                    <button @click="open = ! open" class="text-gray-600 hover:text-gray-900 font-medium">
+                                        Actions
+                                        <svg class="w-4 h-4 inline-block ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </button>
+                                    <div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                                        <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                            <a href="{{ route('admin.global-invoices.show', $globalInvoice->id) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Voir Détails</a>
+                                            <a href="{{ route('admin.global-invoices.edit', $globalInvoice->id) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Éditer</a>
+                                            <button wire:click="confirmDeleteGlobalInvoice({{ $globalInvoice->id }})" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100" role="menuitem">🗑 Supprimer</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     @empty
