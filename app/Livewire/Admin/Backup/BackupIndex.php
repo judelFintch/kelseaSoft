@@ -6,6 +6,8 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use App\Services\Backup\BackupService;
+use Illuminate\Support\Facades\Auth;
+use App\Models\DownloadLog;
 
 class BackupIndex extends Component
 {
@@ -37,6 +39,14 @@ class BackupIndex extends Component
     public function download(string $file): StreamedResponse
     {
         $path = config('backup.path') . DIRECTORY_SEPARATOR . $file;
+
+        DownloadLog::create([
+            'user_id' => Auth::id(),
+            'file_type' => 'backup',
+            'file_id' => null,
+            'ip' => request()->ip(),
+        ]);
+
         return response()->download($path);
     }
 

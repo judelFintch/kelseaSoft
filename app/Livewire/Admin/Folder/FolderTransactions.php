@@ -8,6 +8,7 @@ use App\Models\FolderTransaction;
 use App\Models\Currency;
 use App\Models\CashRegister;
 use Illuminate\Support\Facades\Auth;
+use App\Models\DownloadLog;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -117,6 +118,13 @@ class FolderTransactions extends Component
 
         $sanitizedNumber = str_replace(['/', '\\'], '-', $this->folder->folder_number);
         $filename = 'Transactions_Dossier_' . $sanitizedNumber . '.pdf';
+
+        DownloadLog::create([
+            'user_id' => Auth::id(),
+            'file_type' => 'folder_transactions',
+            'file_id' => $this->folder->id,
+            'ip' => request()->ip(),
+        ]);
 
         return response()->streamDownload(
             fn () => print($pdf->output()),
