@@ -48,8 +48,8 @@
             @endif
             {{-- Fin Affichage Informations Dossier --}}
 
-            <div class="grid grid-cols-2 gap-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:col-span-2">
                     <div class="space-y-1">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Société
                             (Client)</label>
@@ -66,7 +66,7 @@
                         <p class="text-xs text-gray-500">Acronyme de la société (lecture seule)</p>
                     </div>
                 </div>
-                <div class="space-y-1">
+                <div class="space-y-1 md:col-span-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Date de
                         Facture</label>
                     <input type="date" wire:model.live="invoice_date"
@@ -77,7 +77,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="space-y-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Produit</label>
                     <input type="text" wire:model="product" placeholder="Ex : Cuivre"
@@ -108,7 +108,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div class="space-y-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">FOB ($)</label>
                     <input type="number" step="0.01" wire:model="default_fob_amount" placeholder="15000"
@@ -148,7 +148,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="space-y-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Devise
                         principale</label>
@@ -208,7 +208,7 @@
 
                 @foreach ($items as $i => $item)
                     @if ($item['category'] === $category)
-                        <div class="grid grid-cols-7 gap-4 items-end mb-3">
+                        <div class="grid grid-cols-1 md:grid-cols-7 gap-4 items-end mb-3">
                             @if ($category === 'import_tax')
                                 <div class="space-y-1 col-span-1">
                                     <label
