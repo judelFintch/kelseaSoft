@@ -53,15 +53,17 @@
                     <div class="space-y-1">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Société
                             (Client)</label>
-                        <input type="text" value="{{ $selectedFolder?->company?->name }}"
+                        <input type="text" value="{{ $selectedFolder?->company?->name }}" placeholder="Nom du client"
                             class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:outline-none focus:ring-0 dark:bg-gray-700 dark:text-white dark:border-gray-600"
                             readonly>
+                        <p class="text-xs text-gray-500">Nom du client (lecture seule)</p>
                     </div>
                     <div class="space-y-1">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Acronyme</label>
-                        <input type="text" value="{{ $selectedFolder?->company?->acronym }}"
+                        <input type="text" value="{{ $selectedFolder?->company?->acronym }}" placeholder="ACME"
                             class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:outline-none focus:ring-0 dark:bg-gray-700 dark:text-white dark:border-gray-600"
                             readonly>
+                        <p class="text-xs text-gray-500">Acronyme de la société (lecture seule)</p>
                     </div>
                 </div>
                 <div class="space-y-1">
@@ -78,16 +80,18 @@
             <div class="grid grid-cols-3 gap-4">
                 <div class="space-y-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Produit</label>
-                    <input type="text" wire:model="product"
+                    <input type="text" wire:model="product" placeholder="Ex : Cuivre"
                         class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    <p class="text-xs text-gray-500">Exemple : Cuivre</p>
                     @error('product')
                         <span class="text-sm text-red-600">{{ $message }}</span>
                     @enderror
                 </div>
                 <div class="space-y-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Poids (kg)</label>
-                    <input type="number" step="0.01" wire:model.live="weight"
+                    <input type="number" step="0.01" wire:model.live="weight" placeholder="5000"
                         class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    <p class="text-xs text-gray-500">Poids en kilogrammes</p>
                     @error('weight')
                         <span class="text-sm text-red-600">{{ $message }}</span>
                     @enderror
@@ -95,8 +99,9 @@
                 <div class="space-y-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Code
                         Opération</label>
-                    <input type="text" wire:model="operation_code"
+                    <input type="text" wire:model="operation_code" placeholder="OP-123"
                         class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    <p class="text-xs text-gray-500">Code de l'opération</p>
                     @error('operation_code')
                         <span class="text-sm text-red-600">{{ $message }}</span>
                     @enderror
@@ -106,8 +111,9 @@
             <div class="grid grid-cols-4 gap-4">
                 <div class="space-y-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">FOB ($)</label>
-                    <input type="number" step="0.01" wire:model="default_fob_amount"
+                    <input type="number" step="0.01" wire:model="default_fob_amount" placeholder="15000"
                         class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    <p class="text-xs text-gray-500">Montant FOB en dollars</p>
                     @error('default_fob_amount')
                         <span class="text-sm text-red-600">{{ $message }}</span>
                     @enderror
@@ -115,24 +121,27 @@
                 <div class="space-y-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Assurance
                         ($)</label>
-                    <input type="number" step="0.01" wire:model="insurance_amount"
+                    <input type="number" step="0.01" wire:model="insurance_amount" placeholder="500"
                         class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    <p class="text-xs text-gray-500">Montant de l'assurance en dollars</p>
                     @error('insurance_amount')
                         <span class="text-sm text-red-600">{{ $message }}</span>
                     @enderror
                 </div>
                 <div class="space-y-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Fret ($)</label>
-                    <input type="number" step="0.01" wire:model="freight_amount"
+                    <input type="number" step="0.01" wire:model="freight_amount" placeholder="300"
                         class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    <p class="text-xs text-gray-500">Montant du fret en dollars</p>
                     @error('freight_amount')
                         <span class="text-sm text-red-600">{{ $message }}</span>
                     @enderror
                 </div>
                 <div class="space-y-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">CIF ($)</label>
-                    <input type="number" step="0.01" wire:model.live="cif_amount"
+                    <input type="number" step="0.01" wire:model.live="cif_amount" placeholder="15800"
                         class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    <p class="text-xs text-gray-500">Total CIF en dollars</p>
                     @error('cif_amount')
                         <span class="text-sm text-red-600">{{ $message }}</span>
                     @enderror
@@ -157,8 +166,9 @@
                 <div class="space-y-1">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Taux de
                         change</label>
-                    <input type="text" wire:model="exchange_rate"
+                    <input type="text" wire:model="exchange_rate" placeholder="2500"
                         class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    <p class="text-xs text-gray-500">Exemple de taux : 2500</p>
                     @error('exchange_rate')
                         <span class="text-sm text-red-600">{{ $message }}</span>
                     @enderror
@@ -263,9 +273,10 @@
                             <div class="space-y-1 col-span-1">
                                 <label
                                     class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Quantité</label>
-                                <input type="number" step="1"
+                <input type="number" step="1" placeholder="1"
                                     wire:model.live="items.{{ $i }}.quantity"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                <p class="text-xs text-gray-500">Nombre d'unités</p>
                                 @error('items.' . $i . '.quantity')
                                     <span class="text-sm text-red-600">{{ $message }}</span>
                                 @enderror
@@ -275,9 +286,10 @@
                                 <label
                                     class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Montant
                                     (devise locale)</label>
-                                <input type="number" step="0.01"
+                                <input type="number" step="0.01" placeholder="1000"
                                     wire:model.live="items.{{ $i }}.amount_local"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                <p class="text-xs text-gray-500">Montant en devise locale</p>
                                 @error('items.' . $i . '.amount_local')
                                     <span class="text-sm text-red-600">{{ $message }}</span>
                                 @enderror
@@ -287,18 +299,20 @@
                                 <label
                                     class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Montant
                                     USD</label>
-                                <input type="number" step="0.01"
+                                <input type="number" step="0.01" placeholder="0"
                                     wire:model.live="items.{{ $i }}.amount_usd" disabled
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                <p class="text-xs text-gray-500">Montant en USD calculé</p>
                             </div>
 
                             <div class="space-y-1 col-span-1">
                                 <label
                                     class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Montant
                                     CDF</label>
-                                <input type="number" step="0.01"
+                                <input type="number" step="0.01" placeholder="0"
                                     wire:model.live="items.{{ $i }}.amount_cdf" disabled
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                <p class="text-xs text-gray-500">Montant en CDF calculé</p>
                             </div>
 
                             <button wire:click.prevent="removeItem({{ $i }})"
