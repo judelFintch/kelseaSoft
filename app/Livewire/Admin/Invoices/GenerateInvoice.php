@@ -128,6 +128,22 @@ class GenerateInvoice extends Component
                     $item['amount_cdf'] = round($localAmount, 2);
                 }
             }
+        } elseif (preg_match('/^(\d+)\.(tax_id|agency_fee_id|extra_fee_id)$/', $key, $matches)) {
+            $index = (int)$matches[1];
+            $field = $matches[2];
+            $item = &$this->items[$index];
+
+            switch ($field) {
+                case 'tax_id':
+                    $item['label'] = Tax::find($value)?->label ?? '';
+                    break;
+                case 'agency_fee_id':
+                    $item['label'] = AgencyFee::find($value)?->label ?? '';
+                    break;
+                case 'extra_fee_id':
+                    $item['label'] = ExtraFee::find($value)?->label ?? '';
+                    break;
+            }
         }
     }
 
@@ -149,6 +165,7 @@ class GenerateInvoice extends Component
             'exchange_rate' => $this->exchange_rate,
             'amount_local' => 0,
             'amount_usd' => 0.00,
+            'amount_cdf' => 0,
             'converted_amount' => 0,
             'tax_id' => null,
             'agency_fee_id' => null,
