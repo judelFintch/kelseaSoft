@@ -45,44 +45,42 @@
             @endif
             {{-- Fin Affichage Informations Dossier --}}
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {{-- Le company_id sera pré-rempli si un dossier est sélectionné --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="space-y-1">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Société
-                            (Client)</label>
-                        <input type="text" value="{{ $selectedFolder?->company?->name }}"
-                            class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:outline-none focus:ring-0 dark:bg-gray-700 dark:text-white dark:border-gray-600"
-                            readonly>
-                    </div>
-                    <div class="space-y-1">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Acronyme</label>
-                        <input type="text" value="{{ $selectedFolder?->company?->acronym }}"
-                            class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:outline-none focus:ring-0 dark:bg-gray-700 dark:text-white dark:border-gray-600"
-                            readonly>
-                    </div>
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Société
+                        (Client)</label>
+                    <input type="text" value="{{ $selectedFolder?->company?->name }}"
+                        class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:outline-none focus:ring-0 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                        readonly>
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Acronyme</label>
+                    <input type="text" value="{{ $selectedFolder?->company?->acronym }}"
+                        class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:outline-none focus:ring-0 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                        readonly>
                 </div>
                 <x-forms.input label="Date de Facture" model="invoice_date" type="date" />
             </div>
 
-            <div class="grid grid-cols-1 gap-4 mt-4">
+            <div class="grid grid-cols-1 gap-4 mt-6">
                 <x-forms.input label="Numéro de Facture" model="invoice_number" disabled />
             </div>
 
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <x-forms.input label="Produit" model="product" />
                 <x-forms.input label="Poids (kg)" model="weight" type="number" step="0.01" />
                 <x-forms.input label="Code Opération" model="operation_code" />
             </div>
 
-            <div class="grid grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <x-forms.input label="FOB ($)" model="fob_amount" type="number" step="0.01" />
                 <x-forms.input label="Assurance ($)" model="insurance_amount" type="number" step="0.01" />
                 <x-forms.input label="Fret ($)" model="freight_amount" type="number" step="0.01" />
                 <x-forms.input label="CIF ($)" model="cif_amount" type="number" step="0.01" />
             </div>
 
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <x-forms.select label="Devise principale" model="currency_id" :options="$currencies" optionLabel="code"
                     optionValue="id" />
                 <x-forms.input label="Taux de change vers CDF" model="exchange_rate" type="number" step="0.000001" />
@@ -108,7 +106,7 @@
 
                 @foreach ($items as $i => $item)
                     @if ($item['category'] === $category)
-                        <div class="grid grid-cols-6 gap-4 items-end mb-3">
+                        <div class="grid grid-cols-1 md:grid-cols-6 gap-4 items-end mb-3">
                             @if ($category === 'import_tax')
                                 <x-forms.select label="Taxe" :model="'items.' . $i . '.tax_id'" :options="$taxes" optionLabel="label"
                                     optionValue="id" />
