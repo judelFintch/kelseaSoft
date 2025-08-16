@@ -9,10 +9,14 @@
         <div class="bg-green-100 text-green-700 px-4 py-2 rounded">{{ session('success') }}</div>
     @endif
     {{-- Barre de progression --}}
-    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+    <div class="w-full bg-gray-200 rounded-full h-2.5">
         <div class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300"
             style="width: {{ (100 / (count($categorySteps) + 1)) * $step }}%">
         </div>
+    </div>
+    <div class="mt-2 mb-6">
+        <div class="text-sm text-gray-600">Étape {{ $step }} / {{ count($categorySteps) + 1 }}</div>
+        <div class="text-lg font-semibold">{{ $stepLabels[$step] }}</div>
     </div>
 
     {{-- Étape 1 – Informations générales --}}
