@@ -35,6 +35,7 @@ class GenerateInvoice extends Component
     public $items = [];
     public $taxes = [], $agencyFees = [], $extraFees = [], $currencies = [];
     public array $categorySteps = [];
+    public array $stepLabels = [];
     public $selectedFolder = null;
     public $generatedInvoiceLabel = null;
     public $previewInvoiceNumber = null;
@@ -85,6 +86,18 @@ class GenerateInvoice extends Component
     public function initCategorySteps(): void
     {
         $this->categorySteps = ['import_tax', 'agency_fee', 'extra_fee'];
+
+        $categoryLabels = [
+            'import_tax' => "Taxes d'import",
+            'agency_fee' => "Frais d'agence",
+            'extra_fee' => 'Frais divers',
+        ];
+
+        $this->stepLabels = [1 => 'Informations générales'];
+
+        foreach ($this->categorySteps as $index => $category) {
+            $this->stepLabels[$index + 2] = $categoryLabels[$category] ?? ucfirst(str_replace('_', ' ', $category));
+        }
     }
 
     public function updatedItems($value, $key): void
