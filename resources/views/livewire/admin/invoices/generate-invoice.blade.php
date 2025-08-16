@@ -11,11 +11,11 @@
     {{-- Barre de progression --}}
     <div class="w-full bg-gray-200 rounded-full h-2.5">
         <div class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300"
-            style="width: {{ (100 / (count($categorySteps) + 1)) * $step }}%">
+            style="width: {{ (100 / (count($categorySteps) + 2)) * $step }}%">
         </div>
     </div>
     <div class="mt-2 mb-6">
-        <div class="text-sm text-gray-600">Étape {{ $step }} / {{ count($categorySteps) + 1 }}</div>
+        <div class="text-sm text-gray-600">Étape {{ $step }} / {{ count($categorySteps) + 2 }}</div>
         <div class="text-lg font-semibold">{{ $stepLabels[$step] }}</div>
     </div>
 
@@ -318,19 +318,59 @@
                         class="px-6 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
                         ← Retour
                     </button>
-                    @if ($step < count($categorySteps) + 1)
-                        <button wire:click="nextStep"
-                            class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded hover:bg-indigo-700">
-                            Étape suivante →
-                        </button>
-                    @else
-                        <button wire:click="save"
-                            class="px-6 py-2 bg-green-600 text-white font-semibold rounded hover:bg-green-700">
-                            💾 Enregistrer la facture
-                        </button>
-                    @endif
+                    <button wire:click="nextStep"
+                        class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded hover:bg-indigo-700">
+                        Étape suivante →
+                    </button>
                 </div>
             </div>
         @endif
     @endforeach
+
+    @if ($step === count($categorySteps) + 2)
+        @php
+            $totalUsd = collect($items)->sum('amount_usd');
+            $totalCdf = collect($items)->sum('amount_cdf');
+        @endphp
+        <div class="space-y-6">
+            <h3 class="text-lg font-semibold mb-4">Récapitulatif</h3>
+            <div class="space-y-2">
+                <p><strong>Client :</strong> {{ $selectedFolder?->company?->name }}</p>
+                <p><strong>Produit :</strong> {{ $product }}</p>
+            </div>
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="text-left border-b">
+                        <th class="py-2">Item</th>
+                        <th class="py-2 text-right">USD</th>
+                        <th class="py-2 text-right">CDF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($items as $item)
+                        <tr class="border-b">
+                            <td class="py-1">{{ $item['label'] }}</td>
+                            <td class="py-1 text-right">{{ number_format($item['amount_usd'], 2, '.', ' ') }}</td>
+                            <td class="py-1 text-right">{{ number_format($item['amount_cdf'], 2, '.', ' ') }}</td>
+                        </tr>
+                    @endforeach
+                    <tr class="font-semibold">
+                        <td class="py-2">Total</td>
+                        <td class="py-2 text-right">{{ number_format($totalUsd, 2, '.', ' ') }}</td>
+                        <td class="py-2 text-right">{{ number_format($totalCdf, 2, '.', ' ') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pt-6 flex justify-between">
+                <button wire:click="previousStep"
+                    class="px-6 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                    ← Retour
+                </button>
+                <button wire:click="save"
+                    class="px-6 py-2 bg-green-600 text-white font-semibold rounded hover:bg-green-700">
+                    💾 Enregistrer la facture
+                </button>
+            </div>
+        </div>
+    @endif
 </div>

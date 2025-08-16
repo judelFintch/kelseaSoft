@@ -36,6 +36,7 @@ class GenerateInvoice extends Component
     public $taxes = [], $agencyFees = [], $extraFees = [], $currencies = [];
     public array $categorySteps = [];
     public array $stepLabels = [];
+    public $summaryStep = 0;
     public $selectedFolder = null;
     public $generatedInvoiceLabel = null;
     public $previewInvoiceNumber = null;
@@ -98,6 +99,9 @@ class GenerateInvoice extends Component
         foreach ($this->categorySteps as $index => $category) {
             $this->stepLabels[$index + 2] = $categoryLabels[$category] ?? ucfirst(str_replace('_', ' ', $category));
         }
+
+        $this->summaryStep = count($this->categorySteps) + 2;
+        $this->stepLabels[$this->summaryStep] = 'Récapitulatif';
     }
 
     public function updatedItems($value, $key): void
@@ -160,7 +164,7 @@ class GenerateInvoice extends Component
 
     public function nextStep(): void
     {
-        if ($this->step < count($this->categorySteps) + 1) {
+        if ($this->step < count($this->categorySteps) + 2) {
             $this->step++;
         }
     }
