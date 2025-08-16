@@ -17,11 +17,16 @@ KelseaSoft is a powerful and intuitive **customs agency management software** de
 ### 🧾 Invoicing System
 - Link invoices to dossiers with the ability to **input liquidation elements, fees, and expenses**.
 - Generate invoices in **PDF format** with the header of each company.
+- Invoice numbers use two different formats:
+  - For **regular invoices**: `MDB<ACRONYM>NNyy` (year only).
+  - For **global invoices**: `MDB<ACRONYM>GLNNmmyy` (includes month and year).
+- Sequential numbering begins at **335** for invoices and **057** for global invoices.
 - Track payment status (**Paid, Pending, Partially Paid**).
+- Edit existing invoices directly from the generated list for quick adjustments.
 
 ### 🏢 Client Management
-- Pre-register clients with relevant details (name, address, contact, company type).
-- Assign dossiers to registered clients.
+- Pre-register **client companies** with relevant details (name, address, contact, company type).
+- Assign dossiers to registered companies or enter a custom client name (stored in the `client` field).
 - Access client dossier history.
 
 ### 📜 Document Handling
@@ -68,11 +73,13 @@ KelseaSoft is a powerful and intuitive **customs agency management software** de
    ```
 
 ## Usage
-- **Login/Register**: Access the system using your credentials.
+- **Login**: Access the system using your credentials. User registration is
+  restricted to authenticated accounts.
 - **Dossier Management**: Create and manage dossiers efficiently.
 - **Attach Documents**: Upload supporting files for each dossier.
 - **Generate Invoices**: Process invoices and export them as PDFs.
 - **Track Payments**: Monitor payment statuses of each invoice.
+- **Manual Backup**: Run `php artisan database:backup` to create a database dump in the directory defined by `BACKUP_PATH` (defaults to `storage/app/backups`). Set `BACKUP_COMPRESS=true` to gzip the file. Restore with `php artisan database:restore <file>`. Works with MySQL, PostgreSQL, and SQLite.
 
 ## Contributing
 We welcome contributions to enhance KelseaSoft. Feel free to submit pull requests or report issues.

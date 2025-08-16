@@ -1,0 +1,115 @@
+<?php
+
+namespace App\Livewire\Admin\Invoices;
+
+use Livewire\Component;
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
+use App\Models\Tax;
+
+class OperationInvoice extends Component
+{
+    public string $invoiceNumber = '';
+    public ?Invoice $invoice = null;
+    public array $items = [];
+    /**
+     * List of available taxes for the select options.
+     *
+     * Livewire components often keep Eloquent collections in public
+     * properties, so this property is intentionally untyped to avoid
+     * type errors when assigning a collection.
+     */
+    public $taxes = [];
+
+    public function loadInvoice(): void
+    {
+        $this->validate([
+            'invoiceNumber' => 'required|string',
+        ]);
+
+        $this->invoice = Invoice::where('invoice_number', $this->invoiceNumber)
+            ->with('items')
+            ->first();
+
+        $this->taxes = Tax::orderBy('label')->get();
+
+        if (!$this->invoice) {
+            $this->items = [];
+            session()->flash('error', 'Facture introuvable.');
+            return;
+        }
+
+        if ($this->invoice->global_invoice_id) {
+            session()->flash('error', "La facture {$this->invoice->invoice_number} est déjà incluse dans une facture globale. Impossible de la modifier.");
+            $this->invoice = null;
+            $this->items = [];
+            return;
+        }
+
+        $this->items = $this->invoice->items->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'label' => $item->label,
+                'quantity' => $item->quantity ?? 1,
+                'amount_usd' => $item->amount_usd,
+                'tax_id' => $item->tax_id,
+            ];
+        })->toArray();
+    }
+
+    public function updateItem(int $index): void
+    {
+        $this->validate([
+            'items.' . $index . '.label' => 'required|string',
+            'items.' . $index . '.quantity' => 'required|integer|min:1',
+            'items.' . $index . '.amount_usd' => 'required|numeric',
+            'items.' . $index . '.tax_id' => 'nullable|exists:taxes,id',
+        ]);
+
+        if ($this->invoice?->global_invoice_id) {
+            session()->flash('error', 'Impossible de modifier une facture déjà incluse dans une facture globale.');
+            return;
+        }
+
+        $data = $this->items[$index];
+        $item = InvoiceItem::find($data['id']);
+        if ($item) {
+            $item->update([
+                'label' => $data['label'],
+                'quantity' => $data['quantity'],
+                'amount_usd' => $data['amount_usd'],
+                'tax_id' => $data['tax_id'] ?? null,
+            ]);
+
+            $this->invoice->total_usd = $this->invoice->items()->sum('amount_usd');
+            $this->invoice->save();
+
+            session()->flash('success', 'Ligne mise à jour.');
+        }
+    }
+
+    public function validateInvoice(): void
+    {
+        if (!$this->invoice) {
+            session()->flash('error', 'Aucune facture chargée.');
+            return;
+        }
+
+        if ($this->invoice->global_invoice_id) {
+            session()->flash('error', 'Cette facture est déjà incluse dans une facture globale.');
+            return;
+        }
+
+        $this->invoice->total_usd = $this->invoice->items()->sum('amount_usd');
+        $this->invoice->status = 'approved';
+        $this->invoice->save();
+
+        session()->flash('success', 'Opération validée et total mis à jour.');
+        $this->loadInvoice();
+    }
+
+    public function render()
+    {
+        return view('livewire.admin.invoices.operation-invoice');
+    }
+}

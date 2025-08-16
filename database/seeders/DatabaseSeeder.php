@@ -15,9 +15,35 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+        UserSeeder::class,
+        DocumentTypeSeeder::class,
+       // SupplierSeeder::class,
+        DeclarationTypeSeeder::class,
+        CustomsOfficeSeeder::class,
+        LocationSeeder::class,
+        TransporterSeeder::class,
+        
+        // Devise d'abord pour pouvoir référencer les autres montants
+        CurrencySeeder::class,
+
+        // Références monétaires
+        TaxSeeder::class,
+        AgencyFeeSeeder::class,
+        ExtraFeeSeeder::class,
+        BivacSeeder::class,
+
+        // Entreprises et licences liées aux dossiers
+       // CompanySeeder::class,
+       // LicenceSeeder::class,
+
+        // Dossiers créés après les entités de référence
+        //FolderSeeder::class,
+
+        // Facturation (actuellement en commentaire)
+       // InvoiceItemSeeder::class,
+            
         ]);
     }
 }
+ 

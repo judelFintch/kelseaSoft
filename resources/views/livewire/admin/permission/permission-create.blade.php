@@ -1,0 +1,54 @@
+<div>
+    <div class="container mx-auto px-4 sm:px-8">
+        <div class="py-8">
+            <div>
+                <h2 class="text-2xl font-semibold leading-tight">Create Permission</h2>
+            </div>
+            <div class="mt-4 text-sm text-gray-600">
+                <p><strong>Note:</strong> Permissions are often managed by developers directly in the code or through seeders. Adding permissions dynamically here might be an advanced feature. Ensure you understand the implications for your application's authorization logic.</p>
+            </div>
+
+            <form wire:submit.prevent="createPermission" class="mt-6">
+                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
+                            Name (Code - e.g., 'view_reports', 'edit_articles')
+                        </label>
+                        <input wire:model.defer="name" type="text" placeholder="Permission Name (Code)" id="name"
+                               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('name') border-red-500 @enderror">
+                        @error('name') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="display_name">
+                            Display Name (Optional - e.g., 'View Reports', 'Edit Articles')
+                        </label>
+                        <input wire:model.defer="display_name" type="text" placeholder="Display Name" id="display_name"
+                               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('display_name') border-red-500 @enderror">
+                        @error('display_name') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
+                            Description (Optional)
+                        </label>
+                        <textarea wire:model.defer="description" placeholder="Description" id="description"
+                                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('description') border-red-500 @enderror"></textarea>
+                        @error('description') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <button type="submit"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Create Permission
+                        </button>
+                        <a href="{{ route('admin.permission.index') }}"
+                           class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+                            Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
