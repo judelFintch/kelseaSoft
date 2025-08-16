@@ -258,9 +258,9 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse ($items as $item)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item['label'] }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">{{ number_format($item['amount_usd'], 2, '.', ' ') }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">{{ number_format($item['amount_cdf'], 2, '.', ' ') }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item['label'] ?? '' }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">{{ number_format($item['amount_usd'] ?? 0, 2, '.', ' ') }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">{{ number_format($item['amount_cdf'] ?? 0, 2, '.', ' ') }}</td>
                                 </tr>
                             @empty
                                 <tr>
