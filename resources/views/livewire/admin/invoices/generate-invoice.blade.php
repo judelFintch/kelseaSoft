@@ -142,80 +142,77 @@
         @foreach ($categorySteps as $index => $category)
             @if ($step === $index + 2)
                 <div class="space-y-6">
-                    @foreach ($items as $i => $item)
-                        @if ($item['category'] === $category)
-                            <div class="bg-gray-50 p-4 rounded-lg shadow-sm border space-y-4 relative">
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    @if ($category === 'import_tax')
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-400">Taxe</label>
-                                            <select wire:model="items.{{ $i }}.tax_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                                <option value="">-- Choisir --</option>
-                                                @foreach ($taxes as $t)
-                                                    <option value="{{ $t->id }}">{{ $t->label }}</option>
-                                                @endforeach
-                                            </select>
-                                            @error('items.' . $i . '.tax_id') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
-                                        </div>
-                                    @elseif ($category === 'agency_fee')
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-400">Frais agence</label>
-                                            <select wire:model="items.{{ $i }}.agency_fee_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                                <option value="">-- Choisir --</option>
-                                                @foreach ($agencyFees as $f)
-                                                    <option value="{{ $f->id }}">{{ $f->label }}</option>
-                                                @endforeach
-                                            </select>
-                                            @error('items.' . $i . '.agency_fee_id') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
-                                        </div>
-                                    @elseif ($category === 'extra_fee')
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-400">Frais divers</label>
-                                            <select wire:model="items.{{ $i }}.extra_fee_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                                <option value="">-- Choisir --</option>
-                                                @foreach ($extraFees as $e)
-                                                    <option value="{{ $e->id }}">{{ $e->label }}</option>
-                                                @endforeach
-                                            </select>
-                                            @error('items.' . $i . '.extra_fee_id') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
-                                        </div>
+                    <div class="overflow-x-auto bg-white rounded-lg shadow border">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-3/12">Type</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Qté</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Devise</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Montant</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">Total USD</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">Total CDF</th>
+                                    <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach ($items as $i => $item)
+                                    @if ($item['category'] === $category)
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-4 py-2 whitespace-nowrap">
+                                                @if ($category === 'import_tax')
+                                                    <select wire:model="items.{{ $i }}.tax_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                                        <option value="">-- Choisir Taxe --</option>
+                                                        @foreach ($taxes as $t)
+                                                            <option value="{{ $t->id }}">{{ $t->label }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                @elseif ($category === 'agency_fee')
+                                                    <select wire:model="items.{{ $i }}.agency_fee_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                                        <option value="">-- Choisir Frais --</option>
+                                                        @foreach ($agencyFees as $f)
+                                                            <option value="{{ $f->id }}">{{ $f->label }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                @elseif ($category === 'extra_fee')
+                                                    <select wire:model="items.{{ $i }}.extra_fee_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                                        <option value="">-- Choisir Frais --</option>
+                                                        @foreach ($extraFees as $e)
+                                                            <option value="{{ $e->id }}">{{ $e->label }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                @endif
+                                            </td>
+                                            <td class="px-4 py-2 whitespace-nowrap">
+                                                <input type="number" step="1" placeholder="1" wire:model.live="items.{{ $i }}.quantity" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                            </td>
+                                            <td class="px-4 py-2 whitespace-nowrap">
+                                                <select wire:model.live="items.{{ $i }}.currency_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                                    @foreach ($currencies as $c)
+                                                        <option value="{{ $c->id }}">{{ $c->code }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td class="px-4 py-2 whitespace-nowrap">
+                                                <input type="number" step="0.01" placeholder="1000" wire:model.live="items.{{ $i }}.amount_local" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                            </td>
+                                            <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+                                                {{ number_format($item['amount_usd'] ?? 0, 2) }} $
+                                            </td>
+                                            <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+                                                {{ number_format($item['amount_cdf'] ?? 0, 2) }} F
+                                            </td>
+                                            <td class="px-4 py-2 whitespace-nowrap text-right">
+                                                <button wire:click.prevent="removeItem({{ $i }})" class="text-red-500 hover:text-red-700">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                                </button>
+                                            </td>
+                                        </tr>
                                     @endif
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-400">Quantité</label>
-                                        <input type="number" step="1" placeholder="1" wire:model.live="items.{{ $i }}.quantity" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                        @error('items.' . $i . '.quantity') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-400">Devise</label>
-                                        <select wire:model.live="items.{{ $i }}.currency_id" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                            @foreach ($currencies as $c)
-                                                <option value="{{ $c->id }}">{{ $c->code }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('items.' . $i . '.currency_id') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-400">Montant (devise locale)</label>
-                                        <input type="number" step="0.01" placeholder="1000" wire:model.live="items.{{ $i }}.amount_local" class="dark:bg-dark-900 shadow-theme-xs focus:border-indigo-300 focus:ring-indigo-500/10 dark:focus:border-indigo-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                        @error('items.' . $i . '.amount_local') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div class="bg-gray-200 p-2 rounded-lg">
-                                        <label class="block text-sm font-medium text-gray-500">Montant USD</label>
-                                        <p class="font-semibold text-gray-800">{{ number_format($item['amount_usd'] ?? 0, 2) }} $</p>
-                                    </div>
-                                    <div class="bg-gray-200 p-2 rounded-lg">
-                                        <label class="block text-sm font-medium text-gray-500">Montant CDF</label>
-                                        <p class="font-semibold text-gray-800">{{ number_format($item['amount_cdf'] ?? 0, 2) }} F</p>
-                                    </div>
-                                </div>
-                                <button wire:click.prevent="removeItem({{ $i }})" class="absolute top-2 right-2 text-red-500 hover:text-red-700">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                </button>
-                            </div>
-                        @endif
-                    @endforeach
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
                     <button wire:click.prevent="addItem('{{ $category }}')" class="inline-flex items-center px-4 py-2 border border-dashed border-gray-400 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
                         ➕ Ajouter une ligne
@@ -258,9 +255,9 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse ($items as $item)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item['label'] ?? '' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">{{ number_format($item['amount_usd'] ?? 0, 2, '.', ' ') }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">{{ number_format($item['amount_cdf'] ?? 0, 2, '.', ' ') }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item['label'] }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">{{ number_format($item['amount_usd'], 2, '.', ' ') }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">{{ number_format($item['amount_cdf'], 2, '.', ' ') }}</td>
                                 </tr>
                             @empty
                                 <tr>
@@ -289,3 +286,5 @@
         @endif
     </div>
 </div>
+
+

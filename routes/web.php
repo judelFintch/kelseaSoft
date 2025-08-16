@@ -64,6 +64,8 @@ Route::get('/', function () {
 
 Route::get('/dashboard', Dashboard::class)->name('dashboard');
 Route::get('/notifications/latest', [NotificationController::class, 'latest'])->name('notifications.latest');
+Route::get('/notifications/get-latest', [NotificationController::class, 'getLatestNotification'])->name('notifications.get-latest');
+Route::post('/notifications/{notificationId}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
