@@ -189,8 +189,10 @@
             </div>
 
             <div class="pt-4 flex justify-end">
-                <button wire:click="nextStep" class="px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+                <button wire:click="nextStep" wire:loading.attr="disabled" wire:target="nextStep"
+                    class="px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
                     Étape suivante →
+                    <span wire:loading wire:target="nextStep" class="ml-2">…spinner…</span>
                 </button>
             </div>
         </div>
@@ -332,9 +334,10 @@
                         class="px-6 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
                         ← Retour
                     </button>
-                    <button wire:click="nextStep"
+                    <button wire:click="nextStep" wire:loading.attr="disabled" wire:target="nextStep"
                         class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded hover:bg-indigo-700">
                         Étape suivante →
+                        <span wire:loading wire:target="nextStep" class="ml-2">…spinner…</span>
                     </button>
                 </div>
             </div>
@@ -380,9 +383,10 @@
                     class="px-6 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
                     ← Retour
                 </button>
-                <button wire:click="save"
+                <button wire:click="save" wire:loading.attr="disabled" wire:target="save"
                     class="px-6 py-2 bg-green-600 text-white font-semibold rounded hover:bg-green-700">
                     💾 Enregistrer la facture
+                    <span wire:loading wire:target="save" class="ml-2">…spinner…</span>
                 </button>
             </div>
         </div>
