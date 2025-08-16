@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
@@ -31,5 +32,26 @@ class NotificationController extends Controller
             });
 
         return response()->json($logs);
+    }
+
+    public function getLatestNotification(Request $request): JsonResponse
+    {
+        $user = Auth::user();
+        $notification = $user->unreadNotifications()->latest()->first();
+
+        if ($notification) {
+            return response()->json($notification);
+        }
+
+        return response()->json(null);
+    }
+
+    public function markAsRead(Request $request, $notificationId)
+    {
+        $user = Auth::user();
+        $notification = $user->notifications()->findOrFail($notificationId);
+        $notification->markAsRead();
+
+        return response()->json(['status' => 'success']);
     }
 }

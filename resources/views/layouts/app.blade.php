@@ -69,5 +69,6 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             flatpickr("input[type=date]");
         });
     </script>
-</body>
+<x-ui.toast-notification />
+    </body>
 </html>
